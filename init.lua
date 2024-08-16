@@ -97,7 +97,7 @@ local actor = actors.register(function(msg)
                 if string.find(item, '/') then
                     for itemName in split(item, '/') do
                         local searchString = itemName
-                        if not tonumber(itemName) then searchString = '='..searchString end
+                        -- if not tonumber(itemName) then searchString = '='..searchString end
                         local findItem = mq.TLO.FindItem(searchString)
                         local findItemBank = mq.TLO.FindItemBank(searchString)
                         local count = mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
@@ -112,7 +112,7 @@ local actor = actors.register(function(msg)
                     end
                 else
                     local searchString = item
-                    if not tonumber(item) then searchString = '='..searchString end
+                    -- if not tonumber(item) then searchString = '='..searchString end
                     currentResult = currentResult + mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
                     currentSlot = mq.TLO.FindItem(searchString).ItemSlot() or (mq.TLO.FindItemBank(searchString)() and 'Bank') or ''
                 end
@@ -170,7 +170,7 @@ local actor = actors.register(function(msg)
 end)
 
 local function changeBroadcastMode(tempBroadcast)
-    mq.cmdf('%s /lua stop lazarus_bis', broadcast)
+    mq.cmdf('%s /lua stop lazbis', broadcast)
 
     if not mq.TLO.Plugin('mq2mono')() then
         if tempBroadcast == 1 then
@@ -320,7 +320,7 @@ local function bisGUI()
             if ImGui.BeginTabItem('Gear') then
                 local origSelectedItemList = selectedItemList
                 ImGui.PushItemWidth(150)
-                ImGui.SetNextWindowSize(150, 195)
+                ImGui.SetNextWindowSize(150, 213)
                 selectedItemList = ImGui.Combo('Item List', selectedItemList, 'Anguish\0Dreadspire\0FUKU\0HC Items\0Hand Aug\0Pre-Anguish\0Quest Items\0Sebilis\0Veksar\0Vendor Items\0')
                 ImGui.PopItemWidth()
                 itemList = bisConfig[itemLists[selectedItemList]]
@@ -463,7 +463,7 @@ local function bisGUI()
     end
     ImGui.End()
     if not openGUI then
-        mq.cmdf('%s /lua stop lazarus_bis', broadcast)
+        mq.cmdf('%s /lua stop lazbis', broadcast)
         mq.exit()
     end
 end
@@ -489,9 +489,9 @@ local char = {
 group[char.Name] = char
 table.insert(group, char)
 
-mq.cmdf('%s /lua stop lazarus_bis', broadcast)
+mq.cmdf('%s /lua stop lazbis', broadcast)
 mq.delay(500)
-mq.cmdf('%s /lua run lazarus_bis 0%s', broadcast, debug and ' debug' or '')
+mq.cmdf('%s /lua run lazbis 0%s', broadcast, debug and ' debug' or '')
 mq.delay(500)
 
 local function searchAll()
@@ -559,7 +559,7 @@ while not terminate do
         table.insert(group, char)
 
         mq.delay(500)
-        mq.cmdf('%s /lua run lazarus_bis 0%s', broadcast, debug and ' debug' or '')
+        mq.cmdf('%s /lua run lazbis 0%s', broadcast, debug and ' debug' or '')
         mq.delay(500)
         selectionChanged = true
         rebroadcast = false
