@@ -1,2 +1,6 @@
+1.1.0
+- Show unresolved item names for items which get consumed/upgraded such as veksar keys or quest aug components.
+- Various item updates
+
 1.0.0
 - Initial release
