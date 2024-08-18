@@ -16,6 +16,8 @@ local version = '1.1.0'
 
 local args = { ... }
 
+local SCRIPT_NAME = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")
+
 -- UI States
 local openGUI = true
 local shouldDrawGUI = true
@@ -26,6 +28,7 @@ local gear = {}
 local group = {}
 local itemChecks = {}
 local tradeskills = {}
+local ldons = {}
 
 -- Item list information
 local bisConfig = require('bis')
@@ -36,6 +39,7 @@ local selectionChanged = true
 local showslots = true
 local showmissingonly = false
 local orderedSkills = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
+local orderedLDONs = {{name='Deepest Guk', num=75}, {name='Miragul\'s', num=75}, {name='Mistmoore', num=75}, {name='Rujarkian', num=75}, {name='Takish', num=75}}
 
 local debug = false
 
@@ -158,8 +162,13 @@ local actor = actors.register(function(msg)
             ['Jewelry Making'] = mq.TLO.Me.Skill('jewelry making')(),
             Fletching = mq.TLO.Me.Skill('fletching')(),
         }
-        if debug then printf('>>> SEND MSG: id=%s Name=%s Skills=%s', content.id, mq.TLO.Me.CleanName(), skills) end
-        msg:send({id='tsresult', Skills=skills, Name=mq.TLO.Me.CleanName()})
+        -- local ldon = {}
+        -- for i=1,5 do
+        --     print(mq.TLO.Window('AdventureStatsWnd/AdvStats_ThemeList').List(i..',1')())
+        --     ldon[mq.TLO.Window('AdventureStatsWnd/AdvStats_ThemeList').List(i..',1')()] = mq.TLO.Window('AdventureStatsWnd/AdvStats_ThemeList').List(i..',3')()
+        -- end
+        if debug then printf('>>> SEND MSG: id=%s Name=%s Skills=%s ldon=%s', content.id, mq.TLO.Me.CleanName(), skills, ldon) end
+        msg:send({id='tsresult', Skills=skills, ldon=ldon, Name=mq.TLO.Me.CleanName()})
     elseif content.id == 'tsresult' then
         if debug then printf('=== MSG: id=%s Name=%s Skills=%s', content.id, content.Name, content.Skills) end
         if args[1] == '0' then return end
@@ -168,11 +177,15 @@ local actor = actors.register(function(msg)
         for name,skill in pairs(content.Skills) do
             tradeskills[char.Name][name] = skill
         end
+        -- ldons[char.Name] = ldons[char.Name] or {}
+        -- for name,count in pairs(content.ldon) do
+        --     ldons[char.Name][name] = tonumber(count) or 0
+        -- end
     end
 end)
 
 local function changeBroadcastMode(tempBroadcast)
-    mq.cmdf('%s /lua stop lazbis', broadcast)
+    mq.cmdf('%s /lua stop %s', broadcast, SCRIPT_NAME)
 
     if not mq.TLO.Plugin('mq2mono')() then
         if tempBroadcast == 1 then
@@ -234,10 +247,6 @@ local function slotRow(slot, tmpGear)
                 local componentcount = tmpGear[char.Name][realSlot].componentcount
                 local color = getItemColor(slot, tonumber(count), tonumber(countVis), tonumber(componentcount))
                 ImGui.PushStyleColor(ImGuiCol.Text, color[1], color[2], color[3], 1)
-                -- if itemList.ShowBaseItemNames and (itemList.ShowBaseItemNames[realSlot] or itemList.ShowBaseItemNames.ALL) then
-                --     local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
-                --     ImGui.Text('%s%s', itemName, lootDropper and ' ('..lootDropper..')' or '')
-                -- else
                 if itemName == actualName then
                     local resolvedInvSlot = resolveInvSlot(invslot)
                     local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
@@ -254,8 +263,6 @@ local function slotRow(slot, tmpGear)
                         ImGui.EndTooltip()
                     end
                 end
-                    -- ImGui.Text('%s%s%s', actualName, showslots and resolvedInvSlot or '', lootDropper and ' ('..lootDropper..')' or '')
-                -- end
             end
         end
     end
@@ -455,6 +462,19 @@ local function bisGUI()
                                     end
                                     ImGui.TreePop()
                                 end
+                                -- if ImGui.TreeNodeEx('LDON', bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
+                                --     for _,ldon in ipairs(orderedLDONs) do
+                                --         ImGui.TableNextRow()
+                                --         ImGui.TableNextColumn()
+                                --         ImGui.Text(ldon.name)
+                                --         for _,char in ipairs(group) do
+                                --             ImGui.TableNextColumn()
+                                --             local count = ldons[char.Name] and ldons[char.Name][ldon.name] or 0
+                                --             ImGui.TextColored(count < ldon.num and 1 or 0, count == ldon.num and 1 or 0, 0, 1, '%s', ldons[char.Name] and ldons[char.Name][ldon.name])
+                                --         end
+                                --     end
+                                --     ImGui.TreePop()
+                                -- end
                             end
                         end
                     end
@@ -482,7 +502,7 @@ local function bisGUI()
     end
     ImGui.End()
     if not openGUI then
-        mq.cmdf('%s /lua stop lazbis', broadcast)
+        mq.cmdf('%s /lua stop %s', broadcast, SCRIPT_NAME)
         mq.exit()
     end
 end
@@ -508,9 +528,9 @@ local char = {
 group[char.Name] = char
 table.insert(group, char)
 
-mq.cmdf('%s /lua stop lazbis', broadcast)
+mq.cmdf('%s /lua stop %s', broadcast, SCRIPT_NAME)
 mq.delay(500)
-mq.cmdf('%s /lua run lazbis 0%s', broadcast, debug and ' debug' or '')
+mq.cmdf('%s /lua run %s 0%s', broadcast, SCRIPT_NAME, debug and ' debug' or '')
 mq.delay(500)
 
 local function searchAll()
@@ -578,7 +598,7 @@ while not terminate do
         table.insert(group, char)
 
         mq.delay(500)
-        mq.cmdf('%s /lua run lazbis 0%s', broadcast, debug and ' debug' or '')
+        mq.cmdf('%s /lua run %s 0%s', broadcast, SCRIPT_NAME, debug and ' debug' or '')
         mq.delay(500)
         selectionChanged = true
         rebroadcast = false
