@@ -96,6 +96,7 @@ local actor = actors.register(function(msg)
                 local actualName = nil
                 if string.find(item, '/') then
                     for itemName in split(item, '/') do
+                        -- if not actualName then actualName = itemName end
                         local searchString = itemName
                         -- if not tonumber(itemName) then searchString = '='..searchString end
                         local findItem = mq.TLO.FindItem(searchString)
@@ -105,6 +106,7 @@ local actor = actors.register(function(msg)
                             currentResult = 0
                         end
                         if count > 0 and not actualName then
+                        -- if count > 0 and actualName == itemName then
                             actualName = findItem() or findItemBank()
                             currentSlot = findItem.ItemSlot() or (findItemBank() and 'Bank') or ''
                         end
@@ -232,15 +234,28 @@ local function slotRow(slot, tmpGear)
                 local componentcount = tmpGear[char.Name][realSlot].componentcount
                 local color = getItemColor(slot, tonumber(count), tonumber(countVis), tonumber(componentcount))
                 ImGui.PushStyleColor(ImGuiCol.Text, color[1], color[2], color[3], 1)
-                if itemList.ShowBaseItemNames and (itemList.ShowBaseItemNames[realSlot] or itemList.ShowBaseItemNames.ALL) then
-                    local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
-                    ImGui.Text('%s%s', itemName, lootDropper and ' ('..lootDropper..')' or '')
-                else
+                -- if itemList.ShowBaseItemNames and (itemList.ShowBaseItemNames[realSlot] or itemList.ShowBaseItemNames.ALL) then
+                --     local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
+                --     ImGui.Text('%s%s', itemName, lootDropper and ' ('..lootDropper..')' or '')
+                -- else
+                if itemName == actualName then
                     local resolvedInvSlot = resolveInvSlot(invslot)
                     local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
-                    ImGui.Text('%s%s%s', actualName, showslots and resolvedInvSlot or '', lootDropper and ' ('..lootDropper..')' or '')
+                    ImGui.Text('%s%s%s', itemName, showslots and resolvedInvSlot or '', lootDropper and ' ('..lootDropper..')' or '')
+                    ImGui.PopStyleColor()
+                else
+                    local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
+                    ImGui.Text('%s%s', itemName, lootDropper and ' ('..lootDropper..')' or '')
+                    ImGui.PopStyleColor()
+                    if ImGui.IsItemHovered() then
+                        local resolvedInvSlot = resolveInvSlot(invslot)
+                        ImGui.BeginTooltip()
+                        ImGui.Text('Found ') ImGui.SameLine() ImGui.TextColored(0,1,0,1,'%s', actualName) ImGui.SameLine() ImGui.Text('in slot %s', resolvedInvSlot)
+                        ImGui.EndTooltip()
+                    end
                 end
-                ImGui.PopStyleColor()
+                    -- ImGui.Text('%s%s%s', actualName, showslots and resolvedInvSlot or '', lootDropper and ' ('..lootDropper..')' or '')
+                -- end
             end
         end
     end
