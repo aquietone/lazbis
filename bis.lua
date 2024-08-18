@@ -1161,7 +1161,6 @@ return {
 			['Sap'] = 'Forgotten Mugger\'s Sap',
 			['Howl of Tashan'] = 'Malignant Bloodgill Shaman\'s Effigy',
 			['MeleeFamiliar'] = 'Forgotten Leather Leash',
-			['Intensity of the Resolute'] = 'Audacious Kunzar Tu\'Lal',
 			['Feral Swipe'] = 'Cunning Razor-edged Claw',
 			['Ancestral Memories'] = 'Zealous Soulscream Belt',
 			['Staunch Recovery'] = 'Vitalizing Earring of the Darkfaith',
