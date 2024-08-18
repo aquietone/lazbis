@@ -1656,7 +1656,7 @@ return {
 			['WeaponAug4'] = 'Desolate Cat\'s Eye Agate',
 			['WeaponAug5'] = 'Desolate Fire Emerald',
 			['WeaponAug6'] = 'Desolate Hematite',
-			['WeaponAug7'] = 'Desolate Lazis Lazuli',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug9'] = 'Desolate Onyx',
 			['WeaponAug10'] = 'Desolate Star Rose Quartz',
