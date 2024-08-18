@@ -5,6 +5,25 @@ Gotta collect em all
 Initial anguish and DSK standalone scripts provided by Dlilah and ... from Verticordious.  
 Other lists provided by myself, Dlilah and ...  
 
+## Installation
+
+You can install the script by doing either:  
+a. Clone the repository to your MacroQuest lua folder, or  
+b. Download the ZIP file and unzip it to your MacroQuest lua folder  
+
+Once installed, you should have:  
+```
+macroquest/
+  lua/
+    lazbis/
+      init.lua
+      bis.lua
+```
+
+## Usage
+
+Run the script with `/lua run lazbis`.  
+
 ## Overview
 This script provides a live item tracker for all of your logged in characters.
 
