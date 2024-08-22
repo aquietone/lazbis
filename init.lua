@@ -208,7 +208,7 @@ local function rowCallback(udata,cols,values,names)
     if group[values[1]] and not group[values[1]].Offline then return 0 end
     if not group[values[1]] then group[values[1]] = {Name=values[1], Class=values[2], Offline=true, Show=false} table.insert(group, group[values[1]])end
     gear[values[1]] = gear[values[1]] or {}
-    gear[values[1]][values[4]] = {count=values[7], componentcount=values[8], actualname=values[6] and values[5], location=values[6]}
+    gear[values[1]][values[4]] = {count=tonumber(values[7]), componentcount=tonumber(values[8]), actualname=values[6] and values[5], location=values[6]}
     return 0
 end
 
