@@ -42,7 +42,6 @@ local selectionChanged = true
 local showslots = true
 local showmissingonly = false
 local orderedSkills = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
-local orderedLDONs = {{name='Deepest Guk', num=75}, {name='Miragul\'s', num=75}, {name='Mistmoore', num=75}, {name='Rujarkian', num=75}, {name='Takish', num=75}}
 
 local debug = false
 
@@ -184,17 +183,29 @@ end
 
 local function insertCharacterData(name, category)
     local insertStmt = buildInsertStmt(name, category)
-    repeat
+    for i=1,5 do
         local result = db:exec(insertStmt)
-        if result ~= 0 then printf('Insert failed for %s %s with error: %s', name, category, result) end
-        if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
-    until result ~= sql.BUSY
+        if result == sql.BUSY then
+            print('\arDatabase was busy!') mq.delay(math.random(100,1000))
+        elseif result == 1 then
+            printf('\arInsert failed for statement: \n%s', insertStmt)
+        elseif result == 0 then
+            break
+        end
+    end
+    -- repeat
+    --     local result = db:exec(insertStmt)
+    --     -- if result ~= 0 then printf('Insert failed for %s %s with error: %s', name, category, result) end
+    --     if result == sql.BUSY then
+    --         print('\arDatabase was busy!') mq.delay(math.random(10,50))
+    --     elseif result == 1 then
+    --         printf('\arInsert failed for statement: \n%s', stmt)
+    --     end
+    -- until result ~= sql.BUSY
 end
 
 local function rowCallback(udata,cols,values,names)
     if group[values[1]] and not group[values[1]].Offline then return 0 end
-    -- name,server,slot,item,location,count,compcount,category
-    -- printf('%s %s %s %s', values[1], values[2], values[4], values[5])
     if not group[values[1]] then group[values[1]] = {Name=values[1], Class=values[2], Offline=true, Show=false} table.insert(group, group[values[1]])end
     gear[values[1]] = gear[values[1]] or {}
     gear[values[1]][values[4]] = {count=values[7], componentcount=values[8], actualname=values[6] and values[5], location=values[6]}
@@ -286,6 +297,9 @@ local actor = actors.register(function(msg)
             msg:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name()})
         elseif group[content.Name].Offline then
             group[content.Name].Offline = false
+            if selectedBroadcast == 1 or (selectedBroadcast == 3 and mq.TLO.Group.Member(content.Name)()) then
+                group[content.Name].Show = true
+            end
         end
     elseif content.id == 'search' then
         if debug then printf('=== MSG: id=%s list=%s', content.id, content.list) end
@@ -301,9 +315,7 @@ local actor = actors.register(function(msg)
                 local actualName = nil
                 if string.find(item, '/') then
                     for itemName in split(item, '/') do
-                        -- if not actualName then actualName = itemName end
                         local searchString = itemName
-                        -- if not tonumber(itemName) then searchString = '='..searchString end
                         local findItem = mq.TLO.FindItem(searchString)
                         local findItemBank = mq.TLO.FindItemBank(searchString)
                         local count = mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
@@ -311,7 +323,6 @@ local actor = actors.register(function(msg)
                             currentResult = 0
                         end
                         if count > 0 and not actualName then
-                        -- if count > 0 and actualName == itemName then
                             actualName = findItem() or findItemBank()
                             currentSlot = findItem.ItemSlot() or (findItemBank() and 'Bank') or ''
                         end
@@ -319,7 +330,6 @@ local actor = actors.register(function(msg)
                     end
                 else
                     local searchString = item
-                    -- if not tonumber(item) then searchString = '='..searchString end
                     currentResult = currentResult + mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
                     currentSlot = mq.TLO.FindItem(searchString).ItemSlot() or (mq.TLO.FindItemBank(searchString)() and 'Bank') or ''
                 end
@@ -340,7 +350,7 @@ local actor = actors.register(function(msg)
         local results = content.results
         if results == nil then return end
         local char = group[content.Name]
-        gear[char.Name] = {}--gear[char.Name] or {}
+        gear[char.Name] = {}
         for slot,res in pairs(results) do
             if (bisConfig[content.list][content.class] and bisConfig[content.list][content.class][slot]) or bisConfig[content.list].Template[slot] then
                 gear[char.Name][slot] = res
@@ -364,11 +374,6 @@ local actor = actors.register(function(msg)
             ['Jewelry Making'] = mq.TLO.Me.Skill('jewelry making')(),
             Fletching = mq.TLO.Me.Skill('fletching')(),
         }
-        -- local ldon = {}
-        -- for i=1,5 do
-        --     print(mq.TLO.Window('AdventureStatsWnd/AdvStats_ThemeList').List(i..',1')())
-        --     ldon[mq.TLO.Window('AdventureStatsWnd/AdvStats_ThemeList').List(i..',1')()] = mq.TLO.Window('AdventureStatsWnd/AdvStats_ThemeList').List(i..',3')()
-        -- end
         if debug then printf('>>> SEND MSG: id=%s Name=%s Skills=%s', content.id, mq.TLO.Me.CleanName(), skills) end
         msg:send({id='tsresult', Skills=skills, Name=mq.TLO.Me.CleanName()})
     elseif content.id == 'tsresult' then
@@ -379,42 +384,45 @@ local actor = actors.register(function(msg)
         for name,skill in pairs(content.Skills) do
             tradeskills[char.Name][name] = skill
         end
-        -- ldons[char.Name] = ldons[char.Name] or {}
-        -- for name,count in pairs(content.ldon) do
-        --     ldons[char.Name][name] = tonumber(count) or 0
-        -- end
     end
 end)
 
 local function changeBroadcastMode(tempBroadcast)
     mq.cmdf('%s /lua stop %s', broadcast, SCRIPT_NAME)
 
+    local bChanged = false
     if not mq.TLO.Plugin('mq2mono')() then
-        if tempBroadcast == 3 then
+        if tempBroadcast == 3 and broadcast ~= '/dgge' then
             broadcast = '/dgge'
-        else
+            bChanged = true
+        elseif broadcast ~= '/dge' then
             broadcast = '/dge'
+            bChanged = true
         end
     else
-        if tempBroadcast == 3 then
+        if tempBroadcast == 3 and broadcast ~= '/e3bcg' then
             broadcast = '/e3bcg'
-        else
+            bChanged = true
+        elseif broadcast ~= '/e3bca' then
             broadcast = '/e3bca'
+            bChanged = true
         end
     end
     if tempBroadcast == 1 or tempBroadcast == 3 then
         -- remove offline toons
         for _,char in ipairs(group) do
-            if char.Offline then char.Show = false end
+            if char.Offline then char.Show = false elseif tempBroadcast == 1 or (tempBroadcast == 3 and mq.TLO.Group.Member(char.Name)()) then char.Show = true end
         end
     elseif tempBroadcast == 2 then
         -- add offline toons
         for _,char in ipairs(group) do
-            if char.Offline then char.Show = true end
+            char.Show = true
         end
     end
+    if bChanged then
+        rebroadcast = true
+    end
     selectedBroadcast = tempBroadcast
-    rebroadcast = true
 end
 
 local function getItemColor(slot, count, visibleCount, componentCount)
@@ -686,19 +694,6 @@ local function bisGUI()
                                     end
                                     ImGui.TreePop()
                                 end
-                                -- if ImGui.TreeNodeEx('LDON', bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
-                                --     for _,ldon in ipairs(orderedLDONs) do
-                                --         ImGui.TableNextRow()
-                                --         ImGui.TableNextColumn()
-                                --         ImGui.Text(ldon.name)
-                                --         for _,char in ipairs(group) do
-                                --             ImGui.TableNextColumn()
-                                --             local count = ldons[char.Name] and ldons[char.Name][ldon.name] or 0
-                                --             ImGui.TextColored(count < ldon.num and 1 or 0, count == ldon.num and 1 or 0, 0, 1, '%s', ldons[char.Name] and ldons[char.Name][ldon.name])
-                                --         end
-                                --     end
-                                --     ImGui.TreePop()
-                                -- end
                             end
                         end
                     end
@@ -810,12 +805,9 @@ while not terminate do
     mq.delay(1000)
     if rebroadcast then
         gear = {}
-        group = {}
         itemChecks = {}
         tradeskills = {}
-
-        group[char.Name] = char
-        table.insert(group, char)
+        for _,c in ipairs(group) do if c.Name ~= mq.TLO.Me.CleanName() then c.Offline = true end end
 
         mq.delay(500)
         mq.cmdf('%s /lua run %s 0%s', broadcast, SCRIPT_NAME, debug and ' debug' or '')
