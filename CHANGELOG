@@ -1,3 +1,8 @@
+2.0.0
+- Support for offline character data using sqlite3
+- Fix for linked item checks for visible armor containers
+- Various item updates
+
 1.1.0
 - Add tooltips to indicate a different item was found for a given row
 - Allow script to run with whatever folder name like bis or lazbis

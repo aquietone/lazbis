@@ -615,7 +615,7 @@ local function bisGUI()
                     ImGui.BeginTable('linked items', numColumns)
                     ImGui.TableSetupScrollFreeze(0, 1)
                     ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed),
-                        160, 0)
+                        250, 0)
                     for i,char in ipairs(group) do
                         if char.Show then
                             ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
@@ -775,7 +775,8 @@ local function sayCallback(line, char, message)
         for _,list in ipairs(itemLists) do
             local classItems = bisConfig[list][char.Class]
             local templateItems = bisConfig[list].Template
-            for _,itembucket in ipairs({templateItems,classItems}) do
+            local visibleItems = bisConfig[list].Visible
+            for _,itembucket in ipairs({templateItems,visibleItems,classItems}) do
                 for slot,item in pairs(itembucket) do
                     if item then
                         for itemName in split(item, '/') do
