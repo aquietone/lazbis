@@ -20,16 +20,27 @@ macroquest/
       bis.lua
 ```
 
+The first time the script is run, it will prompt to install the lsqlite3 LuaRock dependency from the MacroQuest LuaRocks server. This is needed to support the offline data.  
+
 ## Usage
 
 Run the script with `/lua run lazbis`.  
 
+You can add a startup command to `ingame.cfg` to have the script update the database whenever a character logs in to keep offline data mostly accurate.  
+In your `mq/config/ingame.cfg` (create one if it doesn't exist) add:  
+```
+/docommand /timed ${Math.Random[10,100]} /lua run lazbis dumpinv
+```
+The `/timed ${Math.Random[10,100]}` is just to help avoid database conflicts from multiple toons logging in. The script should retry as well anyways.  
+
 ## Overview
-This script provides a live item tracker for all of your logged in characters.
+Lazarus BIS provides a live item tracker for all of your logged in characters.  
+It also writes the data to a local sqlite3 db to support showing offline characters as well.  
 
 ### Features
 
 - Track who has what items across all currently logged in characters for Anguish, Dreadspire, FUKU, HC Zones, Hand aug, Pre-Anguish, Quest items, Sebilis, Veksar and Vendor items.  
+- Track who has what items across offline characters who have run the script at some point in time.  
 - Shows who needs an item if the item is linked in chat in a comma separated list.  
 - Filter what rows are displayed using the search bar. You can search by any item name text in the table such as "infused flux".  
 - Show what slots each character has items in. Uncheck the box "Show slots" to hide slot information.  
@@ -43,6 +54,8 @@ When you start the script on a character, it will automatically broadcast to the
 It will use `/e3bca` by default as long as you have the `mq2mono` plugin (E3Next users). Otherwise it will use `/dge` from MQ2DanNet.  
 Once the script has started, it relies on the new-ish built-in communication feature in MQ to send all your characters item info back to the character which launched the script.
 Characters will send updated info when the script starts, whenever you click the `refresh` button or when you switch what list you are viewing.
+
+The character which initially started the script will persist all information which it receives from your bots into a local database for querying offline characters later.  
 
 ![](./images/need.png)  
 ![](./images/sebilis.png)  

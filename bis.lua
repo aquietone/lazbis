@@ -2493,6 +2493,14 @@ Stout Key - Tank 2H Burn Clicky]],
 						Ingredients={'Echo of the Forest', 'Luminescent Sea Blossom', 'Elven Wine', 'Ice Crystals', 'Sugarcane', 'Rock Salt'},
 					},
 					{
+						Name='Sleek Spring Roll Sampler (55 ac, 375 hp, 225 mp, 25 sta, 10 agi)',
+						Ingredients={'Swiftbloom Apple', 'Dragonroot', 'Spices', 'Honey', 'Jug of Sauces', 'Clump of Dough', 'Butter', 'Fry Oil'},
+					},
+					{
+						Name='Darting Dragonroot Daquiri (50 ac, 365 hp, 250 mp, 20 sta, 5 agi)',
+						Ingredients={'Swiftbloom Apple', 'Dragonroot', 'Warden\'s Mint', 'Rock Salt', 'Ice Crystals', 'Gnomish Spirits', 'Garnish'},
+					},
+					{
 						Name='Sorcerers Spice Chicken (10 ac, 210 hp, 510 mp, 40 int/wis, 35 MR)',
 						Ingredients={'Celestial Thyme Leaves', 'Marinated Chicken Meat', 'Sorcerers Secret Herb and Spice Mix', 'Fry Oil'},
 					},
@@ -2531,14 +2539,6 @@ Stout Key - Tank 2H Burn Clicky]],
 					{
 						Name='Infected Mushroom Cooler (45 ac, 440 hp, 350 mp, 40 int/wis, 30 DR)',
 						Ingredients={'Blighted Mushroom', 'Elderflower', 'Ice Crystals', 'Deep Fungus Mold', 'Ogre Swill', 'Rock Salt'},
-					},
-					{
-						Name='Sleek Spring Roll Sampler (55 ac, 375 hp, 225 mp, 25 sta, 10 agi)',
-						Ingredients={'Swiftbloom Apple', 'Dragonroot', 'Spices', 'Honey', 'Jug of Sauces', 'Clump of Dough', 'Butter', 'Fry Oil'},
-					},
-					{
-						Name='Darting Dragonroot Daquiri (50 ac, 365 hp, 250 mp, 20 sta, 5 agi)',
-						Ingredients={'Swiftbloom Apple', 'Dragonroot', 'Warden\'s Mint', 'Rock Salt', 'Ice Crystals', 'Gnomish Spirits', 'Garnish'},
 					},
 					{
 						Name='Stampede Satay Sticks (45 ac, 290 hp, 315 mp, 15 str, 10 dex)',

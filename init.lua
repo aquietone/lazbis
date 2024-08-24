@@ -154,16 +154,34 @@ local function resolveInvSlot(invslot)
     end
 end
 
-local function clearCharacterData(name, category)
-    repeat
-        local result = db:exec(("BEGIN TRANSACTION; DELETE FROM Inventory WHERE Character = '%s' AND Server = '%s' AND Category = '%s'; COMMIT;"):format(name, server, category))
-        if result ~= 0 then print(result) end
-        if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
-    until result ~= sql.BUSY
+local function exec(stmt, name, category, action)
+    for i=1,2 do
+        local wrappedStmt = ('BEGIN TRANSACTION;%s;COMMIT;'):format(stmt)
+        -- printf('Exec: %s', wrappedStmt)
+        local result = db:exec(wrappedStmt)
+        if result == sql.BUSY then
+            print('\arDatabase was Busy!') mq.delay(math.random(100,1000))
+        elseif result ~= sql.OK then
+            printf('\ar%s failed for name: %s, category: %s, result: %s\n%s', action, name, category, result, wrappedStmt)
+        elseif result == sql.OK then
+            printf('Successfully %s for name: %s, category: %s', action, name, category)
+            break
+        end
+    end
+end
+
+local function clearAllDataForCharacter(name)
+    local deleteStmt = ("DELETE FROM Inventory WHERE Character = '%s' AND Server = '%s'"):format(name, server)
+    exec(deleteStmt, name, nil, 'deleted')
+end
+
+local function clearCategoryDataForCharacter(name, category)
+    local deleteStmt = ("DELETE FROM Inventory WHERE Character = '%s' AND Server = '%s' AND Category = '%s'"):format(name, server, category)
+    exec(deleteStmt, name, category, 'deleted')
 end
 
 local function buildInsertStmt(name, category)
-    local stmt = "BEGIN TRANSACTION;\n"
+    local stmt = "\n"
     local char = group[name]
     for slot,value in pairs(gear[name]) do
         local itemName = value.actualname
@@ -178,32 +196,12 @@ local function buildInsertStmt(name, category)
             stmt = stmt .. dbfmt:format(name,char.Class,server,realSlot:gsub('\'','\'\''),itemName:gsub('\'','\'\''),resolveInvSlot(value.invslot):gsub('\'','\'\''),tonumber(value.count) or 0,tonumber(value.componentcount) or 0,category)
         end
     end
-    stmt = stmt .. 'COMMIT;'
-    -- print(stmt)
     return stmt
 end
 
-local function insertCharacterData(name, category)
+local function insertCharacterDataForCategory(name, category)
     local insertStmt = buildInsertStmt(name, category)
-    for i=1,5 do
-        local result = db:exec(insertStmt)
-        if result == sql.BUSY then
-            print('\arDatabase was busy!') mq.delay(math.random(100,1000))
-        elseif result == 1 then
-            printf('\arInsert failed for statement: \n%s', insertStmt)
-        elseif result == 0 then
-            break
-        end
-    end
-    -- repeat
-    --     local result = db:exec(insertStmt)
-    --     -- if result ~= 0 then printf('Insert failed for %s %s with error: %s', name, category, result) end
-    --     if result == sql.BUSY then
-    --         print('\arDatabase was busy!') mq.delay(math.random(10,50))
-    --     elseif result == 1 then
-    --         printf('\arInsert failed for statement: \n%s', stmt)
-    --     end
-    -- until result ~= sql.BUSY
+    exec(insertStmt, name, category, 'inserted')
 end
 
 local function rowCallback(udata,cols,values,names)
@@ -225,14 +223,15 @@ local function loadInv(category)
 end
 
 local function dumpInv(name, category)
-    clearCharacterData(name, category)
+    clearCategoryDataForCharacter(name, category)
 
-    insertCharacterData(name, category)
+    insertCharacterDataForCategory(name, category)
 end
 
 if args[1] == 'dumpinv' then
     group[mq.TLO.Me.CleanName()] = {Name=mq.TLO.Me.CleanName(),Class=mq.TLO.Me.Class.Name(),Offline=false}
     table.insert(group, group[mq.TLO.Me.CleanName()])
+    local insertStmt = ''
     for _,list in ipairs(itemLists) do
         local classItems = bisConfig[list][mq.TLO.Me.Class.Name()]
         local templateItems = bisConfig[list].Template
@@ -273,8 +272,10 @@ if args[1] == 'dumpinv' then
             end
         end
         gear[mq.TLO.Me.CleanName()] = results
-        dumpInv(mq.TLO.Me.CleanName(), list)
+        insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list)
     end
+    clearAllDataForCharacter(mq.TLO.Me.CleanName())
+    exec(insertStmt, mq.TLO.Me.CleanName(), nil, 'inserted')
     return
 end
 
