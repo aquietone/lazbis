@@ -748,6 +748,8 @@ local function bisGUI()
                             ImGui.Indent(30)
                             for _,ingredient in ipairs(recipe.Ingredients) do
                                 ImGui.Text('%s%s', ingredient, bisConfig.Info.StatFoodRecipes[7].Recipes[ingredient] and ' - '..bisConfig.Info.StatFoodRecipes[7].Recipes[ingredient].Location or '')
+                                ImGui.SameLine()
+                                ImGui.TextColored(1,1,0,1,'(%s)', mq.TLO.FindItemCount('='..ingredient))
                             end
                             ImGui.Unindent(30)
                             ImGui.TreePop()
@@ -765,10 +767,11 @@ local function bisGUI()
                     if ingredientFilter ~= '' then useIngredientFilter = true else useIngredientFilter = false end
                     local tmpIngredients = bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes
                     if useIngredientFilter then tmpIngredients = filteredIngredients end
-                    if ImGui.BeginTable('Ingredients', 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
+                    if ImGui.BeginTable('Ingredients', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
                         ImGui.TableSetupScrollFreeze(0, 1)
                         ImGui.TableSetupColumn('Ingredient', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
                         ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+                        ImGui.TableSetupColumn('Count', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
                         ImGui.TableHeadersRow()
                         for name,ingredient in pairs(tmpIngredients) do
                             ImGui.TableNextRow()
@@ -776,6 +779,8 @@ local function bisGUI()
                             ImGui.Text(name)
                             ImGui.TableNextColumn()
                             ImGui.Text(ingredient.Location)
+                            ImGui.TableNextColumn()
+                            ImGui.Text('%s', mq.TLO.FindItemCount('='..name))
                         end
                         ImGui.EndTable()
                     end
