@@ -42,6 +42,8 @@ local selectionChanged = true
 local showslots = true
 local showmissingonly = false
 local orderedSkills = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
+local recipeQuest = 'Recipes'
+local recipeQuestIdx = 1
 
 local debug = false
 
@@ -709,6 +711,41 @@ local function bisGUI()
             end
             if ImGui.BeginTabItem('Anguish Focus Effects') then
                 ImGui.Text(bisConfig.Info.AnguishFocusEffects)
+                ImGui.EndTabItem()
+            end
+            if ImGui.BeginTabItem('Stat Food') then
+                ImGui.PushItemWidth(300)
+                if ImGui.BeginCombo('Quest', recipeQuest) then
+                    for i,quest in ipairs(bisConfig.Info.StatFoodRecipes) do
+                        if ImGui.Selectable(quest.Name, recipeQuest == quest.Name) then
+                            recipeQuest = quest.Name
+                            recipeQuestIdx = i
+                        end
+                    end
+                    ImGui.EndCombo()
+                end
+                ImGui.PopItemWidth()
+                if recipeQuest == 'Recipes' then
+                    for _,recipe in ipairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
+                        ImGui.PushStyleColor(ImGuiCol.Text, 0,1,0,1)
+                        local expanded = ImGui.TreeNode(recipe.Name)
+                        ImGui.PopStyleColor()
+                        if expanded then
+                            ImGui.Indent(30)
+                            for _,ingredient in ipairs(recipe.Ingredients) do
+                                ImGui.Text('%s%s', ingredient, bisConfig.Info.StatFoodRecipes[7].Recipes[ingredient] and ' - '..bisConfig.Info.StatFoodRecipes[7].Recipes[ingredient].Location or '')
+                            end
+                            ImGui.Unindent(30)
+                            ImGui.TreePop()
+                        end
+                    end
+                elseif recipeQuest == 'Full Ingredient List' then
+                    for name,ingredient in pairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
+                        ImGui.Text('%s - %s', name, ingredient.Location)
+                    end
+                else
+                    ImGui.Text(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes)
+                end
                 ImGui.EndTabItem()
             end
             if ImGui.BeginTabItem('Links') then
