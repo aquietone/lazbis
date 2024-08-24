@@ -155,16 +155,16 @@ local function resolveInvSlot(invslot)
 end
 
 local function exec(stmt, name, category, action)
-    for i=1,2 do
+    for i=1,10 do
         local wrappedStmt = ('BEGIN TRANSACTION;%s;COMMIT;'):format(stmt)
-        -- printf('Exec: %s', wrappedStmt)
+        if debug then printf('Exec: %s', wrappedStmt) end
         local result = db:exec(wrappedStmt)
         if result == sql.BUSY then
             print('\arDatabase was Busy!') mq.delay(math.random(100,1000))
         elseif result ~= sql.OK then
             printf('\ar%s failed for name: %s, category: %s, result: %s\n%s', action, name, category, result, wrappedStmt)
         elseif result == sql.OK then
-            printf('Successfully %s for name: %s, category: %s', action, name, category)
+            if debug then printf('Successfully %s for name: %s, category: %s', action, name, category) end
             break
         end
     end
@@ -528,6 +528,19 @@ local function filterGear(slots)
     end
 end
 
+local ingredientFilter = ''
+local filteredIngredients = {}
+local useIngredientFilter = false
+
+local function filterIngredients()
+    filteredIngredients = {}
+    for name,ingredient in pairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
+        if name:lower():find(ingredientFilter:lower()) then
+            filteredIngredients[name] = ingredient
+        end
+    end
+end
+
 local function AddUnderline(color)
     local min = ImGui.GetItemRectMinVec()
     local max = ImGui.GetItemRectMaxVec()
@@ -728,7 +741,7 @@ local function bisGUI()
                 ImGui.PopItemWidth()
                 if recipeQuest == 'Recipes' then
                     for _,recipe in ipairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
-                        ImGui.PushStyleColor(ImGuiCol.Text, 0,1,0,1)
+                        ImGui.PushStyleColor(ImGuiCol.Text, 0,1,1,1)
                         local expanded = ImGui.TreeNode(recipe.Name)
                         ImGui.PopStyleColor()
                         if expanded then
@@ -741,8 +754,39 @@ local function bisGUI()
                         end
                     end
                 elseif recipeQuest == 'Full Ingredient List' then
-                    for name,ingredient in pairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
-                        ImGui.Text('%s - %s', name, ingredient.Location)
+                    ImGui.SameLine()
+                    ImGui.PushItemWidth(300)
+                    local tmpIngredientFilter = ImGui.InputTextWithHint('##ingredientfilter', 'Search...', ingredientFilter)
+                    ImGui.PopItemWidth()
+                    if tmpIngredientFilter ~= ingredientFilter then
+                        ingredientFilter = tmpIngredientFilter
+                        filterIngredients()
+                    end
+                    if ingredientFilter ~= '' then useIngredientFilter = true else useIngredientFilter = false end
+                    local tmpIngredients = bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes
+                    if useIngredientFilter then tmpIngredients = filteredIngredients end
+                    if ImGui.BeginTable('Ingredients', 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
+                        ImGui.TableSetupScrollFreeze(0, 1)
+                        ImGui.TableSetupColumn('Ingredient', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+                        ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+                        ImGui.TableHeadersRow()
+                        for name,ingredient in pairs(tmpIngredients) do
+                            ImGui.TableNextRow()
+                            ImGui.TableNextColumn()
+                            ImGui.Text(name)
+                            ImGui.TableNextColumn()
+                            ImGui.Text(ingredient.Location)
+                        end
+                        ImGui.EndTable()
+                    end
+                elseif type(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) == 'table' then
+                    for _,questStep in ipairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
+                        ImGui.TextColored(0,1,1,1,questStep.Name)
+                        ImGui.Indent(25)
+                        for _,step in ipairs(questStep.Steps) do
+                            ImGui.Text('\xee\x97\x8c %s', step)
+                        end
+                        ImGui.Unindent(25)
                     end
                 else
                     ImGui.Text(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes)

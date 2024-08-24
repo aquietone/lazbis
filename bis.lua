@@ -1942,18 +1942,28 @@ return {
 	['questitems'] = {
 		['Bard'] = {
 			['ImbuedRune'] = 'Imbued Rune of Echoes',
+			['Food'] = 'Hunters Meat and Taters',
+			['Drink'] = 'Stalkers Spirit Slush',
 		},
 		['Berserker'] = {
 			['ImbuedRune'] = 'Imbued Rune of Overpowering Frenzy',
+			['Food'] = 'Hunters Meat and Taters',
+			['Drink'] = 'Stalkers Spirit Slush',
 		},
 		['Beastlord'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mikkily\'s Healing',
+			['Food'] = 'Hunters Meat and Taters',
+			['Drink'] = 'Stalkers Spirit Slush',
 		},
 		['Cleric'] = {
 			['ImbuedRune'] = 'Imbued Rune of Vie',
+			['Food'] = 'Sleek Spring Roll Sampler',
+			['Drink'] = 'Darting Dragonroot Daquiri',
 		},
 		['Druid'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Immolating Sun',
+			['Food'] = 'Sleek Spring Roll Sampler',
+			['Drink'] = 'Darting Dragonroot Daquiri',
 		},
 		['Enchanter'] = {
 			['ImbuedRune'] = 'Imbued Rune of Tashan\'s Echo',
@@ -1967,11 +1977,13 @@ return {
 		},
 		['Monk'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dragon Fang',
+			['Food'] = 'Hunters Meat and Taters',
+			['Drink'] = 'Stalkers Spirit Slush',
 		},
 		['Necromancer'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dark Salve',
-			['Food'] = 'Sorcerers Spiced Chicken',
-			['Drink'] = 'Arcane Ambrosia Daquiri',
+			['Food'] = 'Sleek Spring Roll Sampler',
+			['Drink'] = 'Darting Dragonroot Daquiri',
 		},
 		['Paladin'] = {
 			['ImbuedRune'] = 'Imbued Rune of Piety',
@@ -1980,9 +1992,13 @@ return {
 		},
 		['Ranger'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jolting Snapkicks',
+			['Food'] = 'Hunters Meat and Taters',
+			['Drink'] = 'Stalkers Spirit Slush',
 		},
 		['Rogue'] = {
 			['ImbuedRune'] = 'Imbued Rune of Assault',
+			['Food'] = 'Hunters Meat and Taters',
+			['Drink'] = 'Stalkers Spirit Slush',
 		},
 		['Shadow Knight'] = {
 			['ImbuedRune'] = 'Imbued Rune of Agony and Hate',
@@ -1991,6 +2007,8 @@ return {
 		},
 		['Shaman'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Panther',
+			['Food'] = 'Sleek Spring Roll Sampler',
+			['Drink'] = 'Darting Dragonroot Daquiri',
 		},
 		['Warrior'] = {
 			['ImbuedRune'] = 'Imbued Rune of Brutal Onslaught',
@@ -2477,36 +2495,36 @@ Stout Key - Tank 2H Burn Clicky]],
 				Name='Recipes',
 				Recipes={
 					{
-						Name='Armored Starfish Skewers (80 ac, 330 hp, 160 mp, 15 agi, 10 sta)',
-						Ingredients={'Armored Starfish', 'Earthcore Egg', 'Tomato', 'Onion', 'Sweet Green Pepper', 'Hot Red Pepper', 'Fry Oil'},
+						Name='Armored Starfish Skewers (Tank - 80 ac, 330 hp, 160 mp, 15 agi, 10 sta)',
+						Ingredients={'Armored Starfish', 'Earthcore Egg', 'Fry Oil', 'Hot Red Pepper', 'Onion', 'Sweet Green Pepper', 'Tomato'},
 					},
 					{
-						Name='Bamboo Defender Margarita (75 ac, 320 hp, 185 mp, 20 agi, 5 sta)',
-						Ingredients={'Shieldwater', 'Azure Bamboo Leaves', 'Gnomish Spirits', 'Garnish', 'Fruit', 'Rock Salt', 'Ice Crystals'},
+						Name='Bamboo Defender Margarita (Tank - 75 ac, 320 hp, 185 mp, 20 agi, 5 sta)',
+						Ingredients={'Azure Bamboo Leaves', 'Shieldwater', 'Fruit', 'Garnish', 'Gnomish Spirits', 'Ice Crystals', 'Rock Salt'},
 					},
 					{
-						Name='Hunters Meat and Taters (40 ac, 275 hp, 360 mp, 15 dex, 10 str)',
-						Ingredients={'Rujarkian Potato', 'Fry Oil', 'Firestorm Peppers', 'Bear Meat', 'Lion Meat', 'Gator Meat', 'Snake Meat'},
+						Name='Hunters Meat and Taters (Melee - 40 ac, 275 hp, 360 mp, 15 dex, 10 str)',
+						Ingredients={'Firestorm Peppers', 'Rujarkian Potato', 'Bear Meat', 'Fry Oil', 'Gator Meat', 'Lion Meat', 'Snake Meat'},
 					},
 					{
-						Name='Stalkers Spirit Slush (35 ac, 265 hp, 385 mp, 20 dex, 5 str)',
-						Ingredients={'Echo of the Forest', 'Luminescent Sea Blossom', 'Elven Wine', 'Ice Crystals', 'Sugarcane', 'Rock Salt'},
+						Name='Stalkers Spirit Slush (Melee - 35 ac, 265 hp, 385 mp, 20 dex, 5 str)',
+						Ingredients={'Echo of the Forest', 'Luminescent Sea Blossom', 'Elven Wine', 'Ice Crystals', 'Rock Salt', 'Sugarcane'},
 					},
 					{
-						Name='Sleek Spring Roll Sampler (55 ac, 375 hp, 225 mp, 25 sta, 10 agi)',
-						Ingredients={'Swiftbloom Apple', 'Dragonroot', 'Spices', 'Honey', 'Jug of Sauces', 'Clump of Dough', 'Butter', 'Fry Oil'},
+						Name='Sleek Spring Roll Sampler (Priest - 55 ac, 375 hp, 225 mp, 25 sta, 10 agi)',
+						Ingredients={'Dragonroot', 'Swiftbloom Apple', 'Butter', 'Clump of Dough', 'Fry Oil', 'Honey', 'Jug of Sauces', 'Spices'},
 					},
 					{
-						Name='Darting Dragonroot Daquiri (50 ac, 365 hp, 250 mp, 20 sta, 5 agi)',
-						Ingredients={'Swiftbloom Apple', 'Dragonroot', 'Warden\'s Mint', 'Rock Salt', 'Ice Crystals', 'Gnomish Spirits', 'Garnish'},
+						Name='Darting Dragonroot Daquiri (Priest - 50 ac, 365 hp, 250 mp, 20 sta, 5 agi)',
+						Ingredients={'Dragonroot', 'Swiftbloom Apple', 'Warden\'s Mint', 'Garnish', 'Gnomish Spirits', 'Ice Crystals', 'Rock Salt'},
 					},
 					{
-						Name='Sorcerers Spice Chicken (10 ac, 210 hp, 510 mp, 40 int/wis, 35 MR)',
-						Ingredients={'Celestial Thyme Leaves', 'Marinated Chicken Meat', 'Sorcerers Secret Herb and Spice Mix', 'Fry Oil'},
+						Name='Sorcerers Spice Chicken (Caster - 10 ac, 210 hp, 510 mp, 40 int/wis, 35 MR)',
+						Ingredients={'Celestial Thyme Leaves', 'Sorcerers Secret Herb and Spice Mix', 'Fry Oil', 'Marinated Chicken Meat'},
 					},
 					{
-						Name='Arcane Ambrosia Daiquiri (5 ac, 200 hp, 535 mp, 50 int/wis, 35 MR)',
-						Ingredients={'Nectar of Fae Blossoms', 'Stardust Honeydew', 'Ice Crystals', 'Coconut Milk', 'Spiced Rum'},
+						Name='Arcane Ambrosia Daiquiri (Caster - 5 ac, 200 hp, 535 mp, 50 int/wis, 35 MR)',
+						Ingredients={'Nectar of Fae Blossoms', 'Stardust Honeydew', 'Coconut Milk', 'Ice Crystals', 'Spiced Rum'},
 					},
 					{
 						Name='Inferno Fin Sizzle (25 ac, 325 hp, 275 mp, 30 int/wis, 25 FR)',
@@ -2552,200 +2570,324 @@ Stout Key - Tank 2H Burn Clicky]],
 			},
 			{
 				Name='Isabella (South Qeynos)',
-				Recipes=[[Step 1:
-Emberroot from Lava Storm (Foraged)
-Ashen Sea Salt from Erud's Crossing (Ground Spawn)
-Cinder Cinnamon Bark from Nektulos Forest (Ground Spawn) (Need 1 for Rafael later also)
-Flameleaf Mint from Temple of Solusek Ro (Ground Spawn)
-
-Step 2:
-Icicle-Scaled Cod from Stonebrunt Mountains (Fishing)
-Aurora Mint Leaves from Stonebrunt Mountains (Foraged)
-Frigid Lemon from Everfrost Peaks (Foraged)
-Glacial Blossom Nectar from Permafrost Keep (Ground Spawn)
-
-Step 3:
-Crystallized Fairy Sugar from Lesser Faydark (Dropped)
-Starflower Nectar from Umbral Plains (Foraged)
-Lunar Dew Drops from Twilight Sea (Foraged)
-Moonstone Citrus Fruit from The Deep (Ground Spawn)
-
-Step 4:
-Viper Meat from Qeynos Catacombs (Dropped)
-Venomberry from Nektulos Forest (Foraged)
-Poison Dart Plum from Kerra Isle (Foraged)
-Venomous Vine Fruit from Innothule Swamp (Foraged)
-
-Step 5:
-Blighted Chive Sprigs from The Feerrott (Ground Spawn)
-Necrotic Redberries from Kithicor Forest (Foraged)
-Baneleaf Hibiscus Petals from Najena (Ground Spawn)
-Molded Rye Bran from North Freeport (Vendor - )
-
-Flame-Kissed Emberbread - Emberroot, Ashen Sea Salt, Clump of Dough, Cup of Sugar, Yeast, Almonds
-Blaze-Brewed Elixir - Cinder Cinnamon Bars, Flameleaf Mint, Spices, Water Flask, Brandy
-Glacial Fish Delight - Icicle-Scaled Cod, Frigid Lemon, Jug of Sauces, Spices, Onion, Ginger, Ground Garlic
-Glacial Crystal Nectar - Glacial Blossom Nectar, Aurora Mint Leaves, Fruit, Cup of Sugar, Water Flask, White Wine
-Mystical Muffins - Crystallized Fairy Sugar, Starflower Nectar, Rock Salt, Clump of Dough, Butter
-Enchanting Elixir - Lunar Dew Drops, Moonstone Citrus Fruit, Soda, Water Flask, Honey
-Venomous Viper Vittles - Viper Meat, Venomberry, Spices, Jug of Sauces, Hot Red Pepper, Weak Taipan Venom
-Noxious Nectar - Poison Dart Plum, Venomous Vine Fruit, Bottle of Milk, Water Flask, Sugarcane, Delphinium
-Rotting Rye Rolls - Blighted Chive Spores, Molded Rye Bran, Rock Salt, Cup of Sugar, Frosting, Clump of Dough
-Blighted Berry Brew - Necrotic Redberries, Baneleaf Hibiscus Petals, Fruit, Weak Oleander Extract, Red Wine]]
+				Recipes={
+					{
+						Name='Step 1',
+						Steps={
+							'Emberroot from Lava Storm (Foraged)',
+							'Ashen Sea Salt from Erud\'s Crossing (Ground Spawn)',
+							'Cinder Cinnamon Bark from Nektulos Forest (Ground Spawn) (Need 1 for Rafael later also)',
+							'Flameleaf Mint from Temple of Solusek Ro (Ground Spawn)',
+						},
+					},
+					{
+						Name='Step 2',
+						Steps={
+							'Icicle-Scaled Cod from Stonebrunt Mountains (Fishing)',
+							'Aurora Mint Leaves from Stonebrunt Mountains (Foraged)',
+							'Frigid Lemon from Everfrost Peaks (Foraged)',
+							'Glacial Blossom Nectar from Permafrost Keep (Ground Spawn)',
+						}
+					},
+					{
+						Name='Step 3',
+						Steps={
+							'Crystallized Fairy Sugar from Lesser Faydark (Dropped)',
+							'Starflower Nectar from Umbral Plains (Foraged)',
+							'Lunar Dew Drops from Twilight Sea (Foraged)',
+							'Moonstone Citrus Fruit from The Deep (Ground Spawn)',
+						}
+					},
+					{
+						Name='Step 4',
+						Steps={
+							'Viper Meat from Qeynos Catacombs (Dropped)',
+							'Venomberry from Nektulos Forest (Foraged)',
+							'Poison Dart Plum from Kerra Isle (Foraged)',
+							'Venomous Vine Fruit from Innothule Swamp (Foraged)',
+						}
+					},
+					{
+						Name='Step 5',
+						Steps={
+							'Blighted Chive Sprigs from The Feerrott (Ground Spawn)',
+							'Necrotic Redberries from Kithicor Forest (Foraged)',
+							'Baneleaf Hibiscus Petals from Najena (Ground Spawn)',
+							'Molded Rye Bran from North Freeport (Vendor - )',
+						}
+					},
+-- Flame-Kissed Emberbread - Emberroot, Ashen Sea Salt, Clump of Dough, Cup of Sugar, Yeast, Almonds
+-- Blaze-Brewed Elixir - Cinder Cinnamon Bars, Flameleaf Mint, Spices, Water Flask, Brandy
+-- Glacial Fish Delight - Icicle-Scaled Cod, Frigid Lemon, Jug of Sauces, Spices, Onion, Ginger, Ground Garlic
+-- Glacial Crystal Nectar - Glacial Blossom Nectar, Aurora Mint Leaves, Fruit, Cup of Sugar, Water Flask, White Wine
+-- Mystical Muffins - Crystallized Fairy Sugar, Starflower Nectar, Rock Salt, Clump of Dough, Butter
+-- Enchanting Elixir - Lunar Dew Drops, Moonstone Citrus Fruit, Soda, Water Flask, Honey
+-- Venomous Viper Vittles - Viper Meat, Venomberry, Spices, Jug of Sauces, Hot Red Pepper, Weak Taipan Venom
+-- Noxious Nectar - Poison Dart Plum, Venomous Vine Fruit, Bottle of Milk, Water Flask, Sugarcane, Delphinium
+-- Rotting Rye Rolls - Blighted Chive Spores, Molded Rye Bran, Rock Salt, Cup of Sugar, Frosting, Clump of Dough
+-- Blighted Berry Brew - Necrotic Redberries, Baneleaf Hibiscus Petals, Fruit, Weak Oleander Extract, Red Wine
+				},
 			},
 			{
 				Name='Rafael (North Freeport)',
-				Recipes=[[Step 1:
-Glimmerleaf Banana from Highpass Hold (Foraged)
-Rock Lobster from Dagnor's Cauldron (Fished)
-Aegis Blossom from Surefall Glade (Foraged)
-Wardweave Roots from Misty Thicket (Ground Spawn)
-
-Step 2:
-2 Nimbus Nectarines from West Karana (Foraged)
-2 Flutterybys from Nedaria's Landing (Foraged)
-
-Step 3:
-Wildheart Wasabi from Emerald Jungle (Ground Spawn)
-Rhino Ribs from Overthere (Dropped)
-2 Furythorn Figs from Oasis of Marr (Foraged)
-
-Step 4:
-Cinder Cinnamon Bark from Nektulous Forest (Ground Spawn)
-2 Quickstrike Coconuts from North Ro (Foraged)
-Stillmoon Pepper from East Freeport (Vendor - Traveling Spice Merchant)
-
-Golden Shield Gyoza - Glimmerleaf Banana, Rock Lobster, Sweet Green Pepper, Onion, Cup of Flour, Rock Salt, Water Flask
-Guardian's Green Tea Elixir - Aegis Blossom, Wardweave Roots, Ginger, Honey, Water Flask
-Swift Soba Salad - Nimbus Nectarines, Flutterby, Noodles, Onion, Sweet Green Pepper, Carrot
-Swift Sake Spritzer - Nimbus Nectarines, Flutterby, Soda, Water Flask, Rice, Garnish
-Wild Wasabi Skewers - Wildheart Wasabi, Rhino Ribs, Onion, Tomato, Hot Red Pepper, Sweet Green Pepper
-Feral Fig Fizz - Furythorn Fig x2, Soda, Water Flask, Brandy, Sugarcane
-Slashing Stillmoon Snaps - Stillmoon Pepper, Butter, Cup of Sugar, Clump of Dough, Oats
-Chai Coconut Charger - Quickstrike Coconut x2, Cinder Cinnamon Bark, Bottle of Milk, Honey, Sugarcane, Emerald Tea Leaf]]
+				Recipes={
+					{
+						Name='Step 1',
+						Steps={
+							'Glimmerleaf Banana from Highpass Hold (Foraged)',
+							'Rock Lobster from Dagnor\'s Cauldron (Fished)',
+							'Aegis Blossom from Surefall Glade (Foraged)',
+							'Wardweave Roots from Misty Thicket (Ground Spawn)',
+						},
+					},
+					{
+						Name='Step 1',
+						Steps={
+							'2 Nimbus Nectarines from West Karana (Foraged)',
+							'2 Flutterybys from Nedaria\'s Landing (Foraged)',
+						},
+					},
+					{
+						Name='Step 1',
+						Steps={
+							'Wildheart Wasabi from Emerald Jungle (Ground Spawn)',
+							'Rhino Ribs from Overthere (Dropped)',
+							'2 Furythorn Figs from Oasis of Marr (Foraged)',
+						},
+					},
+					{
+						Name='Step 1',
+						Steps={
+							'Cinder Cinnamon Bark from Nektulous Forest (Ground Spawn)',
+							'2 Quickstrike Coconuts from North Ro (Foraged)',
+							'Stillmoon Pepper from East Freeport (Vendor - Traveling Spice Merchant)',
+						},
+					},
+-- Golden Shield Gyoza - Glimmerleaf Banana, Rock Lobster, Sweet Green Pepper, Onion, Cup of Flour, Rock Salt, Water Flask
+-- Guardian's Green Tea Elixir - Aegis Blossom, Wardweave Roots, Ginger, Honey, Water Flask
+-- Swift Soba Salad - Nimbus Nectarines, Flutterby, Noodles, Onion, Sweet Green Pepper, Carrot
+-- Swift Sake Spritzer - Nimbus Nectarines, Flutterby, Soda, Water Flask, Rice, Garnish
+-- Wild Wasabi Skewers - Wildheart Wasabi, Rhino Ribs, Onion, Tomato, Hot Red Pepper, Sweet Green Pepper
+-- Feral Fig Fizz - Furythorn Fig x2, Soda, Water Flask, Brandy, Sugarcane
+-- Slashing Stillmoon Snaps - Stillmoon Pepper, Butter, Cup of Sugar, Clump of Dough, Oats
+-- Chai Coconut Charger - Quickstrike Coconut x2, Cinder Cinnamon Bark, Bottle of Milk, Honey, Sugarcane, Emerald Tea Leaf
+				},
 			},
 			{
 				Name='Madame Celestia Part 1 (North Felwithe)',
-				Recipes=[[Step 1:
-Talk to Julian Piquant in North Felwithe
-
-Step 2:
-Say 'Madame Celestia sent me' to Crystalstorm Frostwind in Western Wastes
-
-Step 3:
-Gale Rune from Western Wastes (Ground Spawn)
-Frostflake Rune from King Tormax throne in Kael Drakkel (Ground Spawn)
-Cold Radiance Rune from Dain Frostreaver IV bedroom in Thurgadin (Ground Spawn)
-Rune Four from Lord Yelinak room in Skyshrine (Ground Spawn)
-
-Step 4:
-Speak to Livvy in Iceclad Ocean
-
-Step 5:
-Perfect Snow from Iceclad Ocean (Ground Spawn)
-Perfect Carrot from Eastern Wastes (Dropped - The Killer Rabbit of Caerbannog, spawns on zone in)
-Perfect Scarf from Galbasi Weaver in Erudin (Vendor)
-Perfect Hat from Fashionably Departed in East Karana (/open corpse)
-
-Step 6:
-Combine 4 Perfect items in Create Snowman to create Perfect Snowman
-
-Step 7:
-Give Perfect Snowman to Livvy in Iceclad Ocean
-
-Step 8:
-Give Heart of Winter to Crystalstorm Frostwind in Western Wastes]]
+				Recipes={
+					{
+						Name='Step 1',
+						Steps={
+							'Talk to Julian Piquant in North Felwithe',
+						}
+					},
+					{
+						Name='Step 2',
+						Steps={
+							'Say \'Madame Celestia sent me\' to Crystalstorm Frostwind in Western Wastes',
+						}
+					},
+					{
+						Name='Step 3',
+						Steps={
+							'Gale Rune from Western Wastes (Ground Spawn)',
+							'Frostflake Rune from King Tormax throne in Kael Drakkel (Ground Spawn)',
+							'Cold Radiance Rune from Dain Frostreaver IV bedroom in Thurgadin (Ground Spawn)',
+							'Rune Four from Lord Yelinak room in Skyshrine (Ground Spawn)',
+						}
+					},
+					{
+						Name='Step 4',
+						Steps={
+							'Speak to Livvy in Iceclad Ocean',
+						}
+					},
+					{
+						Name='Step 5',
+						Steps={
+							'Perfect Snow from Iceclad Ocean (Ground Spawn)',
+							'Perfect Carrot from Eastern Wastes (Dropped - The Killer Rabbit of Caerbannog, spawns on zone in)',
+							'Perfect Scarf from Galbasi Weaver in Erudin (Vendor)',
+							'Perfect Hat from Fashionably Departed in East Karana (/open corpse)',
+						}
+					},
+					{
+						Name='Step 6',
+						Steps={
+							'Combine 4 Perfect items in Create Snowman to create Perfect Snowman',
+						}
+					},
+					{
+						Name='Step 7',
+						Steps={
+							'Give Perfect Snowman to Livvy in Iceclad Ocean',
+						}
+					},
+					{
+						Name='Step 8',
+						Steps={
+							'Give Heart of Winter to Crystalstorm Frostwind in Western Wastes',
+						}
+					},
+				},
 			},
 			{
 				Name='Madame Celestia Part 2 (North Felwithe)',
-				Recipes=[[Step 1:
-Hail Madame Celestia and Julian Piquant
-
-Step 2:
-Give both schematics to Gizmodius Blizzlespark in Steamfont Mountains
-
-Step 3:
-Talk to Gorak Bladeheart in West Freeport and give him a Fabled Earthshaker
-
-Step 4:
-Give Ever Sharp Blades to Gizmodius Blizzlespark in Steamfont Mountains
-
-Step 5:
-Kill Clockwork Dragon (spawns on zone in) and loot Power Source in Plane of Innovation
-
-Step 6:
-Give Power Source to Gizmodius Blizzlespark in Steamfont Mountains
-
-Step 7:
-Buy Crankshaft from a clockwork merchant near ak'anon zone in
-
-Step 8:
-Buy Clockwork Timer from tinkering merchant Rylin Coil in ak'anon
-
-Step 9:
-Give Clockwork Timer and Crankshaft to Gizmodius Blizzlespark in Steamfont Mountains
-
-Step 10:
-Give both Prototypes to Julian Piquant in North Felwithe]]
+				Recipes={
+					{
+						Name='Step 1',
+						Steps={
+							'Hail Madame Celestia and Julian Piquant',
+						}
+					},
+					{
+						Name='Step 2',
+						Steps={
+							'Give both schematics to Gizmodius Blizzlespark in Steamfont Mountains',
+						}
+					},
+					{
+						Name='Step 3',
+						Steps={
+							'Talk to Gorak Bladeheart in West Freeport and give him a Fabled Earthshaker',
+						}
+					},
+					{
+						Name='Step 4',
+						Steps={
+							'Give Ever Sharp Blades to Gizmodius Blizzlespark in Steamfont Mountains',
+						}
+					},
+					{
+						Name='Step 5',
+						Steps={
+							'Kill Clockwork Dragon (spawns on zone in) and loot Power Source in Plane of Innovation',
+						}
+					},
+					{
+						Name='Step 6',
+						Steps={
+							'Give Power Source to Gizmodius Blizzlespark in Steamfont Mountains',
+						}
+					},
+					{
+						Name='Step 7',
+						Steps={
+							'Buy Crankshaft from a clockwork merchant near ak\'anon zone in',
+						}
+					},
+					{
+						Name='Step 8',
+						Steps={
+							'Buy Clockwork Timer from tinkering merchant Rylin Coil in ak\'anon',
+						}
+					},
+					{
+						Name='Step 9',
+						Steps={
+							'Give Clockwork Timer and Crankshaft to Gizmodius Blizzlespark in Steamfont Mountains',
+						}
+					},
+					{
+						Name='Step 19',
+						Steps={
+							'Give both Prototypes to Julian Piquant in North Felwithe',
+						}
+					},
+				},
 			},
 			{
 				Name='Madame Celestia Part 3 (North Felwithe)',
-				Recipes=[[Step 1:
-Hail Julian Piquant and Madame Celestia
-
-Step 2:
-Inferno Fin from Skyfire Mountains (Ground Spawn in lava river)
-Blazing Seaweed from Timorous Deep (Foraged)
-Phoenix Ember Tea Leaves from Plane of Fire (Ground Spawn by phoenix mini)
-Inferno Berries from Skyfire Mountains (Foraged)
-
-Step 3:
-Blizzard Pea Pods from Dreadlands (Ground Spawn)
-Tundra Truffle from Eastern Wastes (Foraged)
-Frostberries from Great Divide (Foraged)
-Frozen Hibiscus Petals from Timorous Deep (Ground Spawn)
-
-Step 4:
-Celestial Thyme Leaves from Plane of Time A (Foraged)
-Sorcerer's Secret Herb and Spice Mix from Scarlet Desert (Pick Pocket Harland or Alvin)
-Nectar of Fae Blossoms from Plane of Growth (Foraged)
-Stardust Honeydew from The Gray (Ground Spawn)
-
-Step 5:
-Blighted Walnuts from Swamp of No Hope (Foraged)
-Tangleberry from Swamp of No Hope (Ground Spawn)
-Shadowleaf Mint from Plane of Torment (Foraged)
-Nightshade Rose from Plane of Mischief (Ground Spawn)
-
-Step 6:
-Baneleaf Potato from Innothule Swamp (Ground Spawn)
-Blightfish from Plane of Disease (Fishing)
-Blighted Mushroom from Fungus Grove (Foraged)
-Elderflower from Plane of Justice (Ground Spawn)
-
-Step 7:
-Armored Starfish from Karnor's Castle (Fishing)
-Earthcore Egg from Jaggedpine Forest (Ground Spawn)
-Shieldwater from Charasis (Vendor - Wandering Monk)
-Azure Bamboo Leaves from Trakanon's Teeth (Foraged)
-
-Step 8:
-Swiftbloom Apple from Plane of Time A (Ground Spawn)
-Dragonroot from Old Sebilis (Ground Spawn)
-Warden's Mint from Greater Faydark (Foraged)
-Pod of Water (Foraged)
-
-Step 9:
-Frenzy Fang Chili from Overthere (Ground Spawn)
-Raw Beef from Julian Piquant (Vendor)
-Trail Blazer Tamarind from Warsliks Woods (Foraged)
-Enchanted Black Pepper Crystals from Julian Piquant (Vendor)
-
-Step 10:
-Rujarkian Potato from Rujarkian Hills LDON (Foraged)
-Firestorm Peppers from Burning Woods (Ground Spawn)
-Echo of the Forest from Surefall Glade (Ground Spawn)
-Luminescent Sea Blossom from Warsliks Woods (Fishing)]]
+				Recipes={
+					{
+						Name='Step 1',
+						Steps={
+							'Hail Julian Piquant and Madame Celestia',
+						}
+					},
+					{
+						Name='Step 2',
+						Steps={
+							'Inferno Fin from Skyfire Mountains (Ground Spawn in lava river)',
+							'Blazing Seaweed from Timorous Deep (Foraged)',
+							'Phoenix Ember Tea Leaves from Plane of Fire (Ground Spawn by phoenix mini)',
+							'Inferno Berries from Skyfire Mountains (Foraged)',
+						}
+					},
+					{
+						Name='Step 3',
+						Steps={
+							'Blizzard Pea Pods from Dreadlands (Ground Spawn)',
+							'Tundra Truffle from Eastern Wastes (Foraged)',
+							'Frostberries from Great Divide (Foraged)',
+							'Frozen Hibiscus Petals from Timorous Deep (Ground Spawn)',
+						}
+					},
+					{
+						Name='Step 4',
+						Steps={
+							'Celestial Thyme Leaves from Plane of Time A (Foraged)',
+							'Sorcerer\'s Secret Herb and Spice Mix from Scarlet Desert (Pick Pocket Harland or Alvin)',
+							'Nectar of Fae Blossoms from Plane of Growth (Foraged)',
+							'Stardust Honeydew from The Gray (Ground Spawn)',
+						}
+					},
+					{
+						Name='Step 5',
+						Steps={
+							'Blighted Walnuts from Swamp of No Hope (Foraged)',
+							'Tangleberry from Swamp of No Hope (Ground Spawn)',
+							'Shadowleaf Mint from Plane of Torment (Foraged)',
+							'Nightshade Rose from Plane of Mischief (Ground Spawn)',
+						}
+					},
+					{
+						Name='Step 6',
+						Steps={
+							'Baneleaf Potato from Innothule Swamp (Ground Spawn)',
+							'Blightfish from Plane of Disease (Fishing)',
+							'Blighted Mushroom from Fungus Grove (Foraged)',
+							'Elderflower from Plane of Justice (Ground Spawn)',
+						}
+					},
+					{
+						Name='Step 7',
+						Steps={
+							'Armored Starfish from Karnor\'s Castle (Fishing)',
+							'Earthcore Egg from Jaggedpine Forest (Ground Spawn)',
+							'Shieldwater from Charasis (Vendor - Wandering Monk)',
+							'Azure Bamboo Leaves from Trakanon\'s Teeth (Foraged)',
+						}
+					},
+					{
+						Name='Step 8',
+						Steps={
+							'Swiftbloom Apple from Plane of Time A (Ground Spawn)',
+							'Dragonroot from Old Sebilis (Ground Spawn)',
+							'Warden\'s Mint from Greater Faydark (Foraged)',
+							'Pod of Water (Foraged)',
+						}
+					},
+					{
+						Name='Step 9',
+						Steps={
+							'Frenzy Fang Chili from Overthere (Ground Spawn)',
+							'Raw Beef from Julian Piquant (Vendor)',
+							'Trail Blazer Tamarind from Warsliks Woods (Foraged)',
+							'Enchanted Black Pepper Crystals from Julian Piquant (Vendor)',
+						}
+					},
+					{
+						Name='Step 10',
+						Steps={
+							'Rujarkian Potato from Rujarkian Hills LDON (Foraged)',
+							'Firestorm Peppers from Burning Woods (Ground Spawn)',
+							'Echo of the Forest from Surefall Glade (Ground Spawn)',
+							'Luminescent Sea Blossom from Warsliks Woods (Fishing)',
+						}
+					},
+				},
 			},
 			{
 				Name='Full Ingredient List',
@@ -2831,6 +2973,7 @@ Luminescent Sea Blossom from Warsliks Woods (Fishing)]]
 					['Fry Oil'] = {Location='Julian Piquant (Vendor)'},
 					['Marinated Chicken Meat'] = {Location='Julian Piquant (Vendor)'},
 					['Victory Toast Whiskey'] = {Location='Julian Piquant (Vendor)'},
+					['Clump of Dough'] = {Location='Cup of Flour, Basilisk Egg, Bottle of Milk'}
 				}
 			}
 		}
