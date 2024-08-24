@@ -926,7 +926,6 @@ return {
 			['Finger1'] = 'Band of the Dragon\'s Bane',
 			['Finger2'] = 'Ringlet of Restless Spirits',
 			['MainHand'] = 'Grim Silhouette',
-			['Secondary'] = 'Shimmer of Strife',
 			['Ranged'] = 'Lightstone of the Ruined Lands',
 			['RangedAug'] = 'Rat Ears',
 			['Aug1'] = 'Hideous Hex of Benevolent Extension',
@@ -1958,18 +1957,26 @@ return {
 		},
 		['Enchanter'] = {
 			['ImbuedRune'] = 'Imbued Rune of Tashan\'s Echo',
+			['Food'] = 'Sorcerers Spiced Chicken',
+			['Drink'] = 'Arcane Ambrosia Daquiri',
 		},
 		['Magician'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jerikor\'s Renewal',
+			['Food'] = 'Sorcerers Spiced Chicken',
+			['Drink'] = 'Arcane Ambrosia Daquiri',
 		},
 		['Monk'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dragon Fang',
 		},
 		['Necromancer'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dark Salve',
+			['Food'] = 'Sorcerers Spiced Chicken',
+			['Drink'] = 'Arcane Ambrosia Daquiri',
 		},
 		['Paladin'] = {
 			['ImbuedRune'] = 'Imbued Rune of Piety',
+			['Food'] = 'Armored Starfish Skewers',
+			['Drink'] = 'Bamboo Defender Margarita',
 		},
 		['Ranger'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jolting Snapkicks',
@@ -1979,15 +1986,21 @@ return {
 		},
 		['Shadow Knight'] = {
 			['ImbuedRune'] = 'Imbued Rune of Agony and Hate',
+			['Food'] = 'Armored Starfish Skewers',
+			['Drink'] = 'Bamboo Defender Margarita',
 		},
 		['Shaman'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Panther',
 		},
 		['Warrior'] = {
 			['ImbuedRune'] = 'Imbued Rune of Brutal Onslaught',
+			['Food'] = 'Armored Starfish Skewers',
+			['Drink'] = 'Bamboo Defender Margarita',
 		},
 		['Wizard'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mana Weave',
+			['Food'] = 'Sorcerers Spiced Chicken',
+			['Drink'] = 'Arcane Ambrosia Daquiri',
 		},
 		['Template'] = {
 			['FabledBrew'] = 'Fabled Blackout Brew',
@@ -2006,6 +2019,7 @@ return {
 				{Name='Augs', Slots={'BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm'}},
+				{Name='Food/Drink', Slots={'Food','Drink'}}
 			}
 		}
 	},
