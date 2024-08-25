@@ -31,7 +31,6 @@ local gear = {}
 local group = {}
 local itemChecks = {}
 local tradeskills = {}
-local ldons = {}
 
 -- Item list information
 local bisConfig = require('bis')
@@ -44,6 +43,7 @@ local showmissingonly = false
 local orderedSkills = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
 local recipeQuest = 'Recipes'
 local recipeQuestIdx = 1
+local ingredientsArray = {}
 
 local debug = false
 
@@ -71,6 +71,11 @@ elseif mq.TLO.Zone.ShortName() == 'unrest' then
     selectedItemList = 3
     itemList = bisConfig.fuku
 end
+
+for name,ingredient in pairs(bisConfig.Info.StatFoodRecipes[7].Recipes) do
+    table.insert(ingredientsArray, {Name=name, Location=ingredient.Location})
+end
+table.sort(ingredientsArray, function(a,b) return a.Name < b.Name end)
 
 local function split(str, char)
     return string.gmatch(str, '[^' .. char .. ']+')
@@ -534,9 +539,9 @@ local useIngredientFilter = false
 
 local function filterIngredients()
     filteredIngredients = {}
-    for name,ingredient in pairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
-        if name:lower():find(ingredientFilter:lower()) then
-            filteredIngredients[name] = ingredient
+    for _,ingredient in pairs(ingredientsArray) do
+        if ingredient.Name:lower():find(ingredientFilter:lower()) then
+            table.insert(filteredIngredients, ingredient)
         end
     end
 end
@@ -564,6 +569,46 @@ local function DrawTextLink(label, url)
     -- else
     --     AddUnderline(ImGui.GetStyleColor(ImGuiCol.Button))
     end
+end
+
+local ColumnID_Name = 1
+local ColumnID_Location = 2
+local current_sort_specs = nil
+local function CompareWithSortSpecs(a, b)
+    for n = 1, current_sort_specs.SpecsCount, 1 do
+        -- Here we identify columns using the ColumnUserID value that we ourselves passed to TableSetupColumn()
+        -- We could also choose to identify columns based on their index (sort_spec.ColumnIndex), which is simpler!
+        local sort_spec = current_sort_specs:Specs(n)
+        local delta = 0
+
+        local sortA = a
+        local sortB = b
+        if sort_spec.ColumnUserID == ColumnID_Name then
+            sortA = a.Name
+            sortB = b.Name
+        elseif sort_spec.ColumnUserID == ColumnID_Location then
+            sortA = a.Location
+            sortB = b.Location
+        end
+        if sortA < sortB then
+            delta = -1
+        elseif sortB < sortA then
+            delta = 1
+        else
+            delta = 0
+        end
+
+        if delta ~= 0 then
+            if sort_spec.SortDirection == ImGuiSortDirection.Ascending then
+                return delta < 0
+            end
+            return delta > 0
+        end
+    end
+
+    -- Always return a way to differentiate items.
+    -- Your own compare function may want to avoid fallback on implicit sort specs e.g. a Name compare if it wasn't already part of the sort specs.
+    return a.Name < b.Name
 end
 
 local function bisGUI()
@@ -765,22 +810,34 @@ local function bisGUI()
                         filterIngredients()
                     end
                     if ingredientFilter ~= '' then useIngredientFilter = true else useIngredientFilter = false end
-                    local tmpIngredients = bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes
+                    local tmpIngredients = ingredientsArray
                     if useIngredientFilter then tmpIngredients = filteredIngredients end
-                    if ImGui.BeginTable('Ingredients', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
+
+                    if ImGui.BeginTable('Ingredients', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY, ImGuiTableFlags.Sortable)) then
                         ImGui.TableSetupScrollFreeze(0, 1)
-                        ImGui.TableSetupColumn('Ingredient', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
-                        ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+                        ImGui.TableSetupColumn('Ingredient', bit32.bor(ImGuiTableColumnFlags.DefaultSort, ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Name)
+                        ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Location)
                         ImGui.TableSetupColumn('Count', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
                         ImGui.TableHeadersRow()
-                        for name,ingredient in pairs(tmpIngredients) do
+
+                        local sort_specs = ImGui.TableGetSortSpecs()
+                        if sort_specs then
+                            if sort_specs.SpecsDirty then
+                                current_sort_specs = sort_specs
+                                table.sort(tmpIngredients, CompareWithSortSpecs)
+                                current_sort_specs = nil
+                                sort_specs.SpecsDirty = false
+                            end
+                        end
+
+                        for _,ingredient in ipairs(tmpIngredients) do
                             ImGui.TableNextRow()
                             ImGui.TableNextColumn()
-                            ImGui.Text(name)
+                            ImGui.Text(ingredient.Name)
                             ImGui.TableNextColumn()
                             ImGui.Text(ingredient.Location)
                             ImGui.TableNextColumn()
-                            ImGui.Text('%s', mq.TLO.FindItemCount('='..name))
+                            ImGui.Text('%s', mq.TLO.FindItemCount('='..ingredient.Name)())
                         end
                         ImGui.EndTable()
                     end
