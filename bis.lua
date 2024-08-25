@@ -1942,48 +1942,48 @@ return {
 	['questitems'] = {
 		['Bard'] = {
 			['ImbuedRune'] = 'Imbued Rune of Echoes',
-			['Food'] = 'Hunters Meat and Taters',
-			['Drink'] = 'Stalkers Spirit Slush',
+			['Food'] = 'Hunter\'s Meat and Taters',
+			['Drink'] = 'Stalker\'s Spirit Slush',
 		},
 		['Berserker'] = {
 			['ImbuedRune'] = 'Imbued Rune of Overpowering Frenzy',
-			['Food'] = 'Hunters Meat and Taters',
-			['Drink'] = 'Stalkers Spirit Slush',
+			['Food'] = 'Hunter\'s Meat and Taters',
+			['Drink'] = 'Stalker\'s Spirit Slush',
 		},
 		['Beastlord'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mikkily\'s Healing',
-			['Food'] = 'Hunters Meat and Taters',
-			['Drink'] = 'Stalkers Spirit Slush',
+			['Food'] = 'Hunter\'s Meat and Taters',
+			['Drink'] = 'Stalker\'s Spirit Slush',
 		},
 		['Cleric'] = {
 			['ImbuedRune'] = 'Imbued Rune of Vie',
 			['Food'] = 'Sleek Spring Roll Sampler',
-			['Drink'] = 'Darting Dragonroot Daquiri',
+			['Drink'] = 'Darting Dragonroot Daiquiri',
 		},
 		['Druid'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Immolating Sun',
 			['Food'] = 'Sleek Spring Roll Sampler',
-			['Drink'] = 'Darting Dragonroot Daquiri',
+			['Drink'] = 'Darting Dragonroot Daiquiri',
 		},
 		['Enchanter'] = {
 			['ImbuedRune'] = 'Imbued Rune of Tashan\'s Echo',
-			['Food'] = 'Sorcerers Spiced Chicken',
-			['Drink'] = 'Arcane Ambrosia Daquiri',
+			['Food'] = 'Sorcerer\'s Spiced Chicken',
+			['Drink'] = 'Arcane Ambrosia Daiquiri',
 		},
 		['Magician'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jerikor\'s Renewal',
-			['Food'] = 'Sorcerers Spiced Chicken',
-			['Drink'] = 'Arcane Ambrosia Daquiri',
+			['Food'] = 'Sorcerer\'s Spiced Chicken',
+			['Drink'] = 'Arcane Ambrosia Daiquiri',
 		},
 		['Monk'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dragon Fang',
-			['Food'] = 'Hunters Meat and Taters',
-			['Drink'] = 'Stalkers Spirit Slush',
+			['Food'] = 'Hunter\'s Meat and Taters',
+			['Drink'] = 'Stalker\'s Spirit Slush',
 		},
 		['Necromancer'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dark Salve',
 			['Food'] = 'Sleek Spring Roll Sampler',
-			['Drink'] = 'Darting Dragonroot Daquiri',
+			['Drink'] = 'Darting Dragonroot Daiquiri',
 		},
 		['Paladin'] = {
 			['ImbuedRune'] = 'Imbued Rune of Piety',
@@ -1992,13 +1992,13 @@ return {
 		},
 		['Ranger'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jolting Snapkicks',
-			['Food'] = 'Hunters Meat and Taters',
-			['Drink'] = 'Stalkers Spirit Slush',
+			['Food'] = 'Hunter\'s Meat and Taters',
+			['Drink'] = 'Stalker\'s Spirit Slush',
 		},
 		['Rogue'] = {
 			['ImbuedRune'] = 'Imbued Rune of Assault',
-			['Food'] = 'Hunters Meat and Taters',
-			['Drink'] = 'Stalkers Spirit Slush',
+			['Food'] = 'Hunter\'s Meat and Taters',
+			['Drink'] = 'Stalker\'s Spirit Slush',
 		},
 		['Shadow Knight'] = {
 			['ImbuedRune'] = 'Imbued Rune of Agony and Hate',
@@ -2008,7 +2008,7 @@ return {
 		['Shaman'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Panther',
 			['Food'] = 'Sleek Spring Roll Sampler',
-			['Drink'] = 'Darting Dragonroot Daquiri',
+			['Drink'] = 'Darting Dragonroot Daiquiri',
 		},
 		['Warrior'] = {
 			['ImbuedRune'] = 'Imbued Rune of Brutal Onslaught',
@@ -2017,8 +2017,8 @@ return {
 		},
 		['Wizard'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mana Weave',
-			['Food'] = 'Sorcerers Spiced Chicken',
-			['Drink'] = 'Arcane Ambrosia Daquiri',
+			['Food'] = 'Sorcerer\'s Spiced Chicken',
+			['Drink'] = 'Arcane Ambrosia Daiquiri',
 		},
 		['Template'] = {
 			['FabledBrew'] = 'Fabled Blackout Brew',
@@ -2446,6 +2446,8 @@ return {
 	['Links'] = {
 		{label='Project Lazarus Wiki', url='https://www.lazaruseq.com/Wiki/index.php/Main_Page'},
 		{label='Allaclone', url='https://www.lazaruseq.com/Alla/'},
+		{label='Lazarus BIS GitHub', url='https://www.github.com/aquietone/lazbis'},
+		{label='Discord', url='https://discord.com/channels/548643730714918913/1274138262063157289'}
 	},
 	['Info'] = {
 		['VisiblePriority'] = [[Visible Armor:
@@ -2503,11 +2505,11 @@ Stout Key - Tank 2H Burn Clicky]],
 						Ingredients={'Azure Bamboo Leaves', 'Shieldwater', 'Fruit', 'Garnish', 'Gnomish Spirits', 'Ice Crystals', 'Rock Salt'},
 					},
 					{
-						Name='Hunters Meat and Taters (Melee - 40 ac, 275 hp, 360 mp, 15 dex, 10 str)',
+						Name='Hunter\'s Meat and Taters (Melee - 40 ac, 275 hp, 360 mp, 15 dex, 10 str)',
 						Ingredients={'Firestorm Peppers', 'Rujarkian Potato', 'Bear Meat', 'Fry Oil', 'Gator Meat', 'Lion Meat', 'Snake Meat'},
 					},
 					{
-						Name='Stalkers Spirit Slush (Melee - 35 ac, 265 hp, 385 mp, 20 dex, 5 str)',
+						Name='Stalker\'s Spirit Slush (Melee - 35 ac, 265 hp, 385 mp, 20 dex, 5 str)',
 						Ingredients={'Echo of the Forest', 'Luminescent Sea Blossom', 'Elven Wine', 'Ice Crystals', 'Rock Salt', 'Sugarcane'},
 					},
 					{
@@ -2515,12 +2517,12 @@ Stout Key - Tank 2H Burn Clicky]],
 						Ingredients={'Dragonroot', 'Swiftbloom Apple', 'Butter', 'Clump of Dough', 'Fry Oil', 'Honey', 'Jug of Sauces', 'Spices'},
 					},
 					{
-						Name='Darting Dragonroot Daquiri (Priest - 50 ac, 365 hp, 250 mp, 20 sta, 5 agi)',
+						Name='Darting Dragonroot Daiquiri (Priest - 50 ac, 365 hp, 250 mp, 20 sta, 5 agi)',
 						Ingredients={'Dragonroot', 'Swiftbloom Apple', 'Warden\'s Mint', 'Garnish', 'Gnomish Spirits', 'Ice Crystals', 'Rock Salt'},
 					},
 					{
-						Name='Sorcerers Spice Chicken (Caster - 10 ac, 210 hp, 510 mp, 40 int/wis, 35 MR)',
-						Ingredients={'Celestial Thyme Leaves', 'Sorcerers Secret Herb and Spice Mix', 'Fry Oil', 'Marinated Chicken Meat'},
+						Name='Sorcerer\'s Spice Chicken (Caster - 10 ac, 210 hp, 510 mp, 40 int/wis, 35 MR)',
+						Ingredients={'Celestial Thyme Leaves', 'Sorcerer\'s Secret Herb and Spice Mix', 'Fry Oil', 'Marinated Chicken Meat'},
 					},
 					{
 						Name='Arcane Ambrosia Daiquiri (Caster - 5 ac, 200 hp, 535 mp, 50 int/wis, 35 MR)',
@@ -2973,6 +2975,8 @@ Stout Key - Tank 2H Burn Clicky]],
 					['Fry Oil'] = {Location='Julian Piquant (Vendor)'},
 					['Marinated Chicken Meat'] = {Location='Julian Piquant (Vendor)'},
 					['Victory Toast Whiskey'] = {Location='Julian Piquant (Vendor)'},
+					['Spiced Rum'] = {Location='Julian Piquant (Vendor)'},
+					['Coconut Milk'] = {Location='Julian Piquant (Vendor)'},
 					['Clump of Dough'] = {Location='Cup of Flour, Basilisk Egg, Bottle of Milk'}
 				}
 			}
