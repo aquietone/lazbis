@@ -4,84 +4,57 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local mq = require('mq')
-local ImGui = require('ImGui')
-local ok, actors = pcall(require, 'actors')
+local meta          = {version = '2.0.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local mq            = require('mq')
+local ImGui         = require('ImGui')
+local bisConfig     = require('bis')
+local PackageMan    = require('mq/PackageMan')
+local sql           = PackageMan.Require('lsqlite3')
+local dbpath        = string.format('%s\\%s', mq.TLO.MacroQuest.Path('resources')(), 'lazbis.db')
+local ok, actors    = pcall(require, 'actors')
 if not ok then
     printf('Your version of MacroQuest does not support Lua Actors, exiting.')
     mq.exit()
 end
-local PackageMan = require('mq/PackageMan')
-local sql = PackageMan.Require('lsqlite3')
-local dbpath = string.format('%s\\%s', mq.TLO.MacroQuest.Path('resources')(), 'lazbis.db')
-
-local version = '2.0.0'
-
-local args = { ... }
-
-local SCRIPT_NAME = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")
 
 -- UI States
-local openGUI = true
+local openGUI       = true
 local shouldDrawGUI = true
-local terminate = false
 
 -- Character info storage
-local gear = {}
-local group = {}
-local itemChecks = {}
-local tradeskills = {}
+local gear          = {}
+local group         = {}
+local itemChecks    = {}
+local tradeskills   = {}
 
 -- Item list information
-local bisConfig = require('bis')
-local itemLists = {[1]='anguish',[2]='dsk',[3]='fuku',[4]='hcitems',[5]='jonas',[6]='preanguish',[7]='questitems',[8]='sebilis',[9]='veksar',[10]='vendoritems',}
-local selectedItemList = 8
-local itemList = bisConfig.sebilis
-local selectionChanged = true
-local showslots = true
-local showmissingonly = false
-local orderedSkills = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
-local recipeQuest = 'Recipes'
-local recipeQuestIdx = 1
-local ingredientsArray = {}
+local selectedItemList  = bisConfig.ItemLists.DefaultItemList
+local itemList          = bisConfig.sebilis
+local selectionChanged  = true
+local showslots         = true
+local showmissingonly   = false
+local orderedSkills     = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
+local recipeQuestIdx    = 1
+local ingredientsArray  = {}
 
-local debug = false
+local debug         = false
 
-local server = mq.TLO.EverQuest.Server()
-local dbfmt = "INSERT INTO Inventory VALUES ('%s','%s','%s','%s','%s','%s',%d,%d,'%s');\n"
+local server        = mq.TLO.EverQuest.Server()
+local dbfmt         = "INSERT INTO Inventory VALUES ('%s','%s','%s','%s','%s','%s',%d,%d,'%s');\n"
 local db
+local actor
 
 -- Default to e3bca if mq2mono is loaded, else use dannet
-local broadcast = '/e3bca'
+local broadcast     = '/e3bca'
 local selectedBroadcast = 1
-local rebroadcast = false
+local rebroadcast   = false
 if not mq.TLO.Plugin('mq2mono')() then broadcast = '/dge' end
-
--- Load item list for specific zone if inside raid instance for that zone
-if mq.TLO.Zone.ShortName() == 'dreadspire' or mq.TLO.Zone.ShortName() == 'thevoida' then
-    selectedItemList = 2
-    itemList = bisConfig.dsk
-elseif mq.TLO.Zone.ShortName() == 'veksar' then
-    selectedItemList = 9
-    itemList = bisConfig.veksar
-elseif mq.TLO.Zone.ShortName() == 'anguish' then
-    selectedItemList = 1
-    itemList = bisConfig.anguish
-elseif mq.TLO.Zone.ShortName() == 'unrest' then
-    selectedItemList = 3
-    itemList = bisConfig.fuku
-end
-
-for name,ingredient in pairs(bisConfig.Info.StatFoodRecipes[7].Recipes) do
-    table.insert(ingredientsArray, {Name=name, Location=ingredient.Location})
-end
-table.sort(ingredientsArray, function(a,b) return a.Name < b.Name end)
 
 local function split(str, char)
     return string.gmatch(str, '[^' .. char .. ']+')
 end
 
-local function initTables(db)
+local function initTables()
     local foundInfo = false
     local foundInventory = false
     local function versioncallback(udata,cols,values,names)
@@ -137,25 +110,10 @@ if result ~= 0 then printf('CREATE TABLE Result: %s', result) end
 end
 
 local function initDB()
-    local db = sql.open(dbpath)
+    db = sql.open(dbpath)
     if db then
         db:exec("PRAGMA journal_mode=WAL;")
-        initTables(db)
-        return db
-    end
-end
-if args[1] ~= '0' then
-    db = initDB()
-end
-
-local function resolveInvSlot(invslot)
-    if invslot == 'Bank' then return ' (Bank)' end
-    local numberinvslot = tonumber(invslot)
-    if not numberinvslot then return '' end
-    if numberinvslot >= 23 then
-        return ' (in bag'..invslot - 22 ..')'
-    else
-        return ' ('..mq.TLO.InvSlot(invslot).Name()..')'
+        initTables()
     end
 end
 
@@ -183,6 +141,17 @@ end
 local function clearCategoryDataForCharacter(name, category)
     local deleteStmt = ("DELETE FROM Inventory WHERE Character = '%s' AND Server = '%s' AND Category = '%s'"):format(name, server, category)
     exec(deleteStmt, name, category, 'deleted')
+end
+
+local function resolveInvSlot(invslot)
+    if invslot == 'Bank' then return ' (Bank)' end
+    local numberinvslot = tonumber(invslot)
+    if not numberinvslot then return '' end
+    if numberinvslot >= 23 then
+        return ' (in bag'..invslot - 22 ..')'
+    else
+        return ' ('..mq.TLO.InvSlot(invslot).Name()..')'
+    end
 end
 
 local function buildInsertStmt(name, category)
@@ -233,64 +202,54 @@ local function dumpInv(name, category)
     insertCharacterDataForCategory(name, category)
 end
 
-if args[1] == 'dumpinv' then
-    group[mq.TLO.Me.CleanName()] = {Name=mq.TLO.Me.CleanName(),Class=mq.TLO.Me.Class.Name(),Offline=false}
-    table.insert(group, group[mq.TLO.Me.CleanName()])
-    local insertStmt = ''
-    for _,list in ipairs(itemLists) do
-        local classItems = bisConfig[list][mq.TLO.Me.Class.Name()]
-        local templateItems = bisConfig[list].Template
-        itemList = bisConfig[list]
-        local results = {}
-        for _,itembucket in ipairs({templateItems,classItems}) do
-            for slot,item in pairs(itembucket) do
-                local currentResult = 0
-                local componentResult = 0
-                local currentSlot = nil
-                local actualName = nil
-                if string.find(item, '/') then
-                    for itemName in split(item, '/') do
-                        local searchString = itemName
-                        local findItem = mq.TLO.FindItem(searchString)
-                        local findItemBank = mq.TLO.FindItemBank(searchString)
-                        local count = mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
-                        if slot == 'PSAugSprings' and itemName == '39071' and currentResult < 3 then
-                            currentResult = 0
-                        end
-                        if count > 0 and not actualName then
-                            actualName = findItem() or findItemBank()
-                            currentSlot = findItem.ItemSlot() or (findItemBank() and 'Bank') or ''
-                        end
-                        currentResult = currentResult + count
+local function searchItemsInList(list)
+    local classItems = bisConfig[list][mq.TLO.Me.Class.Name()]
+    local templateItems = bisConfig[list].Template
+    local results = {}
+    for _,itembucket in ipairs({templateItems,classItems}) do
+        for slot,item in pairs(itembucket) do
+            local currentResult = 0
+            local componentResult = 0
+            local currentSlot = nil
+            local actualName = nil
+            if string.find(item, '/') then
+                for itemName in split(item, '/') do
+                    local searchString = itemName
+                    local findItem = mq.TLO.FindItem(searchString)
+                    local findItemBank = mq.TLO.FindItemBank(searchString)
+                    local count = mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
+                    if slot == 'PSAugSprings' and itemName == '39071' and currentResult < 3 then
+                        currentResult = 0
                     end
-                else
-                    local searchString = item
-                    currentResult = currentResult + mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
-                    currentSlot = mq.TLO.FindItem(searchString).ItemSlot() or (mq.TLO.FindItemBank(searchString)() and 'Bank') or ''
+                    if count > 0 and not actualName then
+                        actualName = findItem() or findItemBank()
+                        currentSlot = findItem.ItemSlot() or (findItemBank() and 'Bank') or ''
+                    end
+                    currentResult = currentResult + count
                 end
-                if currentResult == 0 and bisConfig[list].Visible and bisConfig[list].Visible[slot] then
-                    local compItem = bisConfig[list].Visible[slot]
-                    componentResult = mq.TLO.FindItemCount(compItem)() or mq.TLO.FindItemBankCount(compItem)()
-                    currentSlot = mq.TLO.FindItem(compItem).ItemSlot() or (mq.TLO.FindItemBank(compItem)() and 'Bank') or ''
-                end
-                results[slot] = {count=currentResult, invslot=currentSlot, componentcount=componentResult>0 and componentResult or nil, actualname=actualName}
+            else
+                local searchString = item
+                currentResult = currentResult + mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
+                currentSlot = mq.TLO.FindItem(searchString).ItemSlot() or (mq.TLO.FindItemBank(searchString)() and 'Bank') or ''
             end
+            if currentResult == 0 and bisConfig[list].Visible and bisConfig[list].Visible[slot] then
+                local compItem = bisConfig[list].Visible[slot]
+                componentResult = mq.TLO.FindItemCount(compItem)() or mq.TLO.FindItemBankCount(compItem)()
+                currentSlot = mq.TLO.FindItem(compItem).ItemSlot() or (mq.TLO.FindItemBank(compItem)() and 'Bank') or ''
+            end
+            results[slot] = {count=currentResult, invslot=currentSlot, componentcount=componentResult>0 and componentResult or nil, actualname=actualName}
         end
-        gear[mq.TLO.Me.CleanName()] = results
-        insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list)
     end
-    clearAllDataForCharacter(mq.TLO.Me.CleanName())
-    exec(insertStmt, mq.TLO.Me.CleanName(), nil, 'inserted')
-    return
+    return results
 end
 
 -- Actor message handler
-local actor = actors.register(function(msg)
+local function actorCallback(msg)
     local content = msg()
     if debug then printf('<<< MSG RCVD: id=%s', content.id) end
     if content.id == 'hello' then
         if debug then printf('=== MSG: id=%s Name=%s Class=%s', content.id, content.Name, content.Class) end
-        if args[1] == '0' then return end
+        if not openGUI then return end
         if not group[content.Name] then
             local char = {
                 Name = content.Name,
@@ -312,48 +271,12 @@ local actor = actors.register(function(msg)
     elseif content.id == 'search' then
         if debug then printf('=== MSG: id=%s list=%s', content.id, content.list) end
         -- {id='search', list='dsk'}
-        local classItems = bisConfig[content.list][mq.TLO.Me.Class.Name()]
-        local templateItems = bisConfig[content.list].Template
-        local results = {}
-        for _,itembucket in ipairs({templateItems,classItems}) do
-            for slot,item in pairs(itembucket) do
-                local currentResult = 0
-                local componentResult = 0
-                local currentSlot = nil
-                local actualName = nil
-                if string.find(item, '/') then
-                    for itemName in split(item, '/') do
-                        local searchString = itemName
-                        local findItem = mq.TLO.FindItem(searchString)
-                        local findItemBank = mq.TLO.FindItemBank(searchString)
-                        local count = mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
-                        if slot == 'PSAugSprings' and itemName == '39071' and currentResult < 3 then
-                            currentResult = 0
-                        end
-                        if count > 0 and not actualName then
-                            actualName = findItem() or findItemBank()
-                            currentSlot = findItem.ItemSlot() or (findItemBank() and 'Bank') or ''
-                        end
-                        currentResult = currentResult + count
-                    end
-                else
-                    local searchString = item
-                    currentResult = currentResult + mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
-                    currentSlot = mq.TLO.FindItem(searchString).ItemSlot() or (mq.TLO.FindItemBank(searchString)() and 'Bank') or ''
-                end
-                if currentResult == 0 and bisConfig[content.list].Visible and bisConfig[content.list].Visible[slot] then
-                    local compItem = bisConfig[content.list].Visible[slot]
-                    componentResult = mq.TLO.FindItemCount(compItem)() or mq.TLO.FindItemBankCount(compItem)()
-                    currentSlot = mq.TLO.FindItem(compItem).ItemSlot() or (mq.TLO.FindItemBank(compItem)() and 'Bank') or ''
-                end
-                results[slot] = {count=currentResult, invslot=currentSlot, componentcount=componentResult>0 and componentResult or nil, actualname=actualName}
-            end
-        end
+        local results = searchItemsInList(content.list)
         if debug then printf('>>> SEND MSG: id=%s Name=%s list=%s class=%s', content.id, mq.TLO.Me.CleanName(), content.list, mq.TLO.Me.Class.Name()) end
         msg:send({id='result', Name=mq.TLO.Me.CleanName(), list=content.list, class=mq.TLO.Me.Class.Name(), results=results})
     elseif content.id == 'result' then
         if debug then printf('=== MSG: id=%s Name=%s list=%s class=%s', content.id, content.Name, content.list, content.class) end
-        if args[1] == '0' then return end
+        if not openGUI then return end
         -- {id='result', Name='name', list='dsk', class='Warrior', results={slot1=1, slot2=0}}
         local results = content.results
         if results == nil then return end
@@ -386,17 +309,17 @@ local actor = actors.register(function(msg)
         msg:send({id='tsresult', Skills=skills, Name=mq.TLO.Me.CleanName()})
     elseif content.id == 'tsresult' then
         if debug then printf('=== MSG: id=%s Name=%s Skills=%s', content.id, content.Name, content.Skills) end
-        if args[1] == '0' then return end
+        if not openGUI then return end
         local char = group[content.Name]
         tradeskills[char.Name] = tradeskills[char.Name] or {}
         for name,skill in pairs(content.Skills) do
             tradeskills[char.Name][name] = skill
         end
     end
-end)
+end
 
 local function changeBroadcastMode(tempBroadcast)
-    mq.cmdf('%s /lua stop %s', broadcast, SCRIPT_NAME)
+    mq.cmdf('%s /lua stop %s', broadcast, meta.name)
 
     local bChanged = false
     if not mq.TLO.Plugin('mq2mono')() then
@@ -492,7 +415,6 @@ local filter = ''
 local filteredGear = {}
 local filteredSlots = {}
 local useFilter = false
-
 local function filterGear(slots)
     filteredGear = {}
     filteredSlots = {}
@@ -536,7 +458,6 @@ end
 local ingredientFilter = ''
 local filteredIngredients = {}
 local useIngredientFilter = false
-
 local function filterIngredients()
     filteredIngredients = {}
     for _,ingredient in pairs(ingredientsArray) do
@@ -544,13 +465,6 @@ local function filterIngredients()
             table.insert(filteredIngredients, ingredient)
         end
     end
-end
-
-local function AddUnderline(color)
-    local min = ImGui.GetItemRectMinVec()
-    local max = ImGui.GetItemRectMaxVec()
-    min.y = max.y
-    ImGui.GetWindowDrawList():AddLine(min, max, color, 20)
 end
 
 local function DrawTextLink(label, url)
@@ -562,12 +476,9 @@ local function DrawTextLink(label, url)
         if ImGui.IsMouseClicked(ImGuiMouseButton.Left) then
             os.execute(('start "" "%s"'):format(url))
         end
-        -- AddUnderline(ImGui.GetStyleColor(ImGuiCol.ButtonHovered))
         ImGui.BeginTooltip()
         ImGui.Text('%s', url)
         ImGui.EndTooltip()
-    -- else
-    --     AddUnderline(ImGui.GetStyleColor(ImGuiCol.Button))
     end
 end
 
@@ -576,8 +487,6 @@ local ColumnID_Location = 2
 local current_sort_specs = nil
 local function CompareWithSortSpecs(a, b)
     for n = 1, current_sort_specs.SpecsCount, 1 do
-        -- Here we identify columns using the ColumnUserID value that we ourselves passed to TableSetupColumn()
-        -- We could also choose to identify columns based on their index (sort_spec.ColumnIndex), which is simpler!
         local sort_spec = current_sort_specs:Specs(n)
         local delta = 0
 
@@ -607,22 +516,26 @@ local function CompareWithSortSpecs(a, b)
     end
 
     -- Always return a way to differentiate items.
-    -- Your own compare function may want to avoid fallback on implicit sort specs e.g. a Name compare if it wasn't already part of the sort specs.
     return a.Name < b.Name
 end
 
 local function bisGUI()
     ImGui.SetNextWindowSize(ImVec2(800,500), ImGuiCond.FirstUseEver)
-    openGUI, shouldDrawGUI = ImGui.Begin('BIS Check ('.. version ..')###BIS Check', openGUI, ImGuiWindowFlags.HorizontalScrollbar)
+    openGUI, shouldDrawGUI = ImGui.Begin('BIS Check ('.. meta.version ..')###BIS Check', openGUI, ImGuiWindowFlags.HorizontalScrollbar)
     if shouldDrawGUI then
         if ImGui.BeginTabBar('bistabs') then
             if ImGui.BeginTabItem('Gear') then
                 local origSelectedItemList = selectedItemList
                 ImGui.PushItemWidth(150)
                 ImGui.SetNextWindowSize(150, 213)
-                selectedItemList = ImGui.Combo('Item List', selectedItemList, 'Anguish\0Dreadspire\0FUKU\0HC Items\0Hand Aug\0Pre-Anguish\0Quest Items\0Sebilis\0Veksar\0Vendor Items\0')
+                if ImGui.BeginCombo('Item List', selectedItemList) then
+                    for i,list in ipairs(bisConfig.ItemLists) do
+                        if ImGui.Selectable(list, selectedItemList == list) then selectedItemList = list end
+                    end
+                    ImGui.EndCombo()
+                end
                 ImGui.PopItemWidth()
-                itemList = bisConfig[itemLists[selectedItemList]]
+                itemList = bisConfig[selectedItemList]
                 local slots = itemList.Main.Slots
                 if selectedItemList ~= origSelectedItemList then
                     selectionChanged = true
@@ -737,7 +650,7 @@ local function bisGUI()
                                 end
                                 ImGui.TreePop()
                             end
-                            if catName == 'Gear' and itemLists[selectedItemList] == 'questitems' then
+                            if catName == 'Gear' and selectedItemList == 'questitems' then
                                 ImGui.TableNextRow()
                                 ImGui.TableNextColumn()
                                 if ImGui.TreeNodeEx('Tradeskills', bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
@@ -758,102 +671,104 @@ local function bisGUI()
                             end
                         end
                     end
-
                     ImGui.EndTable()
                 end
-
                 ImGui.EndTabItem()
             end
-            if ImGui.BeginTabItem('Priority') then
-                ImGui.Text(bisConfig.Info.VisiblePriority)
-                ImGui.EndTabItem()
-            end
-            if ImGui.BeginTabItem('Anguish Focus Effects') then
-                ImGui.Text(bisConfig.Info.AnguishFocusEffects)
-                ImGui.EndTabItem()
-            end
-            if ImGui.BeginTabItem('Stat Food') then
-                ImGui.PushItemWidth(300)
-                if ImGui.BeginCombo('Quest', recipeQuest) then
-                    for i,quest in ipairs(bisConfig.Info.StatFoodRecipes) do
-                        if ImGui.Selectable(quest.Name, recipeQuest == quest.Name) then
-                            recipeQuest = quest.Name
-                            recipeQuestIdx = i
-                        end
-                    end
-                    ImGui.EndCombo()
-                end
-                ImGui.PopItemWidth()
-                if recipeQuest == 'Recipes' then
-                    for _,recipe in ipairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
-                        ImGui.PushStyleColor(ImGuiCol.Text, 0,1,1,1)
-                        local expanded = ImGui.TreeNode(recipe.Name)
-                        ImGui.PopStyleColor()
-                        if expanded then
-                            ImGui.Indent(30)
-                            for _,ingredient in ipairs(recipe.Ingredients) do
-                                ImGui.Text('%s%s', ingredient, bisConfig.Info.StatFoodRecipes[7].Recipes[ingredient] and ' - '..bisConfig.Info.StatFoodRecipes[7].Recipes[ingredient].Location or '')
-                                ImGui.SameLine()
-                                ImGui.TextColored(1,1,0,1,'(%s)', mq.TLO.FindItemCount('='..ingredient))
-                            end
-                            ImGui.Unindent(30)
-                            ImGui.TreePop()
-                        end
-                    end
-                elseif recipeQuest == 'Full Ingredient List' then
-                    ImGui.SameLine()
-                    ImGui.PushItemWidth(300)
-                    local tmpIngredientFilter = ImGui.InputTextWithHint('##ingredientfilter', 'Search...', ingredientFilter)
-                    ImGui.PopItemWidth()
-                    if tmpIngredientFilter ~= ingredientFilter then
-                        ingredientFilter = tmpIngredientFilter
-                        filterIngredients()
-                    end
-                    if ingredientFilter ~= '' then useIngredientFilter = true else useIngredientFilter = false end
-                    local tmpIngredients = ingredientsArray
-                    if useIngredientFilter then tmpIngredients = filteredIngredients end
-
-                    if ImGui.BeginTable('Ingredients', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY, ImGuiTableFlags.Sortable)) then
-                        ImGui.TableSetupScrollFreeze(0, 1)
-                        ImGui.TableSetupColumn('Ingredient', bit32.bor(ImGuiTableColumnFlags.DefaultSort, ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Name)
-                        ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Location)
-                        ImGui.TableSetupColumn('Count', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
-                        ImGui.TableHeadersRow()
-
-                        local sort_specs = ImGui.TableGetSortSpecs()
-                        if sort_specs then
-                            if sort_specs.SpecsDirty then
-                                current_sort_specs = sort_specs
-                                table.sort(tmpIngredients, CompareWithSortSpecs)
-                                current_sort_specs = nil
-                                sort_specs.SpecsDirty = false
+            if bisConfig.StatFoodRecipes and ImGui.BeginTabItem('Stat Food') then
+                if ImGui.BeginTabBar('##statfoodtabs') then
+                    if ImGui.BeginTabItem('Recipes') then
+                        for _,recipe in ipairs(bisConfig.StatFoodRecipes) do
+                            ImGui.PushStyleColor(ImGuiCol.Text, 0,1,1,1)
+                            local expanded = ImGui.TreeNode(recipe.Name)
+                            ImGui.PopStyleColor()
+                            if expanded then
+                                ImGui.Indent(30)
+                                for _,ingredient in ipairs(recipe.Ingredients) do
+                                    ImGui.Text('%s%s', ingredient, bisConfig.StatFoodIngredients[ingredient] and ' - '..bisConfig.StatFoodIngredients[ingredient].Location or '')
+                                    ImGui.SameLine()
+                                    ImGui.TextColored(1,1,0,1,'(%s)', mq.TLO.FindItemCount('='..ingredient))
+                                end
+                                ImGui.Unindent(30)
+                                ImGui.TreePop()
                             end
                         end
+                        ImGui.EndTabItem()
+                    end
+                    if ImGui.BeginTabItem('Quests') then
+                        ImGui.PushItemWidth(300)
+                        if ImGui.BeginCombo('Quest', bisConfig.StatFoodQuests[recipeQuestIdx].Name) then
+                            for i,quest in ipairs(bisConfig.StatFoodQuests) do
+                                if ImGui.Selectable(quest.Name, recipeQuestIdx == i) then
+                                    recipeQuestIdx = i
+                                end
+                            end
+                            ImGui.EndCombo()
+                        end
+                        ImGui.PopItemWidth()
 
-                        for _,ingredient in ipairs(tmpIngredients) do
-                            ImGui.TableNextRow()
-                            ImGui.TableNextColumn()
-                            ImGui.Text(ingredient.Name)
-                            ImGui.TableNextColumn()
-                            ImGui.Text(ingredient.Location)
-                            ImGui.TableNextColumn()
-                            ImGui.Text('%s', mq.TLO.FindItemCount('='..ingredient.Name)())
+                        for _,questStep in ipairs(bisConfig.StatFoodQuests[recipeQuestIdx].Recipes) do
+                            ImGui.TextColored(0,1,1,1,questStep.Name)
+                            ImGui.Indent(25)
+                            for _,step in ipairs(questStep.Steps) do
+                                ImGui.Text('\xee\x97\x8c %s', step)
+                            end
+                            ImGui.Unindent(25)
                         end
-                        ImGui.EndTable()
+                        ImGui.EndTabItem()
                     end
-                elseif type(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) == 'table' then
-                    for _,questStep in ipairs(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes) do
-                        ImGui.TextColored(0,1,1,1,questStep.Name)
-                        ImGui.Indent(25)
-                        for _,step in ipairs(questStep.Steps) do
-                            ImGui.Text('\xee\x97\x8c %s', step)
+                    if ImGui.BeginTabItem('Ingredients') then
+                        ImGui.SameLine()
+                        ImGui.PushItemWidth(300)
+                        local tmpIngredientFilter = ImGui.InputTextWithHint('##ingredientfilter', 'Search...', ingredientFilter)
+                        ImGui.PopItemWidth()
+                        if tmpIngredientFilter ~= ingredientFilter then
+                            ingredientFilter = tmpIngredientFilter
+                            filterIngredients()
                         end
-                        ImGui.Unindent(25)
+                        if ingredientFilter ~= '' then useIngredientFilter = true else useIngredientFilter = false end
+                        local tmpIngredients = ingredientsArray
+                        if useIngredientFilter then tmpIngredients = filteredIngredients end
+
+                        if ImGui.BeginTable('Ingredients', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY, ImGuiTableFlags.Sortable)) then
+                            ImGui.TableSetupScrollFreeze(0, 1)
+                            ImGui.TableSetupColumn('Ingredient', bit32.bor(ImGuiTableColumnFlags.DefaultSort, ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Name)
+                            ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Location)
+                            ImGui.TableSetupColumn('Count', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+                            ImGui.TableHeadersRow()
+
+                            local sort_specs = ImGui.TableGetSortSpecs()
+                            if sort_specs then
+                                if sort_specs.SpecsDirty then
+                                    current_sort_specs = sort_specs
+                                    table.sort(tmpIngredients, CompareWithSortSpecs)
+                                    current_sort_specs = nil
+                                    sort_specs.SpecsDirty = false
+                                end
+                            end
+
+                            for _,ingredient in ipairs(tmpIngredients) do
+                                ImGui.TableNextRow()
+                                ImGui.TableNextColumn()
+                                ImGui.Text(ingredient.Name)
+                                ImGui.TableNextColumn()
+                                ImGui.Text(ingredient.Location)
+                                ImGui.TableNextColumn()
+                                ImGui.Text('%s', mq.TLO.FindItemCount('='..ingredient.Name)())
+                            end
+                            ImGui.EndTable()
+                        end
+                        ImGui.EndTabItem()
                     end
-                else
-                    ImGui.Text(bisConfig.Info.StatFoodRecipes[recipeQuestIdx].Recipes)
+                    ImGui.EndTabBar()
                 end
                 ImGui.EndTabItem()
+            end
+            for _,infoTab in ipairs(bisConfig.Info) do
+                if ImGui.BeginTabItem(infoTab.Name) then
+                    ImGui.Text(infoTab.Text)
+                    ImGui.EndTabItem()
+                end
             end
             if ImGui.BeginTabItem('Links') then
                 for _,link in ipairs(bisConfig.Links) do
@@ -865,42 +780,14 @@ local function bisGUI()
     end
     ImGui.End()
     if not openGUI then
-        mq.cmdf('%s /lua stop %s', broadcast, SCRIPT_NAME)
+        mq.cmdf('%s /lua stop %s', broadcast, meta.name)
         mq.exit()
     end
 end
 
-printf('Script called with %d arguments:', #args)
-for i, arg in ipairs(args) do
-    printf('args[%d]: %s', i, arg)
-end
-
-if args[1] == 'debug' or args[2] == 'debug' then debug = true end
-if args[1] == '0' then
-    mq.delay(100)
-    actor:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name()})
-    while true do
-        mq.delay(1000)
-    end
-end
-
-local char = {
-    ['Name'] = mq.TLO.Me(),
-    ['Class'] = mq.TLO.Me.Class.Name(),
-    ['Offline'] = false,
-    ['Show'] = true,
-}
-group[char.Name] = char
-table.insert(group, char)
-
-mq.cmdf('%s /lua stop %s', broadcast, SCRIPT_NAME)
-mq.delay(500)
-mq.cmdf('%s /lua run %s 0%s', broadcast, SCRIPT_NAME, debug and ' debug' or '')
-mq.delay(500)
-
 local function searchAll()
     for _, char in ipairs(group) do
-        actor:send({character=char.Name}, {id='search', list=itemLists[selectedItemList]})
+        actor:send({character=char.Name}, {id='search', list=selectedItemList})
     end
     for _, char in ipairs(group) do
         actor:send({character=char.Name}, {id='tsquery'})
@@ -916,7 +803,7 @@ local function sayCallback(line, char, message)
         return
     end
     for _, char in ipairs(group) do
-        for _,list in ipairs(itemLists) do
+        for _,list in ipairs(bisConfig.ItemLists) do
             local classItems = bisConfig[list][char.Class]
             local templateItems = bisConfig[list].Template
             local visibleItems = bisConfig[list].Visible
@@ -937,16 +824,78 @@ local function sayCallback(line, char, message)
     end
 end
 
-mq.event('meSayItems', 'You say, #2#', sayCallback)
-mq.event('sayItems', '#1# says, #2#', sayCallback)
-mq.event('rsayItems', '#1# tells the raid, #2#', sayCallback)
-mq.event('rMeSayItems', 'You tell your raid, #2#', sayCallback)
-mq.event('gsayItems', '#1# tells the group, #2#', sayCallback)
-mq.event('gMeSayItems', 'You tell your party, #2#', sayCallback)
+local function writeAllItemLists()
+    group[mq.TLO.Me.CleanName()] = {Name=mq.TLO.Me.CleanName(),Class=mq.TLO.Me.Class.Name(),Offline=false}
+    table.insert(group, group[mq.TLO.Me.CleanName()])
+    local insertStmt = ''
+    for _,list in ipairs(bisConfig.ItemLists) do
+        itemList = bisConfig[list]
+        gear[mq.TLO.Me.CleanName()] = searchItemsInList(list)
+        insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list)
+    end
+    clearAllDataForCharacter(mq.TLO.Me.CleanName())
+    exec(insertStmt, mq.TLO.Me.CleanName(), nil, 'inserted')
+end
 
-mq.imgui.init('BISCheck', bisGUI)
+local function init(args)
+    printf('\ag%s\ax started with \ay%d\ax arguments:', meta.name, #args)
+    for i, arg in ipairs(args) do
+        printf('args[%d]: %s', i, arg)
+    end
+    if args[1] == 'debug' or args[2] == 'debug' then debug = true end
+    if args[1] ~= '0' then initDB() end
+    if args[1] == 'dumpinv' then
+        writeAllItemLists()
+        openGUI = false
+        return
+    end
+    if args[1] == '0' then openGUI = false end
+    actor = actors.register(actorCallback)
+    if args[1] == '0' then
+        mq.delay(100)
+        actor:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name()})
+        while true do
+            mq.delay(1000)
+        end
+    end
 
-while not terminate do
+    local zone = mq.TLO.Zone.ShortName()
+    -- Load item list for specific zone if inside raid instance for that zone
+    if bisConfig.ZoneMap[zone] then
+        itemList = bisConfig[bisConfig.ZoneMap[zone].list]
+    end
+
+    for name,ingredient in pairs(bisConfig.StatFoodIngredients) do
+        table.insert(ingredientsArray, {Name=name, Location=ingredient.Location})
+    end
+    table.sort(ingredientsArray, function(a,b) return a.Name < b.Name end)
+
+    local char = {
+        ['Name'] = mq.TLO.Me(),
+        ['Class'] = mq.TLO.Me.Class.Name(),
+        ['Offline'] = false,
+        ['Show'] = true,
+    }
+    group[char.Name] = char
+    table.insert(group, char)
+
+    mq.cmdf('%s /lua stop %s', broadcast, meta.name)
+    mq.delay(500)
+    mq.cmdf('%s /lua run %s 0%s', broadcast, meta.name, debug and ' debug' or '')
+    mq.delay(500)
+
+    mq.event('meSayItems', 'You say, #2#', sayCallback)
+    mq.event('sayItems', '#1# says, #2#', sayCallback)
+    mq.event('rsayItems', '#1# tells the raid, #2#', sayCallback)
+    mq.event('rMeSayItems', 'You tell your raid, #2#', sayCallback)
+    mq.event('gsayItems', '#1# tells the group, #2#', sayCallback)
+    mq.event('gMeSayItems', 'You tell your party, #2#', sayCallback)
+
+    mq.imgui.init('BISCheck', bisGUI)
+end
+
+init({...})
+while openGUI do
     mq.delay(1000)
     if rebroadcast then
         gear = {}
@@ -955,11 +904,11 @@ while not terminate do
         for _,c in ipairs(group) do if c.Name ~= mq.TLO.Me.CleanName() then c.Offline = true end end
 
         mq.delay(500)
-        mq.cmdf('%s /lua run %s 0%s', broadcast, SCRIPT_NAME, debug and ' debug' or '')
+        mq.cmdf('%s /lua run %s 0%s', broadcast, meta.name, debug and ' debug' or '')
         mq.delay(500)
         selectionChanged = true
         rebroadcast = false
     end
-    if selectionChanged then selectionChanged = false searchAll() loadInv(itemLists[selectedItemList]) end
+    if selectionChanged then selectionChanged = false searchAll() loadInv(selectedItemList) end
     mq.doevents()
 end

@@ -1,3 +1,7 @@
+2.0.1
+- Remove hardcoded things and pull from config file
+- Change layout of stat food tab
+
 2.0.0
 - Support for offline character data using sqlite3
 - Fix for linked item checks for visible armor containers
