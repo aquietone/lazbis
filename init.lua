@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.0.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.1.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -602,6 +602,19 @@ local function bisGUI()
                         ImGui.TableSetColumnIndex(0)
                         if ImGui.Button('X##' .. itemName) then
                             itemChecks[itemName] = nil
+                        end
+                        ImGui.SameLine()
+                        if ImGui.Button('Announce##'..itemName) then
+                            local message = '/rs '
+                            local doSend = false
+                            message = message .. itemName .. ' - '
+                            for charName,hasItem in pairs(itemChecks[itemName]) do
+                                if not group[charName].Offline and not hasItem then
+                                    message = message .. charName .. ', '
+                                    doSend = true
+                                end
+                            end
+                            if doSend then mq.cmd(message) end
                         end
                         ImGui.SameLine()
                         ImGui.Text(itemName)
