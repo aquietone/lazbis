@@ -1160,11 +1160,11 @@ return {
 			['Sap'] = 'Forgotten Mugger\'s Sap',
 			['Howl of Tashan'] = 'Malignant Bloodgill Shaman\'s Effigy',
 			['MeleeFamiliar'] = 'Forgotten Leather Leash',
-			['Feral Swipe'] = 'Cunning Razor-edged Claw',
 			['Ancestral Memories'] = 'Zealous Soulscream Belt',
 			['Staunch Recovery'] = 'Vitalizing Earring of the Darkfaith',
 			['Radiant Cure'] = 'Cleansing Band of Twilight',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Berserker'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40850',
@@ -1177,6 +1177,7 @@ return {
 			['Ancestral Memories'] = 'Zealous Soulscream Belt',
 			['Prot of the Spirit Wolf'] = 'Fervent Eyepatch of Warding',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Beastlord'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40859',
@@ -1191,6 +1192,7 @@ return {
 			['Divine Companion\'s Aura'] = 'Enduring Bloodgill Belt',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Cleric'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40851',
@@ -1237,6 +1239,7 @@ return {
 			['Radiant Cure'] = 'Cleansing Band of Twilight',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Magician'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40855',
@@ -1248,6 +1251,7 @@ return {
 			['Divine Companion\'s Aura'] = 'Enduring Bloodgill Belt',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Monk'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40848',
@@ -1264,6 +1268,7 @@ return {
 			['Radiant Cure'] = 'Cleansing Band of Twilight',
 			['Rally'] = 'Vigilant Tu\'Nakk Parryblade',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Necromancer'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40857',
@@ -1278,6 +1283,7 @@ return {
 			['Divine Companion\'s Aura'] = 'Enduring Bloodgill Belt',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Paladin'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40846',
@@ -1308,6 +1314,7 @@ return {
 			['Prot of the Spirit Wolf'] = 'Fervent Eyepatch of Warding',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Rogue'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40849',
@@ -1380,6 +1387,7 @@ return {
 			['Frenzied Devastation'] = 'Malefic Ceremonial Sh\'Voth',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Main'] = {
 			['Slots'] = {
@@ -1957,13 +1965,13 @@ return {
 		},
 		['Cleric'] = {
 			['ImbuedRune'] = 'Imbued Rune of Vie',
-			['Food'] = 'Sleek Spring Roll Sampler',
-			['Drink'] = 'Darting Dragonroot Daiquiri',
+			['Food'] = 'Armored Starfish Skewers',
+			['Drink'] = 'Bamboo Defender Margarita',
 		},
 		['Druid'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Immolating Sun',
-			['Food'] = 'Sleek Spring Roll Sampler',
-			['Drink'] = 'Darting Dragonroot Daiquiri',
+			['Food'] = 'Armored Starfish Skewers',
+			['Drink'] = 'Bamboo Defender Margarita',
 		},
 		['Enchanter'] = {
 			['ImbuedRune'] = 'Imbued Rune of Tashan\'s Echo',
@@ -2007,8 +2015,8 @@ return {
 		},
 		['Shaman'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Panther',
-			['Food'] = 'Sleek Spring Roll Sampler',
-			['Drink'] = 'Darting Dragonroot Daiquiri',
+			['Food'] = 'Armored Starfish Skewers',
+			['Drink'] = 'Bamboo Defender Margarita',
 		},
 		['Warrior'] = {
 			['ImbuedRune'] = 'Imbued Rune of Brutal Onslaught',
