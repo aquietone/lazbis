@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.1.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.1.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -820,7 +820,7 @@ local function sayCallback(line, char, message)
             local classItems = bisConfig[list][char.Class]
             local templateItems = bisConfig[list].Template
             local visibleItems = bisConfig[list].Visible
-            for _,itembucket in ipairs({templateItems,visibleItems,classItems}) do
+            for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
                 for slot,item in pairs(itembucket) do
                     if item then
                         for itemName in split(item, '/') do
@@ -875,7 +875,8 @@ local function init(args)
     local zone = mq.TLO.Zone.ShortName()
     -- Load item list for specific zone if inside raid instance for that zone
     if bisConfig.ZoneMap[zone] then
-        itemList = bisConfig[bisConfig.ZoneMap[zone].list]
+        selectedItemList = bisConfig.ZoneMap[zone].list
+        itemList = bisConfig[selectedItemList]
     end
 
     for name,ingredient in pairs(bisConfig.StatFoodIngredients) do

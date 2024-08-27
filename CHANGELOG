@@ -1,3 +1,7 @@
+2.1.1
+- Fix linked item scanning for some item lists
+- Correct my tpos
+
 2.1.0
 - Add 'Announce' button next to needed items to list who needs into /rs
 - Remove hardcoded things and pull from config file

@@ -1983,12 +1983,12 @@ return {
 		},
 		['Enchanter'] = {
 			['ImbuedRune'] = 'Imbued Rune of Tashan\'s Echo',
-			['Food'] = 'Sorcerer\'s Spiced Chicken',
+			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
 		},
 		['Magician'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jerikor\'s Renewal',
-			['Food'] = 'Sorcerer\'s Spiced Chicken',
+			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
 		},
 		['Monk'] = {
@@ -2033,7 +2033,7 @@ return {
 		},
 		['Wizard'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mana Weave',
-			['Food'] = 'Sorcerer\'s Spiced Chicken',
+			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
 		},
 		['Template'] = {
