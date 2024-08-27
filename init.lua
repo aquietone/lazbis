@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.1.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.1.2', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -192,6 +192,20 @@ local function loadInv(category)
     end
     repeat
         local result = db:exec(string.format("SELECT * FROM Inventory WHERE Category='%s' AND Server = '%s';", category, server), rowCallback)
+        if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
+    until result ~= sql.BUSY
+end
+
+local foundItem = nil
+local function singleRowCallback(udata,cols,values,names)
+    foundItem = {Character=values[1], Count=tonumber(values[7]), ItemName=values[6] and values[5]}
+end
+local function loadSingleRow(category, charName, itemName)
+    for _,char in ipairs(group) do
+        if char.Offline then gear[char.Name] = {} end
+    end
+    repeat
+        local result = db:exec(string.format("SELECT * FROM Inventory WHERE Category='%s' AND Server = '%s' AND Character = '%s' AND ItemName = '%s';", category, server, charName, itemName:gsub('\'','\'\'')), singleRowCallback)
         if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
     until result ~= sql.BUSY
 end
@@ -826,6 +840,11 @@ local function sayCallback(line, char, message)
                         for itemName in split(item, '/') do
                             if string.find(message, itemName) then
                                 local hasItem = gear[char.Name][slot] ~= nil and gear[char.Name][slot].count > 0
+                                if not hasItem and list ~= selectedItemList then
+                                    loadSingleRow(list, char.Name, itemName)
+                                    if foundItem and foundItem.Count > 0 then hasItem = true end
+                                    foundItem = nil
+                                end
                                 itemChecks[itemName] = itemChecks[itemName] or {}
                                 itemChecks[itemName][char.Name] = hasItem
                             end

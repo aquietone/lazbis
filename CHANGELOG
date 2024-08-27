@@ -1,21 +1,24 @@
+2.1.2
+- Fix: Show correct have/need for linked items regardless what item list is currently selected
+
 2.1.1
-- Fix linked item scanning for some item lists
-- Correct my tpos
+- Fix: Rearrange item lists checked during linked item scanning so veksar list works properly
+- Fix: Correct typos in stat foods
 
 2.1.0
-- Add 'Announce' button next to needed items to list who needs into /rs
-- Remove hardcoded things and pull from config file
-- Change layout of stat food tab
+- Feature: Add 'Announce' button next to needed items to list who needs into /rs
+- Refactor: Remove hardcoded things and pull from config file
+- Refactor: Change layout of stat food tab
 
 2.0.0
-- Support for offline character data using sqlite3
-- Fix for linked item checks for visible armor containers
+- Feature: Support for offline character data using sqlite3
+- Feature: Add stat food quest info
+- Fix: Handle detecting visible armor containers for linked item checks
 - Various item updates
-- Add stat food quest info
 
 1.1.0
-- Add tooltips to indicate a different item was found for a given row
-- Allow script to run with whatever folder name like bis or lazbis
+- Feature: Add tooltips to indicate a different item was found for a given row
+- Fix: Allow script to run with whatever folder name like bis or lazbis
 - Various item updates
 
 1.0.0
