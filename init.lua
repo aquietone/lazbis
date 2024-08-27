@@ -605,7 +605,7 @@ local function bisGUI()
                         end
                         ImGui.SameLine()
                         if ImGui.Button('Announce##'..itemName) then
-                            local message = '/rs '
+                            local message = mq.TLO.Raid.Members() > 0 and '/rs ' or '/g '
                             local doSend = false
                             message = message .. itemName .. ' - '
                             for charName,hasItem in pairs(itemChecks[itemName]) do
