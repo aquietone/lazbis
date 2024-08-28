@@ -6,6 +6,7 @@ return {
 		['veksar'] = {index=9, list='veksar'},
 		['anguish'] = {index=1, list='anguish'},
 		['unrest'] = {index=3, list='fuku'},
+		['sebilis'] = {index=8, list='sebilis'},
 	},
 	['anguish'] = {
 		['Bard'] = {

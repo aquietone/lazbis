@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.2.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.2.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -199,7 +199,7 @@ end
 
 local foundItem = nil
 local function singleRowCallback(udata,cols,values,names)
-    foundItem = {Character=values[1], Count=tonumber(values[7]), ItemName=values[6] and values[5]}
+    foundItem = {Character=values[1], Count=tonumber(values[7]), ItemName=values[6] and values[5], ComponentCount=tonumber(values[8])}
 end
 local function loadSingleRow(category, charName, itemName)
     for _,char in ipairs(group) do
@@ -832,30 +832,31 @@ local function sayCallback(line, char, message)
     if string.find(message, 'Burns') then
         return
     end
+    local currentZone = mq.TLO.Zone.ShortName()
+    local listToScan = bisConfig.ZoneMap[currentZone].list
+
     local messages = {}
     for _, char in ipairs(group) do
         if char.Show then
-            for _,list in ipairs(bisConfig.ItemLists) do
-                local classItems = bisConfig[list][char.Class]
-                local templateItems = bisConfig[list].Template
-                local visibleItems = bisConfig[list].Visible
-                for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
-                    for slot,item in pairs(itembucket) do
-                        if item then
-                            for itemName in split(item, '/') do
-                                if string.find(message, itemName) then
-                                    local hasItem = gear[char.Name][slot] ~= nil and gear[char.Name][slot].count > 0
-                                    if not hasItem and list ~= selectedItemList then
-                                        loadSingleRow(list, char.Name, itemName)
-                                        if foundItem and foundItem.Count > 0 then hasItem = true end
-                                        foundItem = nil
-                                    end
-                                    itemChecks[itemName] = itemChecks[itemName] or {}
-                                    itemChecks[itemName][char.Name] = hasItem
-                                    if not hasItem then
-                                        messages[itemName] = messages[itemName] or itemName .. ' - '
-                                        messages[itemName] = messages[itemName] .. char.Name .. ', '
-                                    end
+            local classItems = bisConfig[listToScan][char.Class]
+            local templateItems = bisConfig[listToScan].Template
+            local visibleItems = bisConfig[listToScan].Visible
+            for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
+                for slot,item in pairs(itembucket) do
+                    if item then
+                        for itemName in split(item, '/') do
+                            if string.find(message, itemName) then
+                                local hasItem = gear[char.Name][slot] ~= nil and (gear[char.Name][slot].count > 0 or (gear[char.Name][slot].componentcount or 0) > 0)
+                                if not hasItem and listToScan ~= selectedItemList then
+                                    loadSingleRow(listToScan, char.Name, itemName)
+                                    if foundItem and (foundItem.Count > 0 or (foundItem.ComponentCount or 0) > 0) then hasItem = true end
+                                    foundItem = nil
+                                end
+                                itemChecks[itemName] = itemChecks[itemName] or {}
+                                itemChecks[itemName][char.Name] = hasItem
+                                if not hasItem then
+                                    messages[itemName] = messages[itemName] or itemName .. ' - '
+                                    messages[itemName] = messages[itemName] .. char.Name .. ', '
                                 end
                             end
                         end
@@ -870,6 +871,30 @@ local function sayCallback(line, char, message)
                 local prefix = mq.TLO.Raid.Members() > 0 and '/rs ' or '/g '
                 mq.cmdf('%s%s', prefix, msg)
                 recentlyAnnounced[itemName] = mq.gettime()
+            end
+        end
+    end
+end
+
+local function lootedCallback(line, who, item)
+    if who == 'You' then who = mq.TLO.Me.CleanName() end
+    if not group[who] then return end
+    local char = group[who]
+    for _,list in ipairs(bisConfig.ItemLists) do
+        local classItems = bisConfig[list][char.Class]
+        local templateItems = bisConfig[list].Template
+        local visibleItems = bisConfig[list].Visible
+        for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
+            for slot,itemLine in pairs(itembucket) do
+                for itemName in split(itemLine, '/') do
+                    if itemName == item then
+                        if list == itemList then
+                            
+                        else
+
+                        end
+                    end
+                end
             end
         end
     end
@@ -942,6 +967,8 @@ local function init(args)
     mq.event('rMeSayItems', 'You tell your raid, #2#', sayCallback)
     mq.event('gsayItems', '#1# tells the group, #2#', sayCallback)
     mq.event('gMeSayItems', 'You tell your party, #2#', sayCallback)
+    -- mq.event('otherLootedItem', '--#1# has looted a #2#.--', lootedCallback)
+    -- mq.event('youLootedItem', '--#1# have looted a #2#.--', lootedCallback)
 
     mq.imgui.init('BISCheck', bisGUI)
 end
