@@ -538,6 +538,7 @@ local function bisGUI()
     ImGui.SetNextWindowSize(ImVec2(800,500), ImGuiCond.FirstUseEver)
     openGUI, shouldDrawGUI = ImGui.Begin('BIS Check ('.. meta.version ..')###BIS Check', openGUI, ImGuiWindowFlags.HorizontalScrollbar)
     if shouldDrawGUI then
+        ImGui.PushStyleVar(ImGuiStyleVar.ScrollbarSize, 17)
         if ImGui.BeginTabBar('bistabs') then
             if ImGui.BeginTabItem('Gear') then
                 local origSelectedItemList = selectedItemList
@@ -807,6 +808,7 @@ local function bisGUI()
             end
             ImGui.EndTabBar()
         end
+        ImGui.PopStyleVar()
     end
     ImGui.End()
     if not openGUI then
