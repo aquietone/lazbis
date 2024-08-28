@@ -1,3 +1,8 @@
+2.2.0
+- Add toggle to automatically announce in addition to the buttons for announcing needed items
+- When on, the driver will automatically report the toons who need the item into /rs if in a raid, otherwise in group, for each character which is currently selected to be shown in the table
+- BIS scans for links in say, group and raid chat
+
 2.1.2
 - Fix: Show correct have/need for linked items regardless what item list is currently selected
 

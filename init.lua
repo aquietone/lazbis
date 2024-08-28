@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.1.2', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.2.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -33,6 +33,7 @@ local itemList          = bisConfig.sebilis
 local selectionChanged  = true
 local showslots         = true
 local showmissingonly   = false
+local announceNeeds     = false
 local orderedSkills     = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
 local recipeQuestIdx    = 1
 local ingredientsArray  = {}
@@ -572,7 +573,8 @@ local function bisGUI()
                     filterGear(slots)
                 end
                 if filter ~= '' or showmissingonly then useFilter = true else useFilter = false end
-
+                ImGui.SameLine()
+                announceNeeds = ImGui.Checkbox('Announce Needs', announceNeeds)
                 ImGui.SameLine()
                 ImGui.PushItemWidth(90)
                 local tempBroadcast = ImGui.Combo('Show characters', selectedBroadcast, 'All Online\0All Offline\0Group\0Custom\0')
@@ -821,6 +823,7 @@ local function searchAll()
     end
 end
 
+local recentlyAnnounced = {}
 local function sayCallback(line, char, message)
     if itemList == nil or group == nil or gear == nil then
         print('g ' .. #group .. ' gear ' .. #gear)
@@ -829,28 +832,44 @@ local function sayCallback(line, char, message)
     if string.find(message, 'Burns') then
         return
     end
+    local messages = {}
     for _, char in ipairs(group) do
-        for _,list in ipairs(bisConfig.ItemLists) do
-            local classItems = bisConfig[list][char.Class]
-            local templateItems = bisConfig[list].Template
-            local visibleItems = bisConfig[list].Visible
-            for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
-                for slot,item in pairs(itembucket) do
-                    if item then
-                        for itemName in split(item, '/') do
-                            if string.find(message, itemName) then
-                                local hasItem = gear[char.Name][slot] ~= nil and gear[char.Name][slot].count > 0
-                                if not hasItem and list ~= selectedItemList then
-                                    loadSingleRow(list, char.Name, itemName)
-                                    if foundItem and foundItem.Count > 0 then hasItem = true end
-                                    foundItem = nil
+        if char.Show then
+            for _,list in ipairs(bisConfig.ItemLists) do
+                local classItems = bisConfig[list][char.Class]
+                local templateItems = bisConfig[list].Template
+                local visibleItems = bisConfig[list].Visible
+                for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
+                    for slot,item in pairs(itembucket) do
+                        if item then
+                            for itemName in split(item, '/') do
+                                if string.find(message, itemName) then
+                                    local hasItem = gear[char.Name][slot] ~= nil and gear[char.Name][slot].count > 0
+                                    if not hasItem and list ~= selectedItemList then
+                                        loadSingleRow(list, char.Name, itemName)
+                                        if foundItem and foundItem.Count > 0 then hasItem = true end
+                                        foundItem = nil
+                                    end
+                                    itemChecks[itemName] = itemChecks[itemName] or {}
+                                    itemChecks[itemName][char.Name] = hasItem
+                                    if not hasItem then
+                                        messages[itemName] = messages[itemName] or itemName .. ' - '
+                                        messages[itemName] = messages[itemName] .. char.Name .. ', '
+                                    end
                                 end
-                                itemChecks[itemName] = itemChecks[itemName] or {}
-                                itemChecks[itemName][char.Name] = hasItem
                             end
                         end
                     end
                 end
+            end
+        end
+    end
+    if announceNeeds then
+        for itemName,msg in pairs(messages) do
+            if not recentlyAnnounced[itemName] or mq.gettime() - recentlyAnnounced[itemName] > 30000 then
+                local prefix = mq.TLO.Raid.Members() > 0 and '/rs ' or '/g '
+                mq.cmdf('%s%s', prefix, msg)
+                recentlyAnnounced[itemName] = mq.gettime()
             end
         end
     end
@@ -943,5 +962,10 @@ while openGUI do
         rebroadcast = false
     end
     if selectionChanged then selectionChanged = false searchAll() loadInv(selectedItemList) end
+    for itemName,lastAnnounced in pairs(recentlyAnnounced) do
+        if mq.gettime() - lastAnnounced > 30000 then
+            recentlyAnnounced[itemName] = nil
+        end
+    end
     mq.doevents()
 end
