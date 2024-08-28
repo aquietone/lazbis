@@ -1,5 +1,6 @@
 2.2.1
 - Fix item scanning for visible armor components (again)
+- Sort dropdown menu of characters and names in announce messages
 
 2.2.0
 - Add toggle to automatically announce in addition to the buttons for announcing needed items

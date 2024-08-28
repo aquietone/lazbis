@@ -24,6 +24,7 @@ local shouldDrawGUI = true
 -- Character info storage
 local gear          = {}
 local group         = {}
+local sortedGroup   = {}
 local itemChecks    = {}
 local tradeskills   = {}
 
@@ -55,6 +56,26 @@ local function split(str, char)
     return string.gmatch(str, '[^' .. char .. ']+')
 end
 
+local function addCharacter(name, class, offline, show, msg)
+    if not group[name] then
+        local char = {Name=name, Class=class, Offline=offline, Show=show}
+        if debug then printf('Add character: Name=%s Class=%s Offline=%s Show=%s', char.Name, char.Class, char.Offline, char.Show) end
+        group[name] = char
+        table.insert(group, char)
+        table.insert(sortedGroup, char.Name)
+        table.sort(sortedGroup, function(a,b) return a < b end)
+        if msg then
+            selectionChanged = true
+            msg:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name()})
+        end
+    elseif msg and group[name].Offline then
+        group[name].Offline = false
+        if selectedBroadcast == 1 or (selectedBroadcast == 3 and mq.TLO.Group.Member(name)()) then
+            group[name].Show = true
+        end
+    end
+end
+
 local function initTables()
     local foundInfo = false
     local foundInventory = false
@@ -74,7 +95,6 @@ local function initTables()
     until result ~= sql.BUSY
 
     if not foundInventory then
-        -- print('Creating Inventory')
         repeat
             local result = db:exec([[
 BEGIN TRANSACTION;
@@ -86,7 +106,6 @@ COMMIT;]])
     end
 
     if not foundInfo then
-        -- print('Creating Info')
         repeat
             local result = db:exec([[
 BEGIN TRANSACTION;
@@ -99,13 +118,11 @@ if result ~= 0 then printf('CREATE TABLE Result: %s', result) end
 
     repeat
         local result = db:exec([[DELETE FROM Info;]])
-        -- print(result)
         if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
     until result ~= sql.BUSY
 
     repeat
         local result = db:exec([[INSERT INTO Info VALUES ('1.0');]])
-        -- print(result)
         if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
     until result ~= sql.BUSY
 end
@@ -181,7 +198,7 @@ end
 
 local function rowCallback(udata,cols,values,names)
     if group[values[1]] and not group[values[1]].Offline then return 0 end
-    if not group[values[1]] then group[values[1]] = {Name=values[1], Class=values[2], Offline=true, Show=false} table.insert(group, group[values[1]])end
+    addCharacter(values[1], values[2], true, false)
     gear[values[1]] = gear[values[1]] or {}
     gear[values[1]][values[4]] = {count=tonumber(values[7]), componentcount=tonumber(values[8]), actualname=values[6] and values[5], location=values[6]}
     return 0
@@ -265,24 +282,7 @@ local function actorCallback(msg)
     if content.id == 'hello' then
         if debug then printf('=== MSG: id=%s Name=%s Class=%s', content.id, content.Name, content.Class) end
         if not openGUI then return end
-        if not group[content.Name] then
-            local char = {
-                Name = content.Name,
-                Class = content.Class,
-                Offline = false,
-                Show = true,
-            }
-            if debug then printf('Add character: Name=%s Class=%s', char.Name, char.Class) end
-            group[content.Name] = char
-            table.insert(group, char)
-            selectionChanged = true
-            msg:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name()})
-        elseif group[content.Name].Offline then
-            group[content.Name].Offline = false
-            if selectedBroadcast == 1 or (selectedBroadcast == 3 and mq.TLO.Group.Member(content.Name)()) then
-                group[content.Name].Show = true
-            end
-        end
+        addCharacter(content.Name, content.Class, false, true)
     elseif content.id == 'search' then
         if debug then printf('=== MSG: id=%s list=%s', content.id, content.list) end
         -- {id='search', list='dsk'}
@@ -585,7 +585,8 @@ local function bisGUI()
                 ImGui.SameLine()
                 ImGui.PushItemWidth(150)
                 if ImGui.BeginCombo('##Characters', 'Characters') then
-                    for i,char in ipairs(group) do
+                    for i,name in ipairs(sortedGroup) do
+                        local char = group[name]
                         local tmpShow = ImGui.Checkbox(char.Name, char.Show or false)
                         if tmpShow ~= char.Show then char.Show = tmpShow selectedBroadcast = 4 end
                     end
@@ -602,7 +603,7 @@ local function bisGUI()
                     end
                     ImGui.SameLine()
                     ImGui.Text('Linked items:')
-                    ImGui.BeginTable('linked items', numColumns)
+                    ImGui.BeginTable('linked items', numColumns, bit32.bor(ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY), -1.0, 115)
                     ImGui.TableSetupScrollFreeze(0, 1)
                     ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed),
                         250, 0)
@@ -833,30 +834,34 @@ local function sayCallback(line, char, message)
         return
     end
     local currentZone = mq.TLO.Zone.ShortName()
-    local listToScan = bisConfig.ZoneMap[currentZone].list
+    local currentZoneList = bisConfig.ZoneMap[currentZone] and bisConfig.ZoneMap[currentZone].list
+    local scanLists = currentZoneList and {currentZoneList} or bisConfig.ItemLists
 
     local messages = {}
-    for _, char in ipairs(group) do
-        if char.Show then
-            local classItems = bisConfig[listToScan][char.Class]
-            local templateItems = bisConfig[listToScan].Template
-            local visibleItems = bisConfig[listToScan].Visible
-            for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
-                for slot,item in pairs(itembucket) do
-                    if item then
-                        for itemName in split(item, '/') do
-                            if string.find(message, itemName) then
-                                local hasItem = gear[char.Name][slot] ~= nil and (gear[char.Name][slot].count > 0 or (gear[char.Name][slot].componentcount or 0) > 0)
-                                if not hasItem and listToScan ~= selectedItemList then
-                                    loadSingleRow(listToScan, char.Name, itemName)
-                                    if foundItem and (foundItem.Count > 0 or (foundItem.ComponentCount or 0) > 0) then hasItem = true end
-                                    foundItem = nil
-                                end
-                                itemChecks[itemName] = itemChecks[itemName] or {}
-                                itemChecks[itemName][char.Name] = hasItem
-                                if not hasItem then
-                                    messages[itemName] = messages[itemName] or itemName .. ' - '
-                                    messages[itemName] = messages[itemName] .. char.Name .. ', '
+    for _,list in ipairs(scanLists) do
+        for _, name in ipairs(sortedGroup) do
+            local char = group[name]
+            if char.Show then
+                local classItems = bisConfig[list][char.Class]
+                local templateItems = bisConfig[list].Template
+                local visibleItems = bisConfig[list].Visible
+                for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
+                    for slot,item in pairs(itembucket) do
+                        if item then
+                            for itemName in split(item, '/') do
+                                if string.find(message, itemName) then
+                                    local hasItem = gear[char.Name][slot] ~= nil and (gear[char.Name][slot].count > 0 or (gear[char.Name][slot].componentcount or 0) > 0)
+                                    if not hasItem and list ~= selectedItemList then
+                                        loadSingleRow(list, char.Name, itemName)
+                                        if foundItem and (foundItem.Count > 0 or (foundItem.ComponentCount or 0) > 0) then hasItem = true end
+                                        foundItem = nil
+                                    end
+                                    itemChecks[itemName] = itemChecks[itemName] or {}
+                                    itemChecks[itemName][char.Name] = hasItem
+                                    if not hasItem then
+                                        messages[itemName] = messages[itemName] or itemName .. ' - '
+                                        messages[itemName] = messages[itemName] .. char.Name .. ', '
+                                    end
                                 end
                             end
                         end
@@ -876,33 +881,42 @@ local function sayCallback(line, char, message)
     end
 end
 
-local function lootedCallback(line, who, item)
-    if who == 'You' then who = mq.TLO.Me.CleanName() end
-    if not group[who] then return end
-    local char = group[who]
-    for _,list in ipairs(bisConfig.ItemLists) do
-        local classItems = bisConfig[list][char.Class]
-        local templateItems = bisConfig[list].Template
-        local visibleItems = bisConfig[list].Visible
-        for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
-            for slot,itemLine in pairs(itembucket) do
-                for itemName in split(itemLine, '/') do
-                    if itemName == item then
-                        if list == itemList then
-                            
-                        else
+-- local function lootedCallback(line, who, item)
+--     if who == 'You' then who = mq.TLO.Me.CleanName() end
+--     if not group[who] then return end
+--     local char = group[who]
+--     local currentZone = mq.TLO.Zone.ShortName()
+--     local listToScan = bisConfig.ZoneMap[currentZone].list
 
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
+--     local classItems = bisConfig[listToScan][char.Class]
+--     local templateItems = bisConfig[listToScan].Template
+--     local visibleItems = bisConfig[listToScan].Visible
+--     for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
+--         for slot,itemLine in pairs(itembucket) do
+--             for itemName in split(itemLine, '/') do
+--                 if itemName == item then
+--                     if listToScan == itemList then
+--                         gear[char.Name][slot] = gear[char.Name][slot] or {count=0, invslot=0, componentcount=0 or nil, actualname=item}
+--                         if visibleItems[slot] == item then
+--                             gear[char.Name][slot].componentcount = gear[char.Name][slot].componentcount + 1
+--                         else
+--                             gear[char.Name][slot].count = gear[char.Name][slot].count + 1
+--                         end
+--                     else
+--                         local count = visibleItems[slot] == item and 0 or 1
+--                         local compcount = visibleItems[slot] == item and 1 or 0
+--                         local stmt = 'BEGIN TRANSACTION;\n'
+--                         stmt = stmt .. dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'unknown',count,compcount,listToScan)
+--                         stmt = stmt .. 'COMMIT;'
+--                     end
+--                 end
+--             end
+--         end
+--     end
+-- end
 
 local function writeAllItemLists()
-    group[mq.TLO.Me.CleanName()] = {Name=mq.TLO.Me.CleanName(),Class=mq.TLO.Me.Class.Name(),Offline=false}
-    table.insert(group, group[mq.TLO.Me.CleanName()])
+    addCharacter(mq.TLO.Me.CleanName(), mq.TLO.Me.Class.Name(), false, true)
     local insertStmt = ''
     for _,list in ipairs(bisConfig.ItemLists) do
         itemList = bisConfig[list]
@@ -947,14 +961,7 @@ local function init(args)
     end
     table.sort(ingredientsArray, function(a,b) return a.Name < b.Name end)
 
-    local char = {
-        ['Name'] = mq.TLO.Me(),
-        ['Class'] = mq.TLO.Me.Class.Name(),
-        ['Offline'] = false,
-        ['Show'] = true,
-    }
-    group[char.Name] = char
-    table.insert(group, char)
+    addCharacter(mq.TLO.Me.CleanName(), mq.TLO.Me.Class.Name(), false, true)
 
     mq.cmdf('%s /lua stop %s', broadcast, meta.name)
     mq.delay(500)
