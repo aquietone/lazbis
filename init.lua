@@ -29,7 +29,7 @@ local itemChecks    = {}
 local tradeskills   = {}
 
 -- Item list information
-local selectedItemList  = bisConfig.ItemLists.DefaultItemList
+local selectedItemList  = bisConfig.ItemLists[bisConfig.ItemLists.DefaultItemList.index]
 local itemList          = bisConfig.sebilis
 local selectionChanged  = true
 local showslots         = true
@@ -544,16 +544,16 @@ local function bisGUI()
                 local origSelectedItemList = selectedItemList
                 ImGui.PushItemWidth(150)
                 ImGui.SetNextWindowSize(150, 213)
-                if ImGui.BeginCombo('Item List', selectedItemList) then
+                if ImGui.BeginCombo('Item List', selectedItemList.name) then
                     for i,list in ipairs(bisConfig.ItemLists) do
-                        if ImGui.Selectable(list, selectedItemList == list) then selectedItemList = list end
+                        if ImGui.Selectable(list.name, selectedItemList.id == list.id) then selectedItemList = list end
                     end
                     ImGui.EndCombo()
                 end
                 ImGui.PopItemWidth()
-                itemList = bisConfig[selectedItemList]
+                itemList = bisConfig[selectedItemList.id]
                 local slots = itemList.Main.Slots
-                if selectedItemList ~= origSelectedItemList then
+                if selectedItemList.id ~= origSelectedItemList.id then
                     selectionChanged = true
                     filter = ''
                     showmissingonly = false
@@ -681,7 +681,7 @@ local function bisGUI()
                                 end
                                 ImGui.TreePop()
                             end
-                            if catName == 'Gear' and selectedItemList == 'questitems' then
+                            if catName == 'Gear' and selectedItemList.id == 'questitems' then
                                 ImGui.TableNextRow()
                                 ImGui.TableNextColumn()
                                 if ImGui.TreeNodeEx('Tradeskills', bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
@@ -819,7 +819,7 @@ end
 
 local function searchAll()
     for _, char in ipairs(group) do
-        actor:send({character=char.Name}, {id='search', list=selectedItemList})
+        actor:send({character=char.Name}, {id='search', list=selectedItemList.id})
     end
     for _, char in ipairs(group) do
         actor:send({character=char.Name}, {id='tsquery'})
@@ -836,7 +836,7 @@ local function sayCallback(line, char, message)
         return
     end
     local currentZone = mq.TLO.Zone.ShortName()
-    local currentZoneList = bisConfig.ZoneMap[currentZone] and bisConfig.ZoneMap[currentZone].list
+    local currentZoneList = bisConfig.ZoneMap[currentZone] and bisConfig.ItemLists[bisConfig.ZoneMap[currentZone].index]
     local scanLists = currentZoneList and {currentZoneList} or bisConfig.ItemLists
 
     local messages = {}
@@ -844,17 +844,17 @@ local function sayCallback(line, char, message)
         for _, name in ipairs(sortedGroup) do
             local char = group[name]
             if char.Show then
-                local classItems = bisConfig[list][char.Class]
-                local templateItems = bisConfig[list].Template
-                local visibleItems = bisConfig[list].Visible
+                local classItems = bisConfig[list.id][char.Class]
+                local templateItems = bisConfig[list.id].Template
+                local visibleItems = bisConfig[list.id].Visible
                 for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
                     for slot,item in pairs(itembucket) do
                         if item then
                             for itemName in split(item, '/') do
                                 if string.find(message, itemName) then
                                     local hasItem = gear[char.Name][slot] ~= nil and (gear[char.Name][slot].count > 0 or (gear[char.Name][slot].componentcount or 0) > 0)
-                                    if not hasItem and list ~= selectedItemList then
-                                        loadSingleRow(list, char.Name, itemName)
+                                    if not hasItem and list.id ~= selectedItemList.id then
+                                        loadSingleRow(list.id, char.Name, itemName)
                                         if foundItem and (foundItem.Count > 0 or (foundItem.ComponentCount or 0) > 0) then hasItem = true end
                                         foundItem = nil
                                     end
@@ -921,7 +921,7 @@ local function writeAllItemLists()
     addCharacter(mq.TLO.Me.CleanName(), mq.TLO.Me.Class.Name(), false, true)
     local insertStmt = ''
     for _,list in ipairs(bisConfig.ItemLists) do
-        itemList = bisConfig[list]
+        itemList = bisConfig[list.id]
         gear[mq.TLO.Me.CleanName()] = searchItemsInList(list)
         insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list)
     end
@@ -954,8 +954,8 @@ local function init(args)
     local zone = mq.TLO.Zone.ShortName()
     -- Load item list for specific zone if inside raid instance for that zone
     if bisConfig.ZoneMap[zone] then
-        selectedItemList = bisConfig.ZoneMap[zone].list
-        itemList = bisConfig[selectedItemList]
+        selectedItemList = bisConfig.ItemLists[bisConfig.ZoneMap[zone].index]
+        itemList = bisConfig[selectedItemList.id]
     end
 
     for name,ingredient in pairs(bisConfig.StatFoodIngredients) do
@@ -997,7 +997,7 @@ while openGUI do
         selectionChanged = true
         rebroadcast = false
     end
-    if selectionChanged then selectionChanged = false searchAll() loadInv(selectedItemList) end
+    if selectionChanged then selectionChanged = false searchAll() loadInv(selectedItemList.id) end
     for itemName,lastAnnounced in pairs(recentlyAnnounced) do
         if mq.gettime() - lastAnnounced > 30000 then
             recentlyAnnounced[itemName] = nil

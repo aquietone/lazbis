@@ -1,12 +1,24 @@
 return {
-	['ItemLists'] = {['DefaultItemList'] = 'sebilis',[1]='anguish',[2]='dsk',[3]='fuku',[4]='hcitems',[5]='jonas',[6]='preanguish',[7]='questitems',[8]='sebilis',[9]='veksar',[10]='vendoritems',},
+	['ItemLists'] = {
+		['DefaultItemList'] = {index=8},
+		[1]={id='anguish',name='Anguish'},
+		[2]={id='dsk',name='DSK'},
+		[3]={id='fuku',name='FUKU'},
+		[4]={id='hcitems',name='HC Items'},
+		[5]={id='jonas',name='Hand Aug'},
+		[6]={id='preanguish',name='Pre-Anguish'},
+		[7]={id='questitems',name='Quest Items'},
+		[8]={id='sebilis',name='Sebilis'},
+		[9]={id='veksar',name='Veksar'},
+		[10]={id='vendoritems',name='Vendor Items'},
+	},
 	['ZoneMap'] = {
-		['dreadspire'] = {index=2, list='dsk'},
-		['thevoida'] = {index=2, list='dsk'},
-		['veksar'] = {index=9, list='veksar'},
-		['anguish'] = {index=1, list='anguish'},
-		['unrest'] = {index=3, list='fuku'},
-		['sebilis'] = {index=8, list='sebilis'},
+		['dreadspire'] = {index=2},
+		['thevoida'] = {index=2},
+		['veksar'] = {index=9},
+		['anguish'] = {index=1},
+		['unrest'] = {index=3},
+		['sebilis'] = {index=8},
 	},
 	['anguish'] = {
 		['Bard'] = {
