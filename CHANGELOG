@@ -1,3 +1,7 @@
+2.2.3
+- Fix script being stopped but not restarted on bots when changing character selection
+- Fix error in dumpinv startup command
+
 2.2.2
 - Fix tradeskills showing incorrectly in table when unselecting show driver character
 
