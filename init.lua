@@ -922,8 +922,8 @@ local function writeAllItemLists()
     local insertStmt = ''
     for _,list in ipairs(bisConfig.ItemLists) do
         itemList = bisConfig[list.id]
-        gear[mq.TLO.Me.CleanName()] = searchItemsInList(list)
-        insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list)
+        gear[mq.TLO.Me.CleanName()] = searchItemsInList(list.id)
+        insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list.id)
     end
     clearAllDataForCharacter(mq.TLO.Me.CleanName())
     exec(insertStmt, mq.TLO.Me.CleanName(), nil, 'inserted')
