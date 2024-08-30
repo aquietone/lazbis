@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.3.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.4.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -32,12 +32,11 @@ local tradeskills   = {}
 local selectedItemList  = bisConfig.ItemLists[bisConfig.ItemLists.DefaultItemList.index]
 local itemList          = bisConfig.sebilis
 local selectionChanged  = true
-local showslots         = true
-local showmissingonly   = false
-local announceNeeds     = false
+local settings          = {ShowSlots=true,ShowMissingOnly=false,AnnounceNeeds=false,AnnounceChannel='Group'}
 local orderedSkills     = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
 local recipeQuestIdx    = 1
 local ingredientsArray  = {}
+local reapplyFilter     = false
 
 local debug         = false
 
@@ -58,8 +57,8 @@ end
 
 local function addCharacter(name, class, offline, show, msg)
     if not group[name] then
+        if debug then printf('Add character: Name=%s Class=%s Offline=%s Show=%s, Msg=%s', name, class, offline, show, msg) end
         local char = {Name=name, Class=class, Offline=offline, Show=show}
-        if debug then printf('Add character: Name=%s Class=%s Offline=%s Show=%s', char.Name, char.Class, char.Offline, char.Show) end
         group[name] = char
         table.insert(group, char)
         table.insert(sortedGroup, char.Name)
@@ -69,6 +68,7 @@ local function addCharacter(name, class, offline, show, msg)
             msg:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name()})
         end
     elseif msg and group[name].Offline then
+        if debug then printf('Add character: Name=%s Class=%s Offline=%s Show=%s, Msg=%s', name, class, offline, show, msg) end
         group[name].Offline = false
         if selectedBroadcast == 1 or (selectedBroadcast == 3 and mq.TLO.Group.Member(name)()) then
             group[name].Show = true
@@ -76,15 +76,23 @@ local function addCharacter(name, class, offline, show, msg)
     end
 end
 
+local function simpleExec(stmt)
+    repeat
+        local result = db:exec(stmt)
+        if result ~= 0 then printf('Result: %s', result) end
+        if result == sql.BUSY then print('\arDatebase was busy!') mq.delay(math.random(10,50)) end
+    until result ~= sql.BUSY
+end
+
 local function initTables()
-    local foundInfo = false
     local foundInventory = false
+    local foundSettings = false
     local function versioncallback(udata,cols,values,names)
         for i=1,cols do
-            if values[i] == 'Info' then
-                foundInfo = true
-            elseif values[i] == 'Inventory' then
+            if values[i] == 'Inventory' then
                 foundInventory = true
+            elseif values[i] == 'Settings' then
+                foundSettings = true
             end
         end
         return 0
@@ -95,34 +103,28 @@ local function initTables()
     until result ~= sql.BUSY
 
     if not foundInventory then
-        repeat
-            local result = db:exec([[
-BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS Inventory (Character TEXT NOT NULL, Class TEXT NOT NULL, Server TEXT NOT NULL, Slot TEXT NOT NULL, ItemName TEXT NOT NULL, Location TEXT NOT NULL, Count INTEGER NOT NULL, ComponentCount INTEGER NOT NULL, Category TEXT NOT NULL);
-COMMIT;]])
-            if result ~= 0 then printf('CREATE TABLE Result: %s', result) end
-            if result == sql.BUSY then print('\arDatebase was busy!') mq.delay(math.random(10,50)) end
-        until result ~= sql.BUSY
+        simpleExec([[CREATE TABLE IF NOT EXISTS Inventory (Character TEXT NOT NULL, Class TEXT NOT NULL, Server TEXT NOT NULL, Slot TEXT NOT NULL, ItemName TEXT NOT NULL, Location TEXT NOT NULL, Count INTEGER NOT NULL, ComponentCount INTEGER NOT NULL, Category TEXT NOT NULL)]])
     end
-
-    if not foundInfo then
-        repeat
-            local result = db:exec([[
-BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS Info (Version TEXT NOT NULL);
-COMMIT;]])
-if result ~= 0 then printf('CREATE TABLE Result: %s', result) end
-            if result == sql.BUSY then print('\arDatebase was busy!') mq.delay(math.random(10,50)) end
-        until result ~= sql.BUSY
+    simpleExec([[DROP TABLE IF EXISTS Info]])
+    if not foundSettings then
+        simpleExec([[CREATE TABLE IF NOT EXISTS Settings (Key TEXT UNIQUE NOT NULL, Value TEXT NOT NULL)]])
     end
+    -- check version and handle any migrations, none atm
+    simpleExec(("INSERT INTO Settings VALUES ('Version', '%s') ON CONFLICT(Key) DO UPDATE SET Value = '%s'"):format(meta.version, meta.version))
+end
 
-    repeat
-        local result = db:exec([[DELETE FROM Info;]])
-        if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
-    until result ~= sql.BUSY
+local function settingsRowCallback(udata,cols,values,names)
+    local value = values[2]
+    if value == 'true' then value = true
+    elseif value == 'false' then value = false
+    elseif tonumber(value) then value = tonumber(value) end
+    settings[values[1]] = value
+    return 0
+end
 
+local function initSettings()
     repeat
-        local result = db:exec([[INSERT INTO Info VALUES ('1.0');]])
+        local result = db:exec("SELECT * FROM Settings WHERE Key != 'Version'", settingsRowCallback)
         if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
     until result ~= sql.BUSY
 end
@@ -132,6 +134,7 @@ local function initDB()
     if db then
         db:exec("PRAGMA journal_mode=WAL;")
         initTables()
+        initSettings()
     end
 end
 
@@ -212,6 +215,7 @@ local function loadInv(category)
         local result = db:exec(string.format("SELECT * FROM Inventory WHERE Category='%s' AND Server = '%s';", category, server), rowCallback)
         if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
     until result ~= sql.BUSY
+    reapplyFilter = true
 end
 
 local foundItem = nil
@@ -282,7 +286,7 @@ local function actorCallback(msg)
     if content.id == 'hello' then
         if debug then printf('=== MSG: id=%s Name=%s Class=%s', content.id, content.Name, content.Class) end
         if not openGUI then return end
-        addCharacter(content.Name, content.Class, false, true)
+        addCharacter(content.Name, content.Class, false, true, msg)
     elseif content.id == 'search' then
         if debug then printf('=== MSG: id=%s list=%s', content.id, content.list) end
         -- {id='search', list='dsk'}
@@ -308,6 +312,7 @@ local function actorCallback(msg)
                 gear[char.Name].Visible[slot] = gear[char.Name][slot]
             end
         end
+        reapplyFilter = true
         dumpInv(char.Name, content.list)
     elseif content.id == 'tsquery' then
         if debug then printf('=== MSG: id=%s', content.id) end
@@ -357,7 +362,11 @@ local function changeBroadcastMode(tempBroadcast)
     if tempBroadcast == 1 or tempBroadcast == 3 then
         -- remove offline toons
         for _,char in ipairs(group) do
-            if char.Offline then char.Show = false elseif tempBroadcast == 1 or (tempBroadcast == 3 and mq.TLO.Group.Member(char.Name)()) then char.Show = true end
+            if char.Offline or (tempBroadcast == 3 and not mq.TLO.Group.Member(char.Name)()) then
+                char.Show = false
+            elseif tempBroadcast == 1 or (tempBroadcast == 3 and mq.TLO.Group.Member(char.Name)()) then
+                char.Show = true
+            end
         end
     elseif tempBroadcast == 2 then
         -- add offline toons
@@ -408,7 +417,7 @@ local function slotRow(slot, tmpGear)
                     if itemName == actualName then
                         local resolvedInvSlot = tmpGear[char.Name][realSlot].location or resolveInvSlot(invslot)
                         local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
-                        ImGui.Text('%s%s%s', itemName, showslots and resolvedInvSlot or '', lootDropper and ' ('..lootDropper..')' or '')
+                        ImGui.Text('%s%s%s', itemName, settings.ShowSlots and resolvedInvSlot or '', lootDropper and ' ('..lootDropper..')' or '')
                         ImGui.PopStyleColor()
                     else
                         local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
@@ -442,7 +451,7 @@ local function filterGear(slots)
                 for _, char in ipairs(group) do
                     if (gear[char.Name] ~= nil and gear[char.Name][slot] ~= nil) then
                         local itemName = itemList[char.Class] and itemList[char.Class][slot] or itemList.Template[slot]
-                        if (itemName ~= nil) and itemName:lower():find(lowerFilter) and (not showmissingonly or gear[char.Name][slot].count == 0) then
+                        if (itemName ~= nil) and itemName:lower():find(lowerFilter) and (not settings.ShowMissingOnly or gear[char.Name][slot].count == 0) then
                             filteredGear[char.Name] = filteredGear[char.Name] or {Name=char.Name, Class=char.Class}
                             filteredGear[char.Name][slot] = gear[char.Name][slot]
                             if not filteredSlots[category.Name] then
@@ -535,6 +544,32 @@ local function CompareWithSortSpecs(a, b)
     return a.Name < b.Name
 end
 
+local function updateSetting(name, value)
+    settings[name] = value
+    simpleExec(("INSERT INTO Settings VALUES ('%s', '%s') ON CONFLICT(Key) DO UPDATE SET Value = '%s'"):format(name, value, value))
+end
+
+local function getAnnounceChannel()
+    if settings.AnnounceChannel == 'Raid' then
+        if mq.TLO.Raid.Members() > 0 then return '/rs ' else return '/g ' end
+    elseif settings.AnnounceChannel == 'Group' then
+        return '/g '
+    elseif settings.AnnounceChannel == 'Guild' then
+        return '/gu '
+    elseif settings.AnnounceChannel == 'Say' then
+        return '/say '
+    end
+end
+
+local function VerticalSeparator()
+    ImGui.PushStyleColor(ImGuiCol.Button, 0, 0.2, 0.4, 1)
+    ImGui.PushStyleColor(ImGuiCol.ButtonActive, 0, 0.2, 0.4, 1)
+    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, 0, 0.2, 0.4, 1)
+    ImGui.Button('##separator', 3, 0)
+    ImGui.PopStyleColor(3)
+end
+
+local classes = {Bard='BRD',Beastlord='BST',Berserker='BER',Cleric='CLR',Druid='DRU',Enchanter='ENC',Magician='MAG',Monk='MNK',Necromancer='NEC',Paladin='PAL',Ranger='RNG',Rogue='ROG',['Shadow Knight']='SHD',Shaman='SHM',Warrior='WAR',Wizard='WIZ'}
 local function bisGUI()
     ImGui.SetNextWindowSize(ImVec2(800,500), ImGuiCond.FirstUseEver)
     openGUI, shouldDrawGUI = ImGui.Begin('BIS Check ('.. meta.version ..')###BIS Check', openGUI, ImGuiWindowFlags.HorizontalScrollbar)
@@ -557,7 +592,7 @@ local function bisGUI()
                 if selectedItemList.id ~= origSelectedItemList.id then
                     selectionChanged = true
                     filter = ''
-                    showmissingonly = false
+                    settings.ShowMissingOnly = false
                 end
                 ImGui.SameLine()
                 if ImGui.Button('Refresh') then selectionChanged = true end
@@ -566,31 +601,56 @@ local function bisGUI()
                 local tmpFilter = ImGui.InputTextWithHint('##filter', 'Search...', filter)
                 ImGui.PopItemWidth()
                 ImGui.SameLine()
-                showslots = ImGui.Checkbox('Show Slots', showslots)
+                ImGui.Text('Show:')
                 ImGui.SameLine()
-                local tmpshowmissingonly = ImGui.Checkbox('Show Missing Only', showmissingonly)
-                if tmpshowmissingonly ~= showmissingonly or tmpFilter ~= filter then
+                local tmpShowSlots = ImGui.Checkbox('Slots', settings.ShowSlots)
+                if tmpShowSlots ~= settings.ShowSlots then updateSetting('ShowSlots', tmpShowSlots) end
+                ImGui.SameLine()
+                local tmpShowMissingOnly = ImGui.Checkbox('Missing Only', settings.ShowMissingOnly)
+                if tmpShowMissingOnly ~= settings.ShowMissingOnly or tmpFilter ~= filter or reapplyFilter then
                     filter = tmpFilter
-                    showmissingonly = tmpshowmissingonly
+                    if tmpShowMissingOnly ~= settings.ShowMissingOnly then updateSetting('ShowMissingOnly', tmpShowMissingOnly) end
                     filterGear(slots)
+                    reapplyFilter = false
                 end
-                if filter ~= '' or showmissingonly then useFilter = true else useFilter = false end
+                if filter ~= '' or settings.ShowMissingOnly then useFilter = true else useFilter = false end
                 ImGui.SameLine()
-                announceNeeds = ImGui.Checkbox('Announce Needs', announceNeeds)
+                VerticalSeparator()
+                ImGui.SameLine()
+                ImGui.Text('Announce:')
+                ImGui.SameLine()
+                local tmpAnnounceNeeds = ImGui.Checkbox('##AnnounceNeeds', settings.AnnounceNeeds)
+                if tmpAnnounceNeeds ~= settings.AnnounceNeeds then updateSetting('AnnounceNeeds', tmpAnnounceNeeds) end
                 ImGui.SameLine()
                 ImGui.PushItemWidth(90)
-                local tempBroadcast = ImGui.Combo('Show characters', selectedBroadcast, 'All Online\0All Offline\0Group\0Custom\0')
-                if tempBroadcast ~= selectedBroadcast then
-                    changeBroadcastMode(tempBroadcast)
+                if ImGui.BeginCombo('##Channel', settings.AnnounceChannel) then
+                    for i,name in ipairs({'Group','Raid','Guild','Say'}) do
+                        local selected = ImGui.Selectable(name, settings.AnnounceChannel == name)
+                        if selected and name ~= settings.AnnounceChannel then
+                            updateSetting('AnnounceChannel', name)
+                        end
+                    end
+                    ImGui.EndCombo()
                 end
                 ImGui.PopItemWidth()
                 ImGui.SameLine()
+                VerticalSeparator()
+                ImGui.SameLine()
                 ImGui.PushItemWidth(150)
                 if ImGui.BeginCombo('##Characters', 'Characters') then
+                    local _,pressed = ImGui.Checkbox('All Online', selectedBroadcast == 1)
+                    if pressed then changeBroadcastMode(1) end
+                    _,pressed = ImGui.Checkbox('All Offline', selectedBroadcast == 2)
+                    if pressed then changeBroadcastMode(2) end
+                    _,pressed = ImGui.Checkbox('Group', selectedBroadcast == 3)
+                    if pressed then changeBroadcastMode(3) end
                     for i,name in ipairs(sortedGroup) do
                         local char = group[name]
-                        local tmpShow = ImGui.Checkbox(char.Name, char.Show or false)
-                        if tmpShow ~= char.Show then char.Show = tmpShow selectedBroadcast = 4 end
+                        _,pressed = ImGui.Checkbox(char.Name, char.Show or false)
+                        if pressed then
+                            char.Show = not char.Show
+                            changeBroadcastMode(4)
+                        end
                     end
                     ImGui.EndCombo()
                 end
@@ -607,8 +667,7 @@ local function bisGUI()
                     ImGui.Text('Linked items:')
                     ImGui.BeginTable('linked items', numColumns, bit32.bor(ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY), -1.0, 115)
                     ImGui.TableSetupScrollFreeze(0, 1)
-                    ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed),
-                        250, 0)
+                    ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), 250, 0)
                     for i,char in ipairs(group) do
                         if char.Show then
                             ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
@@ -624,12 +683,14 @@ local function bisGUI()
                         end
                         ImGui.SameLine()
                         if ImGui.Button('Announce##'..itemName) then
-                            local message = mq.TLO.Raid.Members() > 0 and '/rs ' or '/g '
+                            local message = getAnnounceChannel()
                             local doSend = false
                             message = message .. itemName .. ' - '
-                            for charName,hasItem in pairs(itemChecks[itemName]) do
-                                if not group[charName].Offline and not hasItem then
-                                    message = message .. charName .. ', '
+                            for _,name in ipairs(sortedGroup) do
+                                local char = group[name]
+                                if itemChecks[itemName][char.Name] == false then
+                                    -- message = message .. string.format('%s(%s)', char.Name, classes[char.Class]) .. ', '
+                                    message = message .. char.Name .. ', '
                                     doSend = true
                                 end
                             end
@@ -863,6 +924,7 @@ local function sayCallback(line, char, message)
                                     itemChecks[itemName][char.Name] = hasItem
                                     if not hasItem then
                                         messages[itemName] = messages[itemName] or itemName .. ' - '
+                                        -- messages[itemName] = messages[itemName] .. string.format('%s(%s)', char.Name, classes[char.Class]) .. ', '
                                         messages[itemName] = messages[itemName] .. char.Name .. ', '
                                     end
                                 end
@@ -873,10 +935,10 @@ local function sayCallback(line, char, message)
             end
         end
     end
-    if announceNeeds then
+    if settings.AnnounceNeeds then
         for itemName,msg in pairs(messages) do
             if not recentlyAnnounced[itemName] or mq.gettime() - recentlyAnnounced[itemName] > 30000 then
-                local prefix = mq.TLO.Raid.Members() > 0 and '/rs ' or '/g '
+                local prefix = getAnnounceChannel()
                 mq.cmdf('%s%s', prefix, msg)
                 recentlyAnnounced[itemName] = mq.gettime()
             end
@@ -889,7 +951,7 @@ local function lootedCallback(line, who, item)
     if not group[who] then return end
     local char = group[who]
     local currentZone = mq.TLO.Zone.ShortName()
-    local listToScan = bisConfig.ZoneMap[currentZone] and bisConfig.ZoneMap[currentZone].list
+    local listToScan = bisConfig.ZoneMap[currentZone] and bisConfig.ItemLists[bisConfig.ZoneMap[currentZone].index]
     if not listToScan then return end
 
     local classItems = bisConfig[listToScan.id][char.Class]
@@ -900,14 +962,14 @@ local function lootedCallback(line, who, item)
             for itemName in split(itemLine, '/') do
                 if itemName == item then
                     if listToScan.id == selectedItemList.id then
-                        gear[char.Name][slot] = gear[char.Name][slot] or {count=0, componentcount=0 or nil, actualname=item}
+                        gear[char.Name][slot] = gear[char.Name][slot] or {count=0, componentcount=0, actualname=item}
                         if visibleItems[slot] == item then
                             gear[char.Name][slot].componentcount = gear[char.Name][slot].componentcount + 1
                         else
                             gear[char.Name][slot].count = gear[char.Name][slot].count + 1
                         end
                     end
-                    local stmt = dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'',gear[char.Name][slot].count,gear[char.Name][slot].componentcount,listToScan.id)
+                    local stmt = dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'',gear[char.Name][slot].count or 0,gear[char.Name][slot].componentcount or 0,listToScan.id)
                     exec(stmt, char.Name, listToScan.id, 'inserted')
                 end
             end
@@ -987,7 +1049,7 @@ while openGUI do
         gear = {}
         itemChecks = {}
         tradeskills = {}
-        for _,c in ipairs(group) do if c.Name ~= mq.TLO.Me.CleanName() then c.Offline = true end end
+        for _,c in ipairs(group) do if c.Name ~= mq.TLO.Me.CleanName() then c.Offline = true printf('set %s offline', c.Name) end end
 
         mq.delay(500)
         mq.cmdf('%s /lua run %s 0%s', broadcast, meta.name, debug and ' debug' or '')

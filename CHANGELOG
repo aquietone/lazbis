@@ -1,3 +1,9 @@
+2.4.0
+- Feature: Persist settings for show slots, show missing only, announce needs, announce channel
+- Feature: Add setting for channel to announce needs to
+- Fix: event handling for looted items
+- Fix: Announce button for manual announcing now includes all names shown that need the item
+
 2.3.0
 - Feature: Update table and database based on looted items
 - Fix: Banked visible item containers showing up as red should now show as yellow
