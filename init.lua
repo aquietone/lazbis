@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.2.3', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.3.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -266,7 +266,7 @@ local function searchItemsInList(list)
             end
             if currentResult == 0 and bisConfig[list].Visible and bisConfig[list].Visible[slot] then
                 local compItem = bisConfig[list].Visible[slot]
-                componentResult = mq.TLO.FindItemCount(compItem)() or mq.TLO.FindItemBankCount(compItem)()
+                componentResult = mq.TLO.FindItemCount(compItem)() + mq.TLO.FindItemBankCount(compItem)()
                 currentSlot = mq.TLO.FindItem(compItem).ItemSlot() or (mq.TLO.FindItemBank(compItem)() and 'Bank') or ''
             end
             results[slot] = {count=currentResult, invslot=currentSlot, componentcount=componentResult>0 and componentResult or nil, actualname=actualName}
@@ -884,39 +884,36 @@ local function sayCallback(line, char, message)
     end
 end
 
--- local function lootedCallback(line, who, item)
---     if who == 'You' then who = mq.TLO.Me.CleanName() end
---     if not group[who] then return end
---     local char = group[who]
---     local currentZone = mq.TLO.Zone.ShortName()
---     local listToScan = bisConfig.ZoneMap[currentZone].list
+local function lootedCallback(line, who, item)
+    if who == 'You' then who = mq.TLO.Me.CleanName() end
+    if not group[who] then return end
+    local char = group[who]
+    local currentZone = mq.TLO.Zone.ShortName()
+    local listToScan = bisConfig.ZoneMap[currentZone] and bisConfig.ZoneMap[currentZone].list
+    if not listToScan then return end
 
---     local classItems = bisConfig[listToScan][char.Class]
---     local templateItems = bisConfig[listToScan].Template
---     local visibleItems = bisConfig[listToScan].Visible
---     for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
---         for slot,itemLine in pairs(itembucket) do
---             for itemName in split(itemLine, '/') do
---                 if itemName == item then
---                     if listToScan == itemList then
---                         gear[char.Name][slot] = gear[char.Name][slot] or {count=0, invslot=0, componentcount=0 or nil, actualname=item}
---                         if visibleItems[slot] == item then
---                             gear[char.Name][slot].componentcount = gear[char.Name][slot].componentcount + 1
---                         else
---                             gear[char.Name][slot].count = gear[char.Name][slot].count + 1
---                         end
---                     else
---                         local count = visibleItems[slot] == item and 0 or 1
---                         local compcount = visibleItems[slot] == item and 1 or 0
---                         local stmt = 'BEGIN TRANSACTION;\n'
---                         stmt = stmt .. dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'unknown',count,compcount,listToScan)
---                         stmt = stmt .. 'COMMIT;'
---                     end
---                 end
---             end
---         end
---     end
--- end
+    local classItems = bisConfig[listToScan.id][char.Class]
+    local templateItems = bisConfig[listToScan.id].Template
+    local visibleItems = bisConfig[listToScan.id].Visible
+    for _,itembucket in ipairs({classItems,templateItems,visibleItems}) do
+        for slot,itemLine in pairs(itembucket) do
+            for itemName in split(itemLine, '/') do
+                if itemName == item then
+                    if listToScan.id == selectedItemList.id then
+                        gear[char.Name][slot] = gear[char.Name][slot] or {count=0, componentcount=0 or nil, actualname=item}
+                        if visibleItems[slot] == item then
+                            gear[char.Name][slot].componentcount = gear[char.Name][slot].componentcount + 1
+                        else
+                            gear[char.Name][slot].count = gear[char.Name][slot].count + 1
+                        end
+                    end
+                    local stmt = dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'',gear[char.Name][slot].count,gear[char.Name][slot].componentcount,listToScan.id)
+                    exec(stmt, char.Name, listToScan.id, 'inserted')
+                end
+            end
+        end
+    end
+end
 
 local function writeAllItemLists()
     addCharacter(mq.TLO.Me.CleanName(), mq.TLO.Me.Class.Name(), false, true)
@@ -977,8 +974,8 @@ local function init(args)
     mq.event('rMeSayItems', 'You tell your raid, #2#', sayCallback)
     mq.event('gsayItems', '#1# tells the group, #2#', sayCallback)
     mq.event('gMeSayItems', 'You tell your party, #2#', sayCallback)
-    -- mq.event('otherLootedItem', '--#1# has looted a #2#.--', lootedCallback)
-    -- mq.event('youLootedItem', '--#1# have looted a #2#.--', lootedCallback)
+    mq.event('otherLootedItem', '#*#--#1# has looted a #2#.--#*#', lootedCallback)
+    mq.event('youLootedItem', '#*#--#1# have looted a #2#.--#*#', lootedCallback)
 
     mq.imgui.init('BISCheck', bisGUI)
 end

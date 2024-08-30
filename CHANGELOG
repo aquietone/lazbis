@@ -1,3 +1,6 @@
+2.3.0
+- Feature: Update table and database based on looted items
+- Fix: Banked visible item containers showing up as red should now show as yellow
 2.2.3
 - Fix script being stopped but not restarted on bots when changing character selection
 - Fix error in dumpinv startup command
