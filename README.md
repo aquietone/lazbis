@@ -41,12 +41,14 @@ It also writes the data to a local sqlite3 db to support showing offline charact
 
 - Track who has what items across all currently logged in characters for Anguish, Dreadspire, FUKU, HC Zones, Hand aug, Pre-Anguish, Quest items, Sebilis, Veksar and Vendor items.  
 - Track who has what items across offline characters who have run the script at some point in time.  
-- Shows who needs an item if the item is linked in chat in a comma separated list.  
+- Shows who needs an item if the item is linked in chat.  
+- Announce who needs an item into chat when an item is linked in chat.  
 - Filter what rows are displayed using the search bar. You can search by any item name text in the table such as "infused flux".  
 - Show what slots each character has items in. Uncheck the box "Show slots" to hide slot information.  
 - Only show items which characters are missing. Check the box "Show Missing Only" to filter out items you already have.  
 - Show all characters or only grouped characters. In case you have extra characters logged in like buffers which you don't want to track, you can show only grouped characters from the dropdown menu.  
 - Tooltips when hovering over items if the item is showing green because of some other item. For example, if you have crushed an anguish item but you have the Hex aug with that items focus, the item still shows as green.  
+- Full stat food, quest and recipe info for new stat food quest on Project Lazarus.  
 
 ### How it works
 
