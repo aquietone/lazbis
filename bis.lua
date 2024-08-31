@@ -1474,6 +1474,9 @@ return {
 			['ClickyWep4'] = 'Forsaken Sword of Skyfire',
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
 			['ClickyWep7'] = 'Forsaken Poison Wind Censer',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Cleric'] = {
 			['Epic2.5'] = 'Aegis of Ancient Divinity',
@@ -1488,6 +1491,9 @@ return {
 			['ClickyWep2'] = 'Forsaken Sword of the Morning',
 			['ClickyWep5'] = 'Forsaken Shieldstorm',
 			['ClickyWep8'] = 'Forsaken Zealot\'s Incarnadine Sword',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Druid'] = {
 			['Epic2.5'] = 'Staff of Ancient Brambles',
@@ -1502,6 +1508,9 @@ return {
 			['ClickyWep4'] = 'Forsaken Sword of Skyfire',
 			['ClickyWep5'] = 'Forsaken Shieldstorm',
 			['ClickyWep7'] = 'Forsaken Poison Wind Censer',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Enchanter'] = {
 			['Epic2.5'] = 'Staff of Ancient Eloquence',
@@ -1516,6 +1525,9 @@ return {
 			['ClickyWep2'] = 'Forsaken Sword of the Morning',
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
 			['ClickyWep8'] = 'Forsaken Zealot\'s Incarnadine Sword',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Magician'] = {
 			['Epic2.5'] = 'Focus of Ancient Elements',
@@ -1530,6 +1542,9 @@ return {
 			['ClickyWep4'] = 'Forsaken Sword of Skyfire',
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
 			['ClickyWep7'] = 'Forsaken Poison Wind Censer',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Monk'] = {
 			['Epic2.5'] = 'Ancient Fistwraps of Immortality',
@@ -1558,6 +1573,9 @@ return {
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
 			['ClickyWep7'] = 'Forsaken Poison Wind Censer',
 			['ClickyWep8'] = 'Forsaken Zealot\'s Incarnadine Sword',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Paladin'] = {
 			['Epic2.5'] = 'Nightbane, Sword of the Ancients',
@@ -1572,6 +1590,9 @@ return {
 			['ClickyWep3'] = 'Forsaken Fayguard Bladecatcher',
 			['ClickyWep4'] = 'Forsaken Sword of Skyfire',
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Ranger'] = {
 			['Epic2.5'] = 'Aurora, the Ancient Bow',
@@ -1586,6 +1607,9 @@ return {
 			['ClickyWep4'] = 'Forsaken Sword of Skyfire',
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
 			['ClickyWep7'] = 'Forsaken Poison Wind Censer',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Rogue'] = {
 			['Epic2.5'] = 'Nightshade, Blade of Ancient Entropy',
@@ -1614,6 +1638,9 @@ return {
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
 			['ClickyWep7'] = 'Forsaken Poison Wind Censer',
 			['ClickyWep8'] = 'Forsaken Zealot\'s Incarnadine Sword',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Shaman'] = {
 			['Epic2.5'] = 'Ancient Spiritstaff of the Heyokah',
@@ -1628,6 +1655,9 @@ return {
 			['ClickyWep5'] = 'Forsaken Shieldstorm',
 			['ClickyWep7'] = 'Forsaken Poison Wind Censer',
 			['ClickyWep8'] = 'Forsaken Zealot\'s Incarnadine Sword',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Warrior'] = {
 			['Epic2.5'] = 'Kreljnok\'s Sword of Ancient Power',
@@ -1656,6 +1686,9 @@ return {
 			['ClickyWep2'] = 'Forsaken Sword of the Morning',
 			['ClickyWep4'] = 'Forsaken Sword of Skyfire',
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
+			['WeaponAug7'] = 'Desolate Lapis Lazuli',
+			['WeaponAug8'] = 'Desolate Malachite',
+			['WeaponAug11'] = 'Desolate Star Ruby',
 		},
 		['Main'] = {
 			['Slots'] = {
@@ -1682,11 +1715,8 @@ return {
 			['WeaponAug4'] = 'Desolate Cat\'s Eye Agate',
 			['WeaponAug5'] = 'Desolate Fire Emerald',
 			['WeaponAug6'] = 'Desolate Hematite',
-			['WeaponAug7'] = 'Desolate Lapis Lazuli',
-			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug9'] = 'Desolate Onyx',
 			['WeaponAug10'] = 'Desolate Star Rose Quartz',
-			['WeaponAug11'] = 'Desolate Star Ruby',
 			['WeaponAug12'] = 'Grotesque Skull of Grit',
 			['WeaponAug13'] = 'Vitreous Skull of Vitality',
 			['FluxAug1'] = 'Infused Flux of Acumen',
