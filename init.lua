@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.4.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.4.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -964,9 +964,9 @@ local function lootedCallback(line, who, item)
                     if listToScan.id == selectedItemList.id then
                         gear[char.Name][slot] = gear[char.Name][slot] or {count=0, componentcount=0, actualname=item}
                         if visibleItems[slot] == item then
-                            gear[char.Name][slot].componentcount = gear[char.Name][slot].componentcount + 1
+                            gear[char.Name][slot].componentcount = (gear[char.Name][slot].componentcount or 0) + 1
                         else
-                            gear[char.Name][slot].count = gear[char.Name][slot].count + 1
+                            gear[char.Name][slot].count = (gear[char.Name][slot].count or 0) + 1
                         end
                     end
                     local stmt = dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'',gear[char.Name][slot].count or 0,gear[char.Name][slot].componentcount or 0,listToScan.id)
