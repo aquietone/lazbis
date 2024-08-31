@@ -1477,6 +1477,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Cleric'] = {
 			['Epic2.5'] = 'Aegis of Ancient Divinity',
@@ -1494,6 +1495,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Druid'] = {
 			['Epic2.5'] = 'Staff of Ancient Brambles',
@@ -1511,6 +1513,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Enchanter'] = {
 			['Epic2.5'] = 'Staff of Ancient Eloquence',
@@ -1528,6 +1531,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Magician'] = {
 			['Epic2.5'] = 'Focus of Ancient Elements',
@@ -1545,6 +1549,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Monk'] = {
 			['Epic2.5'] = 'Ancient Fistwraps of Immortality',
@@ -1576,6 +1581,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Paladin'] = {
 			['Epic2.5'] = 'Nightbane, Sword of the Ancients',
@@ -1593,6 +1599,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Ranger'] = {
 			['Epic2.5'] = 'Aurora, the Ancient Bow',
@@ -1610,6 +1617,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Rogue'] = {
 			['Epic2.5'] = 'Nightshade, Blade of Ancient Entropy',
@@ -1641,6 +1649,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Shaman'] = {
 			['Epic2.5'] = 'Ancient Spiritstaff of the Heyokah',
@@ -1658,6 +1667,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Warrior'] = {
 			['Epic2.5'] = 'Kreljnok\'s Sword of Ancient Power',
@@ -1689,6 +1699,7 @@ return {
 			['WeaponAug7'] = 'Desolate Lapis Lazuli',
 			['WeaponAug8'] = 'Desolate Malachite',
 			['WeaponAug11'] = 'Desolate Star Ruby',
+			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 		},
 		['Main'] = {
 			['Slots'] = {
@@ -1716,7 +1727,6 @@ return {
 			['WeaponAug5'] = 'Desolate Fire Emerald',
 			['WeaponAug6'] = 'Desolate Hematite',
 			['WeaponAug9'] = 'Desolate Onyx',
-			['WeaponAug10'] = 'Desolate Star Rose Quartz',
 			['WeaponAug12'] = 'Grotesque Skull of Grit',
 			['WeaponAug13'] = 'Vitreous Skull of Vitality',
 			['FluxAug1'] = 'Infused Flux of Acumen',
