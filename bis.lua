@@ -324,8 +324,8 @@ return {
 			['Ranged'] = 'Totem of the Chimera',
 			['DSK1'] = 'Shoulderpads of Warfare/28116',
 			['DSK2'] = 'Golem Stone Face Guard/28117',
-			['DSK3'] = 'Ring of Disdain/28110',
-			['DSK4'] = 'Symbol of the Overlord/40814', 
+			-- ['DSK3'] = 'Ring of Disdain/28110',
+			['DSK3'] = 'Symbol of the Overlord/40814',
 		},
 		['Shaman'] = {
 			['Chest'] = 'Ritualchanter\'s Tunic of the Ancestors/32261',

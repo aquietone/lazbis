@@ -1,6 +1,7 @@
 2.4.1
 - Fix: handle nil when incrementing count on looted item
 - Move class specific sebilis weapon augs to specific classes
+- Remove dsk aug heal focus item from shd list
 
 2.4.0
 - Feature: Persist settings for show slots, show missing only, announce needs, announce channel
