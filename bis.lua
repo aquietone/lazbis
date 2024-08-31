@@ -1555,7 +1555,6 @@ return {
 			['Legs'] = 'Forsaken Graverobber\'s Trousers',
 			['Feet'] = 'Forsaken Graverobber\'s Shoes',
 			['ClickyWep1'] = 'Forsaken Rod of Lamentation',
-			['ClickyWep5'] = 'Forsaken Shieldstorm',
 			['ClickyWep6'] = 'Forsaken Breath of Harmony',
 			['ClickyWep7'] = 'Forsaken Poison Wind Censer',
 			['ClickyWep8'] = 'Forsaken Zealot\'s Incarnadine Sword',
