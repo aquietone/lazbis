@@ -1,3 +1,5 @@
+2.4.2
+- Open item links from linkdb when left clicking an item (provided you have a working, populated MQ2LinkDB database)
 2.4.1
 - Fix: handle nil when incrementing count on looted item
 - Fix: nil check visible item table during looted item event

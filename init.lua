@@ -419,6 +419,9 @@ local function slotRow(slot, tmpGear)
                         local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
                         ImGui.Text('%s%s%s', itemName, settings.ShowSlots and resolvedInvSlot or '', lootDropper and ' ('..lootDropper..')' or '')
                         ImGui.PopStyleColor()
+                        if ImGui.IsItemHovered() and ImGui.IsMouseClicked(ImGuiMouseButton.Left) then
+                            mq.cmdf('/link %s', itemName)
+                        end
                     else
                         local lootDropper = color[2] == 0 and bisConfig.LootDroppers[actualName]
                         ImGui.Text('%s%s', itemName, lootDropper and ' ('..lootDropper..')' or '')
@@ -428,6 +431,9 @@ local function slotRow(slot, tmpGear)
                             ImGui.BeginTooltip()
                             ImGui.Text('Found ') ImGui.SameLine() ImGui.TextColored(0,1,0,1,'%s', actualName) ImGui.SameLine() ImGui.Text('in slot %s', resolvedInvSlot)
                             ImGui.EndTooltip()
+                        end
+                        if ImGui.IsItemHovered() and ImGui.IsMouseClicked(ImGuiMouseButton.Left) then
+                            mq.cmdf('/squelch /link %s', itemName)
                         end
                     end
                 end
