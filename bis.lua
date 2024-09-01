@@ -1116,7 +1116,8 @@ return {
 			['Wand'] = 'Wand of Ruptured Reality',
 		},
 		['Visible'] = {
-			['Wrists'] = 'Binding of Reality',
+			['Wrist1'] = 'Vessel of the Ascendant Bracer',
+			['Wrist2'] = 'Binding of Reality',
 			['Arms'] = 'Vessel of the Ascendant Sleeves',
 			['Slots'] = 'Head,Arms,Wrists,Hands,Chest,Legs,Feet,Any',
 			['Feet'] = 'Vessel of the Ascendant Boots',
@@ -1247,6 +1248,7 @@ return {
 			['Radiant Cure'] = 'Cleansing Band of Twilight',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Divine Companion\'s Aura'] = 'Enduring Bloodgill Belt',
 		},
 		['Enchanter'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40856',
@@ -1350,6 +1352,7 @@ return {
 			['Ancestral Memories'] = 'Zealous Soulscream Belt',
 			['Prot of the Spirit Wolf'] = 'Fervent Eyepatch of Warding',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Warlord\'s Bravery'] = 'Obstinate Kunzar Deathguard Shield',
 		},
 		['Shadow Knight'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40847',
@@ -1366,6 +1369,7 @@ return {
 			['Warlord\'s Bravery'] = 'Obstinate Kunzar Deathguard Shield',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Rally'] = 'Vigilant Tu\'Nakk Parryblade',
+			['Divine Companion\'s Aura'] = 'Enduring Bloodgill Belt',
 		},
 		['Shaman'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40852',
@@ -1381,6 +1385,7 @@ return {
 			['Radiant Cure'] = 'Cleansing Ring of Twilight',
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
+			['Divine Companion\'s Aura'] = 'Enduring Bloodgill Belt',
 		},
 		['Warrior'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40845',
@@ -1409,6 +1414,7 @@ return {
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
 			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
+			['Warlord\'s Bravery'] = 'Obstinate Kunzar Deathguard Shield',
 		},
 		['Main'] = {
 			['Slots'] = {

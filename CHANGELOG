@@ -1,7 +1,9 @@
 2.4.1
 - Fix: handle nil when incrementing count on looted item
+- Fix: nil check visible item table during looted item event
 - Move class specific sebilis weapon augs to specific classes
 - Remove dsk aug heal focus item from shd list
+- Misc item data updates
 
 2.4.0
 - Feature: Persist settings for show slots, show missing only, announce needs, announce channel

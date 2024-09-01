@@ -963,7 +963,7 @@ local function lootedCallback(line, who, item)
                 if itemName == item then
                     if listToScan.id == selectedItemList.id then
                         gear[char.Name][slot] = gear[char.Name][slot] or {count=0, componentcount=0, actualname=item}
-                        if visibleItems[slot] == item then
+                        if visibleItems and visibleItems[slot] == item then
                             gear[char.Name][slot].componentcount = (gear[char.Name][slot].componentcount or 0) + 1
                         else
                             gear[char.Name][slot].count = (gear[char.Name][slot].count or 0) + 1
