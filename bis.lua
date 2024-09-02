@@ -2854,7 +2854,7 @@ return {
 						'Celestial Thyme Leaves from Plane of Time A (Foraged)',
 						'Sorcerer\'s Secret Herb and Spice Mix from Scarlet Desert (Pick Pocket Harland or Alvin)',
 						'Nectar of Fae Blossoms from Plane of Growth (Foraged)',
-						'Stardust Honeydew from The Gray (Ground Spawn)',
+						'Stardust Honeydew from The Grey (Ground Spawn)',
 					}
 				},
 				{
@@ -2968,7 +2968,7 @@ return {
 		['Celestial Thyme Leaves'] = {Location='Plane of Time A (Foraged)'},
 		['Sorcerer\'s Secret Herb and Spice Mix'] = {Location='Scarlet Desert (Foraged)'},
 		['Nectar of Fae Blossoms'] = {Location='Plane of Growth (Foraged)'},
-		['Stardust Honeydew'] = {Location='The Gray (Ground Spawn)'},
+		['Stardust Honeydew'] = {Location='The Grey (Ground Spawn)'},
 		['Blighted Walnuts'] = {Location='Swamp of No Hope (Foraged)'},
 		['Tangleberry'] = {Location='Swamp of No Hope (Ground Spawn)'},
 		['Shadowleaf Mint'] = {Location='Plane of Torment (Foraged)'},
