@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.4.3', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.5.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -27,6 +27,7 @@ local group         = {}
 local sortedGroup   = {}
 local itemChecks    = {}
 local tradeskills   = {}
+local emptySlots    = {}
 
 -- Item list information
 local selectedItemList  = bisConfig.ItemLists[bisConfig.ItemLists.DefaultItemList.index]
@@ -37,6 +38,7 @@ local orderedSkills     = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'J
 local recipeQuestIdx    = 1
 local ingredientsArray  = {}
 local reapplyFilter     = false
+local slots             = {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource','ammo'}
 
 local debug         = false
 
@@ -334,6 +336,37 @@ local function actorCallback(msg)
         tradeskills[char.Name] = tradeskills[char.Name] or {}
         for name,skill in pairs(content.Skills) do
             tradeskills[char.Name][name] = skill
+        end
+    elseif content.id == 'searchempties' then
+        local empties={}
+        for i = 0, 22 do
+            local slot = mq.TLO.InvSlot(i).Item
+            if slot.ID() ~= nil then
+                for j=1,6 do
+                    local augType = slot.AugSlot(j).Type()
+                    if augType and augType ~= 0 and augType ~= 20 and augType ~= 30 then
+                        local augSlot = slot.AugSlot(j).Item()
+                        if not augSlot then--and augType ~= 0 then
+                            -- empty aug slot
+                            table.insert(empties, ('%s: Slot %s, Type %s'):format(slots[i+1], j, augType))
+                        end
+                    end
+                end
+            else
+                -- empty slot
+                table.insert(empties, slots[i+1])
+            end
+        end
+        if debug then printf('>>> SEND MSG: id=%s Name=%s empties=%s', content.id, mq.TLO.Me.CleanName(), empties) end
+        msg:send({id='emptiesresult', empties=empties, Name=mq.TLO.Me.CleanName()})
+    elseif content.id == 'emptiesresult' then
+        if debug then printf('=== MSG: id=%s Name=%s empties=%s', content.id, content.Name, content.empties) end
+        if not openGUI then return end
+        emptySlots[content.Name] = content.empties
+        local message = 'Empties for ' .. content.Name .. ' - '
+        if not content.empties then return end
+        for _,empty in ipairs(content.empties) do
+            message = message .. empty .. ', '
         end
     end
 end
@@ -774,6 +807,21 @@ local function bisGUI()
                 end
                 ImGui.EndTabItem()
             end
+            if ImGui.BeginTabItem('Empties') then
+                for char,empties in pairs(emptySlots) do
+                    if empties then
+                        ImGui.PushID(char)
+                        if ImGui.TreeNode('%s', char) then
+                            for _,empty in ipairs(empties) do
+                                ImGui.Text(' - %s', empty)
+                            end
+                            ImGui.TreePop()
+                        end
+                        ImGui.PopID()
+                    end
+                end
+                ImGui.EndTabItem()
+            end
             if bisConfig.StatFoodRecipes and ImGui.BeginTabItem('Stat Food') then
                 if ImGui.BeginTabBar('##statfoodtabs') then
                     if ImGui.BeginTabItem('Recipes') then
@@ -892,10 +940,36 @@ local function searchAll()
     for _, char in ipairs(group) do
         actor:send({character=char.Name}, {id='tsquery'})
     end
+    for _, char in ipairs(group) do
+        actor:send({character=char.Name}, {id='searchempties'})
+    end
 end
 
+local LINK_TYPES = nil
+if mq.LinkTypes then
+    LINK_TYPES = {
+        [mq.LinkTypes.Item] = 'Item',
+        [mq.LinkTypes.Player] = 'Player',
+        [mq.LinkTypes.Spam] = 'Spam',
+        [mq.LinkTypes.Achievement] = 'Achievement',
+        [mq.LinkTypes.Dialog] = 'Dialog',
+        [mq.LinkTypes.Command] = 'Command',
+        [mq.LinkTypes.Spell] = 'Spell',
+        [mq.LinkTypes.Faction] = 'Faction',
+    }
+end
 local recentlyAnnounced = {}
 local function sayCallback(line, char, message)
+    local itemLinks = {}
+    if mq.ExtractLinks then
+        local links = mq.ExtractLinks(message)
+        for _,link in ipairs(links) do
+            if link.type == mq.LinkTypes.Item then
+                local item = mq.ParseItemLink(link.link)
+                itemLinks[item.itemName] = link.link
+            end
+        end
+    end
     if itemList == nil or group == nil or gear == nil then
         print('g ' .. #group .. ' gear ' .. #gear)
         return
@@ -929,8 +1003,9 @@ local function sayCallback(line, char, message)
                                     itemChecks[itemName] = itemChecks[itemName] or {}
                                     itemChecks[itemName][char.Name] = hasItem
                                     if not hasItem then
-                                        messages[itemName] = messages[itemName] or itemName .. ' - '
-                                        -- messages[itemName] = messages[itemName] .. string.format('%s(%s)', char.Name, classes[char.Class]) .. ', '
+                                        if not messages[itemName] then
+                                            if itemLinks[itemName] then messages[itemName] = itemLinks[itemName] .. ' - '  else messages[itemName] = itemName .. ' - ' end
+                                        end
                                         messages[itemName] = messages[itemName] .. char.Name .. ', '
                                     end
                                 end
@@ -1036,14 +1111,14 @@ local function init(args)
     mq.cmdf('%s /lua run %s 0%s', broadcast, meta.name, debug and ' debug' or '')
     mq.delay(500)
 
-    mq.event('meSayItems', 'You say, #2#', sayCallback)
-    mq.event('sayItems', '#1# says, #2#', sayCallback)
-    mq.event('rsayItems', '#1# tells the raid, #2#', sayCallback)
-    mq.event('rMeSayItems', 'You tell your raid, #2#', sayCallback)
-    mq.event('gsayItems', '#1# tells the group, #2#', sayCallback)
-    mq.event('gMeSayItems', 'You tell your party, #2#', sayCallback)
-    mq.event('otherLootedItem', '#*#--#1# has looted a #2#.--#*#', lootedCallback)
-    mq.event('youLootedItem', '#*#--#1# have looted a #2#.--#*#', lootedCallback)
+    mq.event('meSayItems', 'You say, #2#', sayCallback, {keepLinks = true})
+    mq.event('sayItems', '#1# says, #2#', sayCallback, {keepLinks = true})
+    mq.event('rsayItems', '#1# tells the raid, #2#', sayCallback, {keepLinks = true})
+    mq.event('rMeSayItems', 'You tell your raid, #2#', sayCallback, {keepLinks = true})
+    mq.event('gsayItems', '#1# tells the group, #2#', sayCallback, {keepLinks = true})
+    mq.event('gMeSayItems', 'You tell your party, #2#', sayCallback, {keepLinks = true})
+    mq.event('otherLootedItem', '#*#--#1# has looted a #2#.--#*#', lootedCallback, {keepLinks = true})
+    mq.event('youLootedItem', '#*#--#1# have looted a #2#.--#*#', lootedCallback, {keepLinks = true})
 
     mq.imgui.init('BISCheck', bisGUI)
 end

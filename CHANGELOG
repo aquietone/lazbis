@@ -1,3 +1,7 @@
+2.5.0
+- Add 'Empties' tab which will give a list of empty aug slots for each character
+- Include item links instead of just item names into announce messages (requires updated MQ)
+
 2.4.3
 - Add cold dmg dsk aug for bst
 
