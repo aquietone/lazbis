@@ -38,7 +38,7 @@ local orderedSkills     = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'J
 local recipeQuestIdx    = 1
 local ingredientsArray  = {}
 local reapplyFilter     = false
-local slots             = {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource','ammo'}
+local slots             = {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource'}
 
 local debug         = false
 
@@ -46,6 +46,8 @@ local server        = mq.TLO.EverQuest.Server()
 local dbfmt         = "INSERT INTO Inventory VALUES ('%s','%s','%s','%s','%s','%s',%d,%d,'%s');\n"
 local db
 local actor
+
+local niceImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/bis.png")
 
 -- Default to e3bca if mq2mono is loaded, else use dannet
 local broadcast     = '/e3bca'
@@ -339,7 +341,7 @@ local function actorCallback(msg)
         end
     elseif content.id == 'searchempties' then
         local empties={}
-        for i = 0, 22 do
+        for i = 0, 21 do
             local slot = mq.TLO.InvSlot(i).Item
             if slot.ID() ~= nil then
                 for j=1,6 do
@@ -808,9 +810,11 @@ local function bisGUI()
                 ImGui.EndTabItem()
             end
             if ImGui.BeginTabItem('Empties') then
+                local hadEmpties = false
                 for char,empties in pairs(emptySlots) do
                     if empties then
                         ImGui.PushID(char)
+                        hadEmpties = true
                         if ImGui.TreeNode('%s', char) then
                             for _,empty in ipairs(empties) do
                                 ImGui.Text(' - %s', empty)
@@ -819,6 +823,9 @@ local function bisGUI()
                         end
                         ImGui.PopID()
                     end
+                end
+                if not hadEmpties then
+                    ImGui.ImageButton('NiceButton', niceImg:GetTextureID(), ImVec2(200, 200),ImVec2(0.0,0.0), ImVec2(.55, .7))
                 end
                 ImGui.EndTabItem()
             end
