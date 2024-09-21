@@ -30,7 +30,7 @@ local tradeskills   = {}
 local emptySlots    = {}
 
 -- Item list information
-local selectedItemList  = bisConfig.ItemLists[bisConfig.ItemLists.DefaultItemList.index]
+local selectedItemList  = bisConfig.ItemLists[bisConfig.DefaultItemList.group][bisConfig.DefaultItemList.index]
 local itemList          = bisConfig.sebilis
 local selectionChanged  = true
 local settings          = {ShowSlots=true,ShowMissingOnly=false,AnnounceNeeds=false,AnnounceChannel='Group'}
@@ -184,15 +184,15 @@ local function buildInsertStmt(name, category)
     local char = group[name]
     for slot,value in pairs(gear[name]) do
         local itemName = value.actualname
-        local realSlot = slot ~= 'Wrists2' and slot or 'Wrists'
+        local configSlot = slot ~= 'Wrist1' and slot ~= 'Wrist2' and slot or 'Wrists'
         if not itemName then
-            itemName = itemList[char.Class] and itemList[char.Class][realSlot] or itemList.Template[realSlot]
+            itemName = itemList[char.Class] and (itemList[char.Class][configSlot] or itemList[char.Class][slot] or itemList.Template[configSlot] or itemList.Template[slot])
             if itemName and string.find(itemName, '/') then
                 itemName = itemName:match("([^/]+)")
             end
         end
         if itemName then
-            stmt = stmt .. dbfmt:format(name,char.Class,server,realSlot:gsub('\'','\'\''),itemName:gsub('\'','\'\''),resolveInvSlot(value.invslot):gsub('\'','\'\''),tonumber(value.count) or 0,tonumber(value.componentcount) or 0,category)
+            stmt = stmt .. dbfmt:format(name,char.Class,server,slot:gsub('\'','\'\''),itemName:gsub('\'','\'\''),resolveInvSlot(value.invslot):gsub('\'','\'\''),tonumber(value.count) or 0,tonumber(value.componentcount) or 0,category)
         end
     end
     return stmt
@@ -254,30 +254,59 @@ local function searchItemsInList(list)
             local actualName = nil
             if string.find(item, '/') then
                 for itemName in split(item, '/') do
-                    local searchString = itemName
-                    local findItem = mq.TLO.FindItem(searchString)
-                    local findItemBank = mq.TLO.FindItemBank(searchString)
-                    local count = mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
-                    if slot == 'PSAugSprings' and itemName == '39071' and currentResult < 3 then
-                        currentResult = 0
+                    if slot == 'Wrists' then
+                        local leftwrist = mq.TLO.Me.Inventory('leftwrist')
+                        local rightwrist = mq.TLO.Me.Inventory('rightwrist')
+                        if leftwrist.Name() == itemName or leftwrist.ID() == tonumber(itemName) then
+                            results['Wrist1'] = {count=1,invslot=9,actualname=leftwrist.Name()}
+                        elseif not results['Wrist1'] then
+                            results['Wrist1'] = {count=0,invslot='',actualname=nil}
+                        end
+                        if rightwrist.Name() == itemName or rightwrist.ID() == tonumber(itemName) then
+                            results['Wrist2'] = {count=1,invslot=10,actualname=rightwrist.Name()}
+                        elseif not results['Wrist2'] then
+                            results['Wrist2'] = {count=0,invslot='',actualname=nil}
+                        end
+                    else
+                        local searchString = itemName
+                        local findItem = mq.TLO.FindItem(searchString)
+                        local findItemBank = mq.TLO.FindItemBank(searchString)
+                        local count = mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
+                        if slot == 'PSAugSprings' and itemName == '39071' and currentResult < 3 then
+                            currentResult = 0
+                        end
+                        if count > 0 and not actualName then
+                            actualName = findItem() or findItemBank()
+                            currentSlot = findItem.ItemSlot() or (findItemBank() and 'Bank') or ''
+                        end
+                        currentResult = currentResult + count
                     end
-                    if count > 0 and not actualName then
-                        actualName = findItem() or findItemBank()
-                        currentSlot = findItem.ItemSlot() or (findItemBank() and 'Bank') or ''
-                    end
-                    currentResult = currentResult + count
                 end
             else
                 local searchString = item
                 currentResult = currentResult + mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
                 currentSlot = mq.TLO.FindItem(searchString).ItemSlot() or (mq.TLO.FindItemBank(searchString)() and 'Bank') or ''
             end
-            if currentResult == 0 and bisConfig[list].Visible and bisConfig[list].Visible[slot] then
-                local compItem = bisConfig[list].Visible[slot]
-                componentResult = mq.TLO.FindItemCount(compItem)() + mq.TLO.FindItemBankCount(compItem)()
-                currentSlot = mq.TLO.FindItem(compItem).ItemSlot() or (mq.TLO.FindItemBank(compItem)() and 'Bank') or ''
+            if slot ~= 'Wrists' then
+                if currentResult == 0 and bisConfig[list].Visible and bisConfig[list].Visible[slot] then
+                    local compItem = bisConfig[list].Visible[slot]
+                    componentResult = mq.TLO.FindItemCount(compItem)() + mq.TLO.FindItemBankCount(compItem)()
+                    currentSlot = mq.TLO.FindItem(compItem).ItemSlot() or (mq.TLO.FindItemBank(compItem)() and 'Bank') or ''
+                end
+                results[slot] = {count=currentResult, invslot=currentSlot, componentcount=componentResult>0 and componentResult or nil, actualname=actualName}
+            else
+                if bisConfig[list].Visible and bisConfig[list].Visible['Wrists'] then
+                    local compItem = bisConfig[list].Visible[slot]
+                    componentResult = mq.TLO.FindItemCount(compItem)() + mq.TLO.FindItemBankCount(compItem)()
+                    if results['Wrist1'].count == 0 and componentResult >= 1 then
+                        results['Wrist1'].count = 1 results['Wrist1'].componentcount = 1
+                        componentResult = componentResult - 1
+                    end
+                    if results['Wrist2'].count == 0 and componentResult >= 1 then
+                        results['Wrist2'].count = 1 results['Wrist2'].componentcount = 1
+                    end
+                end
             end
-            results[slot] = {count=currentResult, invslot=currentSlot, componentcount=componentResult>0 and componentResult or nil, actualname=actualName}
         end
     end
     return results
@@ -307,6 +336,8 @@ local function actorCallback(msg)
         gear[char.Name] = {}
         for slot,res in pairs(results) do
             if (bisConfig[content.list][content.class] and bisConfig[content.list][content.class][slot]) or bisConfig[content.list].Template[slot] then
+                gear[char.Name][slot] = res
+            elseif slot == 'Wrist1' or slot == 'Wrist2' then
                 gear[char.Name][slot] = res
             end
         end
@@ -420,14 +451,15 @@ local function getItemColor(slot, count, visibleCount, componentCount)
     if componentCount and componentCount > 0 then
         return { 1, 1, 0 }
     end
-    if slot == 'Wrists2' then
-        return { count == 2 and 0 or 1, count == 2 and 1 or 0, .1 }
-    end
+    -- if slot == 'Wrists2' then
+    --     return { count == 2 and 0 or 1, count == 2 and 1 or 0, .1 }
+    -- end
     return { count > 0 and 0 or 1, (count > 0 or visibleCount > 0) and 1 or 0, .1 }
 end
 
 local function slotRow(slot, tmpGear)
-    local realSlot = slot ~= 'Wrists2' and slot or 'Wrists'
+    -- local realSlot = slot ~= 'Wrists2' and slot or 'Wrists'
+    local realSlot = slot
     ImGui.TableNextRow()
     ImGui.TableNextColumn()
     ImGui.Text('' .. slot)
@@ -435,7 +467,11 @@ local function slotRow(slot, tmpGear)
         if char.Show then
             ImGui.TableNextColumn()
             if (tmpGear[char.Name] ~= nil and tmpGear[char.Name][realSlot] ~= nil) then
-                local itemName = itemList[char.Class] and itemList[char.Class][realSlot] or itemList.Template[realSlot]
+                local configSlot = slot
+                if configSlot == 'Wrist1' or configSlot == 'Wrist2' then
+                    if itemList[char.Class] and itemList[char.Class]['Wrists'] then configSlot = 'Wrists' end
+                end
+                local itemName = itemList[char.Class] and itemList[char.Class][configSlot] or itemList.Template[configSlot]
                 if (itemName ~= nil) then
                     if string.find(itemName, '/') then
                         itemName = itemName:match("([^/]+)")
@@ -445,7 +481,7 @@ local function slotRow(slot, tmpGear)
                         actualName = itemName
                     end
                     local count, invslot = tmpGear[char.Name][realSlot].count, tmpGear[char.Name][realSlot].invslot
-                    local countVis = tmpGear[char.Name].Visible and tmpGear[char.Name].Visible[realSlot] and tmpGear[char.Name].Visible[realSlot].count or 0
+                    local countVis = tmpGear[char.Name].Visible and tmpGear[char.Name].Visible[configSlot] and tmpGear[char.Name].Visible[configSlot].count or 0
                     local componentcount = tmpGear[char.Name][realSlot].componentcount
                     local color = getItemColor(slot, tonumber(count), tonumber(countVis), tonumber(componentcount))
                     ImGui.PushStyleColor(ImGuiCol.Text, color[1], color[2], color[3], 1)
@@ -620,10 +656,14 @@ local function bisGUI()
             if ImGui.BeginTabItem('Gear') then
                 local origSelectedItemList = selectedItemList
                 ImGui.PushItemWidth(150)
-                ImGui.SetNextWindowSize(150, 213)
+                ImGui.SetNextWindowSize(150, 285)--213)
                 if ImGui.BeginCombo('Item List', selectedItemList.name) then
-                    for i,list in ipairs(bisConfig.ItemLists) do
-                        if ImGui.Selectable(list.name, selectedItemList.id == list.id) then selectedItemList = list end
+                    for _,group in ipairs(bisConfig.Groups) do
+                        ImGui.TextColored(1,1,0,1,group)
+                        ImGui.Separator()
+                        for i,list in ipairs(bisConfig.ItemLists[group]) do
+                            if ImGui.Selectable(list.name, selectedItemList.id == list.id) then selectedItemList = list end
+                        end
                     end
                     ImGui.EndCombo()
                 end
@@ -777,9 +817,11 @@ local function bisGUI()
                             if ImGui.TreeNodeEx(catName, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
                                 local catSlots = category.Slots
                                 for _,slot in ipairs(catSlots) do
-                                    slotRow(slot, tmpGear)
-                                    if slot == 'Wrists' then
-                                        slotRow('Wrists2', tmpGear)
+                                    if slot ~= 'Wrists' then
+                                        slotRow(slot, tmpGear)
+                                    else
+                                        slotRow('Wrist1', tmpGear)
+                                        slotRow('Wrist2', tmpGear)
                                     end
                                 end
                                 ImGui.TreePop()
@@ -985,8 +1027,9 @@ local function sayCallback(line, char, message)
         return
     end
     local currentZone = mq.TLO.Zone.ShortName()
-    local currentZoneList = bisConfig.ZoneMap[currentZone] and bisConfig.ItemLists[bisConfig.ZoneMap[currentZone].index]
-    local scanLists = currentZoneList and {currentZoneList} or bisConfig.ItemLists
+    -- currentZone = 'anguish'
+    local currentZoneList = bisConfig.ZoneMap[currentZone] and bisConfig.ItemLists[bisConfig.ZoneMap[currentZone].group][bisConfig.ZoneMap[currentZone].index]
+    local scanLists = currentZoneList and {currentZoneList} or bisConfig.ItemLists['Raid Best In Slot']
 
     local messages = {}
     for _,list in ipairs(scanLists) do
@@ -1039,7 +1082,7 @@ local function lootedCallback(line, who, item)
     if not group[who] then return end
     local char = group[who]
     local currentZone = mq.TLO.Zone.ShortName()
-    local listToScan = bisConfig.ZoneMap[currentZone] and bisConfig.ItemLists[bisConfig.ZoneMap[currentZone].index]
+    local listToScan = bisConfig.ZoneMap[currentZone] and bisConfig.ItemLists[bisConfig.ZoneMap[currentZone].group][bisConfig.ZoneMap[currentZone].index]
     if not listToScan then return end
 
     local classItems = bisConfig[listToScan.id][char.Class]
@@ -1068,13 +1111,15 @@ end
 local function writeAllItemLists()
     addCharacter(mq.TLO.Me.CleanName(), mq.TLO.Me.Class.Name(), false, true)
     local insertStmt = ''
-    for _,list in ipairs(bisConfig.ItemLists) do
-        itemList = bisConfig[list.id]
-        gear[mq.TLO.Me.CleanName()] = searchItemsInList(list.id)
-        insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list.id)
+    for _,group in ipairs(bisConfig.Groups) do
+        for _,list in ipairs(bisConfig.ItemLists[group]) do
+            itemList = bisConfig[list.id]
+            gear[mq.TLO.Me.CleanName()] = searchItemsInList(list.id)
+            insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list.id)
+        end
+        clearAllDataForCharacter(mq.TLO.Me.CleanName())
+        exec(insertStmt, mq.TLO.Me.CleanName(), nil, 'inserted')
     end
-    clearAllDataForCharacter(mq.TLO.Me.CleanName())
-    exec(insertStmt, mq.TLO.Me.CleanName(), nil, 'inserted')
 end
 
 local function init(args)
@@ -1102,7 +1147,7 @@ local function init(args)
     local zone = mq.TLO.Zone.ShortName()
     -- Load item list for specific zone if inside raid instance for that zone
     if bisConfig.ZoneMap[zone] then
-        selectedItemList = bisConfig.ItemLists[bisConfig.ZoneMap[zone].index]
+        selectedItemList = bisConfig.ItemLists[bisConfig.ZoneMap[zone].group][bisConfig.ZoneMap[zone].index]
         itemList = bisConfig[selectedItemList.id]
     end
 

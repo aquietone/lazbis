@@ -1,3 +1,7 @@
+2.5.1
+- Potential fixes for anguish/dsk wrist items tracking
+- Rorganized menu
+
 2.5.0
 - Add 'Empties' tab which will give a list of empty aug slots for each character
 - Include item links instead of just item names into announce messages (requires updated MQ)
