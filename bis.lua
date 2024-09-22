@@ -1314,7 +1314,6 @@ return {
 			['Prot of the Spirit Wolf'] = 'Fervent Eyepatch of Warding',
 			['Radiant Cure'] = 'Cleansing Band of Twilight',
 			['Rally'] = 'Vigilant Tu\'Nakk Parryblade',
-			['Retreat'] = 'Shadowy Silken Veil of Gazing',
 			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
 		},
 		['Necromancer'] = {
