@@ -20,6 +20,7 @@ end
 -- UI States
 local openGUI       = true
 local shouldDrawGUI = true
+local minimizedGUI  = false
 
 -- Character info storage
 local gear          = {}
@@ -48,6 +49,7 @@ local db
 local actor
 
 local niceImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/bis.png")
+local iconImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/icon_lazbis.png")
 
 -- Default to e3bca if mq2mono is loaded, else use dannet
 local broadcast     = '/e3bca'
@@ -649,334 +651,352 @@ end
 local classes = {Bard='BRD',Beastlord='BST',Berserker='BER',Cleric='CLR',Druid='DRU',Enchanter='ENC',Magician='MAG',Monk='MNK',Necromancer='NEC',Paladin='PAL',Ranger='RNG',Rogue='ROG',['Shadow Knight']='SHD',Shaman='SHM',Warrior='WAR',Wizard='WIZ'}
 local function bisGUI()
     ImGui.SetNextWindowSize(ImVec2(800,500), ImGuiCond.FirstUseEver)
-    openGUI, shouldDrawGUI = ImGui.Begin('BIS Check ('.. meta.version ..')###BIS Check', openGUI, ImGuiWindowFlags.HorizontalScrollbar)
+	if minimizedGUI then
+        openGUI, shouldDrawGUI = ImGui.Begin('BIS Check (' .. meta.version .. ')###BIS Check Mini', openGUI,
+            bit32.bor(ImGuiWindowFlags.AlwaysAutoResize, ImGuiWindowFlags.NoResize, ImGuiWindowFlags.NoTitleBar))
+    else
+		openGUI, shouldDrawGUI = ImGui.Begin('BIS Check ('.. meta.version ..')###BIS Check', openGUI, ImGuiWindowFlags.HorizontalScrollbar)
+	end
     if shouldDrawGUI then
-        ImGui.PushStyleVar(ImGuiStyleVar.ScrollbarSize, 17)
-        if ImGui.BeginTabBar('bistabs') then
-            if ImGui.BeginTabItem('Gear') then
-                local origSelectedItemList = selectedItemList
-                ImGui.PushItemWidth(150)
-                ImGui.SetNextWindowSize(150, 285)--213)
-                if ImGui.BeginCombo('Item List', selectedItemList.name) then
-                    for _,group in ipairs(bisConfig.Groups) do
-                        ImGui.TextColored(1,1,0,1,group)
-                        ImGui.Separator()
-                        for i,list in ipairs(bisConfig.ItemLists[group]) do
-                            if ImGui.Selectable(list.name, selectedItemList.id == list.id) then selectedItemList = list end
-                        end
-                    end
-                    ImGui.EndCombo()
-                end
-                ImGui.PopItemWidth()
-                itemList = bisConfig[selectedItemList.id]
-                local slots = itemList.Main.Slots
-                if selectedItemList.id ~= origSelectedItemList.id then
-                    selectionChanged = true
-                    filter = ''
-                    settings.ShowMissingOnly = false
-                end
-                ImGui.SameLine()
-                if ImGui.Button('Refresh') then selectionChanged = true end
-                ImGui.SameLine()
-                ImGui.PushItemWidth(300)
-                local tmpFilter = ImGui.InputTextWithHint('##filter', 'Search...', filter)
-                ImGui.PopItemWidth()
-                ImGui.SameLine()
-                ImGui.Text('Show:')
-                ImGui.SameLine()
-                local tmpShowSlots = ImGui.Checkbox('Slots', settings.ShowSlots)
-                if tmpShowSlots ~= settings.ShowSlots then updateSetting('ShowSlots', tmpShowSlots) end
-                ImGui.SameLine()
-                local tmpShowMissingOnly = ImGui.Checkbox('Missing Only', settings.ShowMissingOnly)
-                if tmpShowMissingOnly ~= settings.ShowMissingOnly or tmpFilter ~= filter or reapplyFilter then
-                    filter = tmpFilter
-                    if tmpShowMissingOnly ~= settings.ShowMissingOnly then updateSetting('ShowMissingOnly', tmpShowMissingOnly) end
-                    filterGear(slots)
-                    reapplyFilter = false
-                end
-                if filter ~= '' or settings.ShowMissingOnly then useFilter = true else useFilter = false end
-                ImGui.SameLine()
-                VerticalSeparator()
-                ImGui.SameLine()
-                ImGui.Text('Announce:')
-                ImGui.SameLine()
-                local tmpAnnounceNeeds = ImGui.Checkbox('##AnnounceNeeds', settings.AnnounceNeeds)
-                if tmpAnnounceNeeds ~= settings.AnnounceNeeds then updateSetting('AnnounceNeeds', tmpAnnounceNeeds) end
-                ImGui.SameLine()
-                ImGui.PushItemWidth(90)
-                if ImGui.BeginCombo('##Channel', settings.AnnounceChannel) then
-                    for i,name in ipairs({'Group','Raid','Guild','Say'}) do
-                        local selected = ImGui.Selectable(name, settings.AnnounceChannel == name)
-                        if selected and name ~= settings.AnnounceChannel then
-                            updateSetting('AnnounceChannel', name)
-                        end
-                    end
-                    ImGui.EndCombo()
-                end
-                ImGui.PopItemWidth()
-                ImGui.SameLine()
-                VerticalSeparator()
-                ImGui.SameLine()
-                ImGui.PushItemWidth(150)
-                if ImGui.BeginCombo('##Characters', 'Characters') then
-                    local _,pressed = ImGui.Checkbox('All Online', selectedBroadcast == 1)
-                    if pressed then changeBroadcastMode(1) end
-                    _,pressed = ImGui.Checkbox('All Offline', selectedBroadcast == 2)
-                    if pressed then changeBroadcastMode(2) end
-                    _,pressed = ImGui.Checkbox('Group', selectedBroadcast == 3)
-                    if pressed then changeBroadcastMode(3) end
-                    for i,name in ipairs(sortedGroup) do
-                        local char = group[name]
-                        _,pressed = ImGui.Checkbox(char.Name, char.Show or false)
-                        if pressed then
-                            char.Show = not char.Show
-                            changeBroadcastMode(4)
-                        end
-                    end
-                    ImGui.EndCombo()
-                end
-                ImGui.PopItemWidth()
-
-                local numColumns = 1
-                for _,char in ipairs(group) do if char.Show then numColumns = numColumns + 1 end end
-                if next(itemChecks) ~= nil then
-                    ImGui.Separator()
-                    if ImGui.Button('X##LinkedItems') then
-                        itemChecks = {}
-                    end
-                    ImGui.SameLine()
-                    ImGui.Text('Linked items:')
-                    ImGui.BeginTable('linked items', numColumns, bit32.bor(ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY), -1.0, 115)
-                    ImGui.TableSetupScrollFreeze(0, 1)
-                    ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), 250, 0)
-                    for i,char in ipairs(group) do
-                        if char.Show then
-                            ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
-                        end
-                    end
-                    ImGui.TableHeadersRow()
-
-                    for itemName, _ in pairs(itemChecks) do
-                        ImGui.TableNextRow()
-                        ImGui.TableSetColumnIndex(0)
-                        if ImGui.Button('X##' .. itemName) then
-                            itemChecks[itemName] = nil
-                        end
-                        ImGui.SameLine()
-                        if ImGui.Button('Announce##'..itemName) then
-                            local message = getAnnounceChannel()
-                            local doSend = false
-                            message = message .. itemName .. ' - '
-                            for _,name in ipairs(sortedGroup) do
-                                local char = group[name]
-                                if itemChecks[itemName][char.Name] == false then
-                                    -- message = message .. string.format('%s(%s)', char.Name, classes[char.Class]) .. ', '
-                                    message = message .. char.Name .. ', '
-                                    doSend = true
-                                end
-                            end
-                            if doSend then mq.cmd(message) end
-                        end
-                        ImGui.SameLine()
-                        ImGui.Text(itemName)
-                        if itemChecks[itemName] then
-                            for _,char in ipairs(group) do
-                                if char.Show then
-                                    ImGui.TableNextColumn()
-                                    if itemChecks[itemName][char.Name] ~= nil then
-                                        local hasItem = itemChecks[itemName][char.Name]
-                                        ImGui.PushStyleColor(ImGuiCol.Text, hasItem and 0 or 1, hasItem and 1 or 0, 0.1, 1)
-                                        ImGui.Text(hasItem and 'HAVE' or 'NEED')
-                                        ImGui.PopStyleColor()
-                                    end
-                                end
-                            end
-                        end
-                    end
-                    ImGui.EndTable()
-                end
-
-                if ImGui.BeginTable('gear', numColumns, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
-                    ImGui.TableSetupScrollFreeze(0, 1)
-                    ImGui.TableSetupColumn('Item', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
-                    for i,char in ipairs(group) do
-                        if char.Show then
-                            ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
-                        end
-                    end
-                    ImGui.TableHeadersRow()
-
-                    local tmpSlots = slots
-                    local tmpGear = gear
-                    if useFilter then tmpSlots = filteredSlots tmpGear = filteredGear end
-                    if tmpSlots then
-                        for _,category in ipairs(tmpSlots) do
-                            local catName = category.Name
-                            ImGui.TableNextRow()
-                            ImGui.TableNextColumn()
-                            if ImGui.TreeNodeEx(catName, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
-                                local catSlots = category.Slots
-                                for _,slot in ipairs(catSlots) do
-                                    if slot ~= 'Wrists' then
-                                        slotRow(slot, tmpGear)
-                                    else
-                                        slotRow('Wrist1', tmpGear)
-                                        slotRow('Wrist2', tmpGear)
-                                    end
-                                end
-                                ImGui.TreePop()
-                            end
-                            if catName == 'Gear' and selectedItemList.id == 'questitems' then
-                                ImGui.TableNextRow()
-                                ImGui.TableNextColumn()
-                                if ImGui.TreeNodeEx('Tradeskills', bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
-                                    for _,name in ipairs(orderedSkills) do
-                                        ImGui.TableNextRow()
-                                        ImGui.TableNextColumn()
-                                        ImGui.Text(name)
-                                        for _,char in ipairs(group) do
-                                            if char.Show then
-                                                ImGui.TableNextColumn()
-                                                local skill = tradeskills[char.Name] and tradeskills[char.Name][name] or 0
-                                                ImGui.TextColored(skill < 300 and 1 or 0, skill == 300 and 1 or 0, 0, 1, '%s', tradeskills[char.Name] and tradeskills[char.Name][name])
-                                            end
-                                        end
-                                    end
-                                    ImGui.TreePop()
-                                end
-                            end
-                        end
-                    end
-                    ImGui.EndTable()
-                end
-                ImGui.EndTabItem()
+		if minimizedGUI then
+            if ImGui.ImageButton('MinimizeLazBis', iconImg:GetTextureID(), ImVec2(30, 30)) then
+                minimizedGUI = false
             end
-            if ImGui.BeginTabItem('Empties') then
-                local hadEmpties = false
-                for char,empties in pairs(emptySlots) do
-                    if empties then
-                        ImGui.PushID(char)
-                        hadEmpties = true
-                        if ImGui.TreeNode('%s', char) then
-                            for _,empty in ipairs(empties) do
-                                ImGui.Text(' - %s', empty)
-                            end
-                            ImGui.TreePop()
-                        end
-                        ImGui.PopID()
-                    end
-                end
-                if not hadEmpties then
-                    ImGui.ImageButton('NiceButton', niceImg:GetTextureID(), ImVec2(200, 200),ImVec2(0.0,0.0), ImVec2(.55, .7))
-                end
-                ImGui.EndTabItem()
+            if ImGui.IsItemHovered() then
+                ImGui.SetTooltip("LazBis is Running")
             end
-            if bisConfig.StatFoodRecipes and ImGui.BeginTabItem('Stat Food') then
-                if ImGui.BeginTabBar('##statfoodtabs') then
-                    if ImGui.BeginTabItem('Recipes') then
-                        for _,recipe in ipairs(bisConfig.StatFoodRecipes) do
-                            ImGui.PushStyleColor(ImGuiCol.Text, 0,1,1,1)
-                            local expanded = ImGui.TreeNode(recipe.Name)
-                            ImGui.PopStyleColor()
-                            if expanded then
-                                ImGui.Indent(30)
-                                for _,ingredient in ipairs(recipe.Ingredients) do
-                                    ImGui.Text('%s%s', ingredient, bisConfig.StatFoodIngredients[ingredient] and ' - '..bisConfig.StatFoodIngredients[ingredient].Location or '')
-                                    ImGui.SameLine()
-                                    ImGui.TextColored(1,1,0,1,'(%s)', mq.TLO.FindItemCount('='..ingredient))
-                                end
-                                ImGui.Unindent(30)
-                                ImGui.TreePop()
-                            end
-                        end
-                        ImGui.EndTabItem()
-                    end
-                    if ImGui.BeginTabItem('Quests') then
-                        ImGui.PushItemWidth(300)
-                        if ImGui.BeginCombo('Quest', bisConfig.StatFoodQuests[recipeQuestIdx].Name) then
-                            for i,quest in ipairs(bisConfig.StatFoodQuests) do
-                                if ImGui.Selectable(quest.Name, recipeQuestIdx == i) then
-                                    recipeQuestIdx = i
-                                end
-                            end
-                            ImGui.EndCombo()
-                        end
-                        ImGui.PopItemWidth()
-
-                        for _,questStep in ipairs(bisConfig.StatFoodQuests[recipeQuestIdx].Recipes) do
-                            ImGui.TextColored(0,1,1,1,questStep.Name)
-                            ImGui.Indent(25)
-                            for _,step in ipairs(questStep.Steps) do
-                                ImGui.Text('\xee\x97\x8c %s', step)
-                            end
-                            ImGui.Unindent(25)
-                        end
-                        ImGui.EndTabItem()
-                    end
-                    if ImGui.BeginTabItem('Ingredients') then
-                        ImGui.SameLine()
-                        ImGui.PushItemWidth(300)
-                        local tmpIngredientFilter = ImGui.InputTextWithHint('##ingredientfilter', 'Search...', ingredientFilter)
-                        ImGui.PopItemWidth()
-                        if tmpIngredientFilter ~= ingredientFilter then
-                            ingredientFilter = tmpIngredientFilter
-                            filterIngredients()
-                        end
-                        if ingredientFilter ~= '' then useIngredientFilter = true else useIngredientFilter = false end
-                        local tmpIngredients = ingredientsArray
-                        if useIngredientFilter then tmpIngredients = filteredIngredients end
-
-                        if ImGui.BeginTable('Ingredients', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY, ImGuiTableFlags.Sortable)) then
-                            ImGui.TableSetupScrollFreeze(0, 1)
-                            ImGui.TableSetupColumn('Ingredient', bit32.bor(ImGuiTableColumnFlags.DefaultSort, ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Name)
-                            ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Location)
-                            ImGui.TableSetupColumn('Count', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
-                            ImGui.TableHeadersRow()
-
-                            local sort_specs = ImGui.TableGetSortSpecs()
-                            if sort_specs then
-                                if sort_specs.SpecsDirty then
-                                    current_sort_specs = sort_specs
-                                    table.sort(tmpIngredients, CompareWithSortSpecs)
-                                    current_sort_specs = nil
-                                    sort_specs.SpecsDirty = false
-                                end
-                            end
-
-                            for _,ingredient in ipairs(tmpIngredients) do
-                                ImGui.TableNextRow()
-                                ImGui.TableNextColumn()
-                                ImGui.Text(ingredient.Name)
-                                ImGui.TableNextColumn()
-                                ImGui.Text(ingredient.Location)
-                                ImGui.TableNextColumn()
-                                ImGui.Text('%s', mq.TLO.FindItemCount('='..ingredient.Name)())
-                            end
-                            ImGui.EndTable()
-                        end
-                        ImGui.EndTabItem()
-                    end
-                    ImGui.EndTabBar()
-                end
-                ImGui.EndTabItem()
+        else
+			ImGui.PushStyleVar(ImGuiStyleVar.ScrollbarSize, 17)
+			if ImGui.BeginTabBar('bistabs') then
+				if ImGui.BeginTabItem('Gear') then
+					local origSelectedItemList = selectedItemList
+					ImGui.PushItemWidth(150)
+					ImGui.SetNextWindowSize(150, 285)--213)
+					if ImGui.BeginCombo('Item List', selectedItemList.name) then
+						for _,group in ipairs(bisConfig.Groups) do
+							ImGui.TextColored(1,1,0,1,group)
+							ImGui.Separator()
+							for i,list in ipairs(bisConfig.ItemLists[group]) do
+								if ImGui.Selectable(list.name, selectedItemList.id == list.id) then selectedItemList = list end
+							end
+						end
+						ImGui.EndCombo()
+					end
+					ImGui.PopItemWidth()
+					itemList = bisConfig[selectedItemList.id]
+					local slots = itemList.Main.Slots
+					if selectedItemList.id ~= origSelectedItemList.id then
+						selectionChanged = true
+						filter = ''
+						settings.ShowMissingOnly = false
+					end
+					ImGui.SameLine()
+					if ImGui.Button('Refresh') then selectionChanged = true end
+					ImGui.SameLine()
+					ImGui.PushItemWidth(300)
+					local tmpFilter = ImGui.InputTextWithHint('##filter', 'Search...', filter)
+					ImGui.PopItemWidth()
+					ImGui.SameLine()
+					ImGui.Text('Show:')
+					ImGui.SameLine()
+					local tmpShowSlots = ImGui.Checkbox('Slots', settings.ShowSlots)
+					if tmpShowSlots ~= settings.ShowSlots then updateSetting('ShowSlots', tmpShowSlots) end
+					ImGui.SameLine()
+					local tmpShowMissingOnly = ImGui.Checkbox('Missing Only', settings.ShowMissingOnly)
+					if tmpShowMissingOnly ~= settings.ShowMissingOnly or tmpFilter ~= filter or reapplyFilter then
+						filter = tmpFilter
+						if tmpShowMissingOnly ~= settings.ShowMissingOnly then updateSetting('ShowMissingOnly', tmpShowMissingOnly) end
+						filterGear(slots)
+						reapplyFilter = false
+					end
+					if filter ~= '' or settings.ShowMissingOnly then useFilter = true else useFilter = false end
+					ImGui.SameLine()
+					VerticalSeparator()
+					ImGui.SameLine()
+					ImGui.Text('Announce:')
+					ImGui.SameLine()
+					local tmpAnnounceNeeds = ImGui.Checkbox('##AnnounceNeeds', settings.AnnounceNeeds)
+					if tmpAnnounceNeeds ~= settings.AnnounceNeeds then updateSetting('AnnounceNeeds', tmpAnnounceNeeds) end
+					ImGui.SameLine()
+					ImGui.PushItemWidth(90)
+					if ImGui.BeginCombo('##Channel', settings.AnnounceChannel) then
+						for i,name in ipairs({'Group','Raid','Guild','Say'}) do
+							local selected = ImGui.Selectable(name, settings.AnnounceChannel == name)
+							if selected and name ~= settings.AnnounceChannel then
+								updateSetting('AnnounceChannel', name)
+							end
+						end
+						ImGui.EndCombo()
+					end
+					ImGui.PopItemWidth()
+					ImGui.SameLine()
+					VerticalSeparator()
+					ImGui.SameLine()
+					ImGui.PushItemWidth(150)
+					if ImGui.BeginCombo('##Characters', 'Characters') then
+						local _,pressed = ImGui.Checkbox('All Online', selectedBroadcast == 1)
+						if pressed then changeBroadcastMode(1) end
+						_,pressed = ImGui.Checkbox('All Offline', selectedBroadcast == 2)
+						if pressed then changeBroadcastMode(2) end
+						_,pressed = ImGui.Checkbox('Group', selectedBroadcast == 3)
+						if pressed then changeBroadcastMode(3) end
+						for i,name in ipairs(sortedGroup) do
+							local char = group[name]
+							_,pressed = ImGui.Checkbox(char.Name, char.Show or false)
+							if pressed then
+								char.Show = not char.Show
+								changeBroadcastMode(4)
+							end
+						end
+						ImGui.EndCombo()
+					end
+					ImGui.PopItemWidth()
+		
+					local numColumns = 1
+					for _,char in ipairs(group) do if char.Show then numColumns = numColumns + 1 end end
+					if next(itemChecks) ~= nil then
+						ImGui.Separator()
+						if ImGui.Button('X##LinkedItems') then
+							itemChecks = {}
+						end
+						ImGui.SameLine()
+						ImGui.Text('Linked items:')
+						ImGui.BeginTable('linked items', numColumns, bit32.bor(ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY), -1.0, 115)
+						ImGui.TableSetupScrollFreeze(0, 1)
+						ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), 250, 0)
+						for i,char in ipairs(group) do
+							if char.Show then
+								ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+							end
+						end
+						ImGui.TableHeadersRow()
+		
+						for itemName, _ in pairs(itemChecks) do
+							ImGui.TableNextRow()
+							ImGui.TableSetColumnIndex(0)
+							if ImGui.Button('X##' .. itemName) then
+								itemChecks[itemName] = nil
+							end
+							ImGui.SameLine()
+							if ImGui.Button('Announce##'..itemName) then
+								local message = getAnnounceChannel()
+								local doSend = false
+								message = message .. itemName .. ' - '
+								for _,name in ipairs(sortedGroup) do
+									local char = group[name]
+									if itemChecks[itemName][char.Name] == false then
+										-- message = message .. string.format('%s(%s)', char.Name, classes[char.Class]) .. ', '
+										message = message .. char.Name .. ', '
+										doSend = true
+									end
+								end
+								if doSend then mq.cmd(message) end
+							end
+							ImGui.SameLine()
+							ImGui.Text(itemName)
+							if itemChecks[itemName] then
+								for _,char in ipairs(group) do
+									if char.Show then
+										ImGui.TableNextColumn()
+										if itemChecks[itemName][char.Name] ~= nil then
+											local hasItem = itemChecks[itemName][char.Name]
+											ImGui.PushStyleColor(ImGuiCol.Text, hasItem and 0 or 1, hasItem and 1 or 0, 0.1, 1)
+											ImGui.Text(hasItem and 'HAVE' or 'NEED')
+											ImGui.PopStyleColor()
+										end
+									end
+								end
+							end
+						end
+						ImGui.EndTable()
+					end
+		
+					if ImGui.BeginTable('gear', numColumns, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
+						ImGui.TableSetupScrollFreeze(0, 1)
+						ImGui.TableSetupColumn('Item', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+						for i,char in ipairs(group) do
+							if char.Show then
+								ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+							end
+						end
+						ImGui.TableHeadersRow()
+		
+						local tmpSlots = slots
+						local tmpGear = gear
+						if useFilter then tmpSlots = filteredSlots tmpGear = filteredGear end
+						if tmpSlots then
+							for _,category in ipairs(tmpSlots) do
+								local catName = category.Name
+								ImGui.TableNextRow()
+								ImGui.TableNextColumn()
+								if ImGui.TreeNodeEx(catName, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
+									local catSlots = category.Slots
+									for _,slot in ipairs(catSlots) do
+										if slot ~= 'Wrists' then
+											slotRow(slot, tmpGear)
+										else
+											slotRow('Wrist1', tmpGear)
+											slotRow('Wrist2', tmpGear)
+										end
+									end
+									ImGui.TreePop()
+								end
+								if catName == 'Gear' and selectedItemList.id == 'questitems' then
+									ImGui.TableNextRow()
+									ImGui.TableNextColumn()
+									if ImGui.TreeNodeEx('Tradeskills', bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
+										for _,name in ipairs(orderedSkills) do
+											ImGui.TableNextRow()
+											ImGui.TableNextColumn()
+											ImGui.Text(name)
+											for _,char in ipairs(group) do
+												if char.Show then
+													ImGui.TableNextColumn()
+													local skill = tradeskills[char.Name] and tradeskills[char.Name][name] or 0
+													ImGui.TextColored(skill < 300 and 1 or 0, skill == 300 and 1 or 0, 0, 1, '%s', tradeskills[char.Name] and tradeskills[char.Name][name])
+												end
+											end
+										end
+										ImGui.TreePop()
+									end
+								end
+							end
+						end
+						ImGui.EndTable()
+					end
+					ImGui.EndTabItem()
+				end
+				if ImGui.BeginTabItem('Empties') then
+					local hadEmpties = false
+					for char,empties in pairs(emptySlots) do
+						if empties then
+							ImGui.PushID(char)
+							hadEmpties = true
+							if ImGui.TreeNode('%s', char) then
+								for _,empty in ipairs(empties) do
+									ImGui.Text(' - %s', empty)
+								end
+								ImGui.TreePop()
+							end
+							ImGui.PopID()
+						end
+					end
+					if not hadEmpties then
+						ImGui.ImageButton('NiceButton', niceImg:GetTextureID(), ImVec2(200, 200),ImVec2(0.0,0.0), ImVec2(.55, .7))
+					end
+					ImGui.EndTabItem()
+				end
+				if bisConfig.StatFoodRecipes and ImGui.BeginTabItem('Stat Food') then
+					if ImGui.BeginTabBar('##statfoodtabs') then
+						if ImGui.BeginTabItem('Recipes') then
+							for _,recipe in ipairs(bisConfig.StatFoodRecipes) do
+								ImGui.PushStyleColor(ImGuiCol.Text, 0,1,1,1)
+								local expanded = ImGui.TreeNode(recipe.Name)
+								ImGui.PopStyleColor()
+								if expanded then
+									ImGui.Indent(30)
+									for _,ingredient in ipairs(recipe.Ingredients) do
+										ImGui.Text('%s%s', ingredient, bisConfig.StatFoodIngredients[ingredient] and ' - '..bisConfig.StatFoodIngredients[ingredient].Location or '')
+										ImGui.SameLine()
+										ImGui.TextColored(1,1,0,1,'(%s)', mq.TLO.FindItemCount('='..ingredient))
+									end
+									ImGui.Unindent(30)
+									ImGui.TreePop()
+								end
+							end
+							ImGui.EndTabItem()
+						end
+						if ImGui.BeginTabItem('Quests') then
+							ImGui.PushItemWidth(300)
+							if ImGui.BeginCombo('Quest', bisConfig.StatFoodQuests[recipeQuestIdx].Name) then
+								for i,quest in ipairs(bisConfig.StatFoodQuests) do
+									if ImGui.Selectable(quest.Name, recipeQuestIdx == i) then
+										recipeQuestIdx = i
+									end
+								end
+								ImGui.EndCombo()
+							end
+							ImGui.PopItemWidth()
+		
+							for _,questStep in ipairs(bisConfig.StatFoodQuests[recipeQuestIdx].Recipes) do
+								ImGui.TextColored(0,1,1,1,questStep.Name)
+								ImGui.Indent(25)
+								for _,step in ipairs(questStep.Steps) do
+									ImGui.Text('\xee\x97\x8c %s', step)
+								end
+								ImGui.Unindent(25)
+							end
+							ImGui.EndTabItem()
+						end
+						if ImGui.BeginTabItem('Ingredients') then
+							ImGui.SameLine()
+							ImGui.PushItemWidth(300)
+							local tmpIngredientFilter = ImGui.InputTextWithHint('##ingredientfilter', 'Search...', ingredientFilter)
+							ImGui.PopItemWidth()
+							if tmpIngredientFilter ~= ingredientFilter then
+								ingredientFilter = tmpIngredientFilter
+								filterIngredients()
+							end
+							if ingredientFilter ~= '' then useIngredientFilter = true else useIngredientFilter = false end
+							local tmpIngredients = ingredientsArray
+							if useIngredientFilter then tmpIngredients = filteredIngredients end
+		
+							if ImGui.BeginTable('Ingredients', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY, ImGuiTableFlags.Sortable)) then
+								ImGui.TableSetupScrollFreeze(0, 1)
+								ImGui.TableSetupColumn('Ingredient', bit32.bor(ImGuiTableColumnFlags.DefaultSort, ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Name)
+								ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, ColumnID_Location)
+								ImGui.TableSetupColumn('Count', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+								ImGui.TableHeadersRow()
+		
+								local sort_specs = ImGui.TableGetSortSpecs()
+								if sort_specs then
+									if sort_specs.SpecsDirty then
+										current_sort_specs = sort_specs
+										table.sort(tmpIngredients, CompareWithSortSpecs)
+										current_sort_specs = nil
+										sort_specs.SpecsDirty = false
+									end
+								end
+		
+								for _,ingredient in ipairs(tmpIngredients) do
+									ImGui.TableNextRow()
+									ImGui.TableNextColumn()
+									ImGui.Text(ingredient.Name)
+									ImGui.TableNextColumn()
+									ImGui.Text(ingredient.Location)
+									ImGui.TableNextColumn()
+									ImGui.Text('%s', mq.TLO.FindItemCount('='..ingredient.Name)())
+								end
+								ImGui.EndTable()
+							end
+							ImGui.EndTabItem()
+						end
+						ImGui.EndTabBar()
+					end
+					ImGui.EndTabItem()
+				end
+				for _,infoTab in ipairs(bisConfig.Info) do
+					if ImGui.BeginTabItem(infoTab.Name) then
+						ImGui.Text(infoTab.Text)
+						ImGui.EndTabItem()
+					end
+				end
+				if ImGui.BeginTabItem('Links') then
+					for _,link in ipairs(bisConfig.Links) do
+						DrawTextLink(link.label, link.url)
+					end
+				end
+				ImGui.EndTabBar()
+			end
+			ImGui.SameLine()
+            if ImGui.Button('Minimize') then
+                minimizedGUI = true
             end
-            for _,infoTab in ipairs(bisConfig.Info) do
-                if ImGui.BeginTabItem(infoTab.Name) then
-                    ImGui.Text(infoTab.Text)
-                    ImGui.EndTabItem()
-                end
-            end
-            if ImGui.BeginTabItem('Links') then
-                for _,link in ipairs(bisConfig.Links) do
-                    DrawTextLink(link.label, link.url)
-                end
-            end
-            ImGui.EndTabBar()
-        end
-        ImGui.PopStyleVar()
+			ImGui.PopStyleVar()
+		end
     end
     ImGui.End()
-    if not openGUI then
+    if not openGUI and not minimizedGUI then
         mq.cmdf('%s /lua stop %s', broadcast, meta.name)
         mq.exit()
     end
