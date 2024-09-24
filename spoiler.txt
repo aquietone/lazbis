@@ -1,0 +1,51 @@
+Clue - 6 day lockout
+
+Head to Plane of Mischief (mischiefplane) and speak to Clue to obtain the instance.
+
+When you zone in, speak to Elias for some background on the task. Like the game Clue, you must identify the Who, What and Where of the murder of Tserrina.
+
+Say 'where' to Elias for the list of floors and select any floor to begin. Elias will port you between each floor.
+
+Hail each of the 6 suspects. One will emote one of the following lines:
+- The Librarian glances around anxiously, hands fidgeting.
+- Angry Chef slams a fist on the table, eyes narrowing with irritation rather than remorse.
+- Ahhotep smirks slightly, his eyes gleaming with a hint of something... unsettling.
+- Daman the Bride glares with a manic intensity, her eyes blazing with fury.
+- Disordered Spirit says 'No... It wasn't me... was it? I don't... remember. Shadows... they hide so much...
+- Svartmane The Advisor smiles slightly, his eyes calculating and calm.
+
+Whichever one outputs the emote is the killer.
+
+Say 'What' to each suspect. Upon saying 'What', a ground spawn may appear around the zone, which will be the murder weapon.
+
+Also say 'Who' and 'Where' to each suspect, though these may not serve any purpose.
+
+Sometimes, upon hailing (or maybe when saying who or what?), an NPC may spawn somewhere in the zone, such as 'Cloaked Confidante' or 'Elusive Henchman'. Kill them and they may also drop the murder weapon.
+
+Hail the other grey con NPCs on each floor and they will trigger a ground spawn to spawn somewhere in the zone. Find the ground spawn whose lore indicates 'Strong' evidence and this floor is the location.
+The 'Strong' evidence items are:
+- Tserrina's Broken Staff
+- Tserrina's Burned Diary
+- Tserrina's Crushed Amulet
+- Tserrina's Torn Robe
+
+Once you have all three answers, head up to Tranquility and solve the puzzle.
+
+Black Drake riddles:
+- 'I have cities but no houses, ...' - Answer: map
+- 'I speak without a mouth, ...' - Answer: echo
+- 'I'm not alive, yet I can grow, ...' - Answer: fire
+- 'I have an eye but I cannot see, ...' - Answer: needle
+- 'I'm light as a feather, ...' - Answer: breath
+- 'I disappear as soon as you say my name, ...' - Answer: silence
+- 'The more there is the less you see' - Answer: darkness
+
+Blue/Red Drake riddle:
+- If the Blue Drake says: 'If you ask the Red Drake, he would say I lie', then respond with Blue Drake.
+- If the Red Drake says: 'If you ask the Blue Drake, he would say I lie', then respond with Red Drake.
+
+Reward:
+- Power of 9 - 1 slot container
+- Eyes of the Ghost - Face with clicky (see invis, movement speed, levitation, ultravision, magnification)
+
+Combine Idol of the Scale or Illuminious Oculus in the Power of 9 to create an enhanced aug.
