@@ -1913,7 +1913,7 @@ return {
 	},
 	['vendoritems'] = {
 		['Bard'] = {
-			['IdolScale'] = 'Idol of the Scale',
+			['IdolScale'] = 'Idol of the Scale/150977',
 			['BoarWhistle'] = 'Boar Caller\'s Whistle',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['Striking(Kick)'] = 'Focus Rune of Striking',
@@ -1921,7 +1921,7 @@ return {
 			['Dragorn'] = 'Dragorn War Mask',
 		},
 		['Berserker'] = {
-			['IdolScale'] = 'Idol of the Scale',
+			['IdolScale'] = 'Idol of the Scale/150977',
 			['FuriousAssault(Frenzy)'] = 'Focus Rune of Furious Assault',
 			['BoarWhistle'] = 'Boar Caller\'s Whistle',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
@@ -1929,7 +1929,7 @@ return {
 			['Dragorn'] = 'Dragorn War Mask',
 		},
 		['Beastlord'] = {
-			['IdolScale'] = 'Idol of the Scale',
+			['IdolScale'] = 'Idol of the Scale/150977',
 			['Manastone'] = 'Manastone',
 			['BoarWhistle'] = 'Boar Caller\'s Whistle',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
@@ -1954,7 +1954,7 @@ return {
 			['SnakeFlute'] = 'Snake Charmer\'s Flute/40459',
 		},
 		['Monk'] = {
-			['IdolScale'] = 'Idol of the Scale',
+			['IdolScale'] = 'Idol of the Scale/150977',
 			['DexterousStriking(Flying Kick)'] = 'Focus Rune of Dexterous Striking',
 			['AdeptBlows(Tiger Claw)'] = 'Focus Rune of Adept Blows',
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
@@ -1973,6 +1973,7 @@ return {
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
 			['Dragorn'] = 'Dragorn War Mask',
+			['IdolScale'] = 'Idol of the Scale/150977',
 		},
 		['Ranger'] = {
 			['Manastone'] = 'Manastone',
@@ -1983,7 +1984,7 @@ return {
 			['Dragorn'] = 'Dragorn War Mask',
 		},
 		['Rogue'] = {
-			['IdolScale'] = 'Idol of the Scale',
+			['IdolScale'] = 'Idol of the Scale/150977',
 			['FoulPlay(Backstab)'] = 'Focus Rune of Foul Play',
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
@@ -1991,7 +1992,7 @@ return {
 			['Dragorn'] = 'Dragorn War Mask',
 		},
 		['Shadow Knight'] = {
-			['IdolScale'] = 'Idol of the Scale',
+			['IdolScale'] = 'Idol of the Scale/150977',
 			['BruteForce(Bash)'] = 'Focus Rune of Brute Force',
 			['Manastone'] = 'Manastone',
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
@@ -2004,7 +2005,7 @@ return {
 			['SnakeFlute'] = 'Snake Charmer\'s Flute/40459',
 		},
 		['Warrior'] = {
-			['IdolScale'] = 'Idol of the Scale',
+			['IdolScale'] = 'Idol of the Scale/150977',
 			['BruteForce(Bash)'] = 'Focus Rune of Brute Force',
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
@@ -2028,7 +2029,7 @@ return {
 			['Annihilation(Spell Damage)'] = 'Focus Shard of Aggregate Annihilation',
 			['Lucky Copper/Silver'] = 'Lucky Copper/Lucky Silver',
 			['Lucky Grass'] = 'Lucky Grass Trinket',
-			['Oculous'] = 'Illuminious Oculus',
+			['Oculous'] = 'Illuminious Oculus/150980',
 			['VenomVial'] = 'Bottomless Venom Vial',
 			['Mount'] = 'Whirligig Flyer Control Device/Ornate Flying Carpet/39635',
 			['WarPirate'] = 'Visage of the War Pirate',
@@ -2050,16 +2051,19 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Echoes',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
+			['Despair'] = '9 Paths of Despair',
 		},
 		['Berserker'] = {
 			['ImbuedRune'] = 'Imbued Rune of Overpowering Frenzy',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
+			['Despair'] = '9 Paths of Despair',
 		},
 		['Beastlord'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mikkily\'s Healing',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
+			['Despair'] = '9 Paths of Despair',
 		},
 		['Cleric'] = {
 			['ImbuedRune'] = 'Imbued Rune of Vie',
@@ -2085,6 +2089,7 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Dragon Fang',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
+			['Despair'] = '9 Paths of Despair',
 		},
 		['Necromancer'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dark Salve',
@@ -2095,6 +2100,7 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Piety',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
+			['Despair'] = '9 Paths of Despair',
 		},
 		['Ranger'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jolting Snapkicks',
@@ -2105,11 +2111,13 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Assault',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
+			['Despair'] = '9 Paths of Despair',
 		},
 		['Shadow Knight'] = {
 			['ImbuedRune'] = 'Imbued Rune of Agony and Hate',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
+			['Despair'] = '9 Paths of Despair',
 		},
 		['Shaman'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Panther',
@@ -2120,6 +2128,7 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Brutal Onslaught',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
+			['Despair'] = '9 Paths of Despair',
 		},
 		['Wizard'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mana Weave',
@@ -2137,10 +2146,11 @@ return {
 			['BIC4'] = 'Black Gemstone of Torture',
 			['EOC'] = 'Essence of Creation/150402',
 			['Radix'] = 'Radix',
+			['Reflection'] = '9 Echoes of Reflection',
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs', Slots={'BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
+				{Name='Augs', Slots={'Despair','Reflection','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}
