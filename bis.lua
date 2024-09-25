@@ -2034,6 +2034,7 @@ return {
 			['Mount'] = 'Whirligig Flyer Control Device/Ornate Flying Carpet/39635',
 			['WarPirate'] = 'Visage of the War Pirate',
 			['DarkArachnids'] = 'Visage of the Dark Arachnids',
+			['Lucky Horseshoe'] = 'Luckiest of Horseshoes/150978',
 		},
 		['Main'] = {
 			['Slots'] = {
@@ -2041,7 +2042,7 @@ return {
 				{Name='Planar', Slots={'AdeptBlows(Tiger Claw)','BruteForce(Bash)','DexterousStriking(Flying Kick)','EnchantedJewel(Shielding)','EscalatingOnslaught(HStr)','FoulPlay(Backstab)','FuriousAssault(Frenzy)','MysticalAegis(Spell Shield)','Prowess(Offense)','Striking(Kick)'}},
 				{Name='Diamond Coins', Slots={'Manastone'}},
 				{Name='Gold Coins', Slots={'DarkArachnids','Dragorn','WarPirate'}},
-				{Name='Celestial Crests', Slots={'BloodDrinker','IdolScale','Lucky Copper/Silver','Lucky Grass','Mount','Oculous','VenomVial',}},
+				{Name='Celestial Crests', Slots={'BloodDrinker','IdolScale','Lucky Copper/Silver','Lucky Grass','Lucky Horseshoe','Mount','Oculous','VenomVial',}},
 				{Name='Player Made', Slots={'BoarWhistle','SnakeFlute',}},
 			}
 		}
@@ -2147,10 +2148,11 @@ return {
 			['EOC'] = 'Essence of Creation/150402',
 			['Radix'] = 'Radix',
 			['Reflection'] = '9 Echoes of Reflection',
+			['Ascension'] = '9 Spheres of Ascension',
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs', Slots={'Despair','Reflection','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
+				{Name='Augs', Slots={'Despair','Reflection','Ascension','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}
