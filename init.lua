@@ -679,19 +679,6 @@ local function bisGUI()
             ImGui.SameLine()
 			if ImGui.BeginTabBar('bistabs') then
 				if ImGui.BeginTabItem('Gear') then
-					if settings['SelectedList'] then
-						for _, group in ipairs(bisConfig.Groups) do
-							for _, list in ipairs(bisConfig.ItemLists[group]) do
-								if list.id == settings['SelectedList'] then
-									selectedItemList = list
-									break
-								end
-							end
-						end
-					else
-						selectedItemList = bisConfig.ItemLists[bisConfig.Groups[1]][1]
-						settings['SelectedList'] = selectedItemList.id
-					end
 					local origSelectedItemList = selectedItemList
 					ImGui.PushItemWidth(150)
 					ImGui.SetNextWindowSize(150, 285)
@@ -1194,6 +1181,18 @@ local function init(args)
     if bisConfig.ZoneMap[zone] then
         selectedItemList = bisConfig.ItemLists[bisConfig.ZoneMap[zone].group][bisConfig.ZoneMap[zone].index]
         itemList = bisConfig[selectedItemList.id]
+    else
+        -- Otherwise load the last list we were looking at
+        if settings['SelectedList'] then
+            for _, group in ipairs(bisConfig.Groups) do
+                for _, list in ipairs(bisConfig.ItemLists[group]) do
+                    if list.id == settings['SelectedList'] then
+                        selectedItemList = list
+                        break
+                    end
+                end
+            end
+        end
     end
 
     for name,ingredient in pairs(bisConfig.StatFoodIngredients) do
