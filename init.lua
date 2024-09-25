@@ -9,6 +9,7 @@ local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
 local PackageMan    = require('mq/PackageMan')
+local icons         = require('mq/icons')
 local sql           = PackageMan.Require('lsqlite3')
 local dbpath        = string.format('%s\\%s', mq.TLO.MacroQuest.Path('resources')(), 'lazbis.db')
 local ok, actors    = pcall(require, 'actors')
@@ -667,6 +668,15 @@ local function bisGUI()
             end
         else
 			ImGui.PushStyleVar(ImGuiStyleVar.ScrollbarSize, 17)
+            if ImGui.Button(icons.MD_FULLSCREEN_EXIT) then
+                minimizedGUI = true
+            end
+            if ImGui.IsItemHovered() then
+                ImGui.BeginTooltip()
+                ImGui.Text('Minimize')
+                ImGui.EndTooltip()
+            end
+            ImGui.SameLine()
 			if ImGui.BeginTabBar('bistabs') then
 				if ImGui.BeginTabItem('Gear') then
 					local origSelectedItemList = selectedItemList
@@ -988,10 +998,6 @@ local function bisGUI()
 				end
 				ImGui.EndTabBar()
 			end
-			ImGui.SameLine()
-            if ImGui.Button('Minimize') then
-                minimizedGUI = true
-            end
 			ImGui.PopStyleVar()
 		end
     end
