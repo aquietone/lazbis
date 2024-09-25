@@ -679,26 +679,45 @@ local function bisGUI()
             ImGui.SameLine()
 			if ImGui.BeginTabBar('bistabs') then
 				if ImGui.BeginTabItem('Gear') then
+					if settings['SelectedList'] then
+						for _, group in ipairs(bisConfig.Groups) do
+							for _, list in ipairs(bisConfig.ItemLists[group]) do
+								if list.id == settings['SelectedList'] then
+									selectedItemList = list
+									break
+								end
+							end
+						end
+					else
+						selectedItemList = bisConfig.ItemLists[bisConfig.Groups[1]][1]
+						settings['SelectedList'] = selectedItemList.id
+					end
 					local origSelectedItemList = selectedItemList
 					ImGui.PushItemWidth(150)
-					ImGui.SetNextWindowSize(150, 285)--213)
+					ImGui.SetNextWindowSize(150, 285)
 					if ImGui.BeginCombo('Item List', selectedItemList.name) then
-						for _,group in ipairs(bisConfig.Groups) do
-							ImGui.TextColored(1,1,0,1,group)
+						for _, group in ipairs(bisConfig.Groups) do
+							ImGui.TextColored(1, 1, 0, 1, group)
 							ImGui.Separator()
-							for i,list in ipairs(bisConfig.ItemLists[group]) do
-								if ImGui.Selectable(list.name, selectedItemList.id == list.id) then selectedItemList = list end
+							for i, list in ipairs(bisConfig.ItemLists[group]) do
+								if ImGui.Selectable(list.name, selectedItemList.id == list.id) then
+									selectedItemList = list
+									settings['SelectedList'] = selectedItemList.id
+									updateSetting('SelectedList', selectedItemList.id)
+								end
 							end
 						end
 						ImGui.EndCombo()
 					end
 					ImGui.PopItemWidth()
+
 					itemList = bisConfig[selectedItemList.id]
 					local slots = itemList.Main.Slots
 					if selectedItemList.id ~= origSelectedItemList.id then
 						selectionChanged = true
 						filter = ''
 						settings.ShowMissingOnly = false
+						updateSetting('SelectedList', selectedItemList.id)
 					end
 					ImGui.SameLine()
 					if ImGui.Button('Refresh') then selectionChanged = true end
