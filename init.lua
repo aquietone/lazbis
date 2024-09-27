@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.5.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.6.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -30,6 +30,7 @@ local sortedGroup   = {}
 local itemChecks    = {}
 local tradeskills   = {}
 local emptySlots    = {}
+local teams         = {}
 
 -- Item list information
 local selectedItemList  = bisConfig.ItemLists[bisConfig.DefaultItemList.group][bisConfig.DefaultItemList.index]
@@ -48,6 +49,10 @@ local server        = mq.TLO.EverQuest.Server()
 local dbfmt         = "INSERT INTO Inventory VALUES ('%s','%s','%s','%s','%s','%s',%d,%d,'%s');\n"
 local db
 local actor
+
+local teamName      = ''
+local showPopup     = false
+local selectedTeam  = ''
 
 local niceImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/bis.png")
 local iconImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/icon_lazbis.png")
@@ -121,6 +126,15 @@ local function initTables()
 end
 
 local function settingsRowCallback(udata,cols,values,names)
+    if values[1]:find('TEAM:') then
+        -- printf('loaded team %s - %s', values[1], values[2])
+        teams[values[1]] = {}
+        for token in string.gmatch(values[2], "[^,]+") do
+            -- print(token)
+            table.insert(teams[values[1]], token)
+        end
+        return 0
+    end
     local value = values[2]
     if value == 'true' then value = true
     elseif value == 'false' then value = false
@@ -437,10 +451,21 @@ local function changeBroadcastMode(tempBroadcast)
                 char.Show = true
             end
         end
+        selectedTeam = ''
     elseif tempBroadcast == 2 then
         -- add offline toons
         for _,char in ipairs(group) do
             char.Show = true
+        end
+        selectedTeam = ''
+    elseif tempBroadcast == 4 then
+        selectedTeam = ''
+    elseif type(tempBroadcast) ~= 'number' then
+        for _,char in ipairs(group) do char.Show = false end
+        for _,teamMember in ipairs(teams[tempBroadcast]) do
+            for _,char in ipairs(group) do
+                if teamMember == char.Name then char.Show = true end
+            end
         end
     end
     if bChanged then
@@ -750,6 +775,10 @@ local function bisGUI()
 					ImGui.SameLine()
 					ImGui.PushItemWidth(150)
 					if ImGui.BeginCombo('##Characters', 'Characters') then
+                        for teamName,_ in pairs(teams) do
+                            local _,pressed = ImGui.Checkbox(teamName:gsub('TEAM:', 'Team: '), selectedTeam == teamName)
+                            if pressed then if selectedTeam ~= teamName then selectedTeam = teamName changeBroadcastMode(teamName) else selectedTeam = '' end end
+                        end
 						local _,pressed = ImGui.Checkbox('All Online', selectedBroadcast == 1)
 						if pressed then changeBroadcastMode(1) end
 						_,pressed = ImGui.Checkbox('All Offline', selectedBroadcast == 2)
@@ -767,7 +796,75 @@ local function bisGUI()
 						ImGui.EndCombo()
 					end
 					ImGui.PopItemWidth()
-		
+                    ImGui.SameLine()
+                    if ImGui.Button('Save Character Set') then
+                        showPopup = true
+                        ImGui.OpenPopup('Save Team')
+                        ImGui.SetNextWindowSize(200, 90)
+                    end
+                    ImGui.SameLine()
+                    if ImGui.Button('Delete Character Set') then
+                        if selectedTeam then
+                            simpleExec(("DELETE FROM Settings WHERE Key = '%s'"):format(selectedTeam))
+                            teams[teamName] = nil
+                        end
+                    end
+                    ImGui.SameLine()
+                    if ImGui.Button('Delete Selected Characters') then
+                        showPopup = true
+                        ImGui.OpenPopup('Delete Characters')
+                        ImGui.SetNextWindowSize(200, 90)
+                    end
+                    if ImGui.BeginPopupModal('Delete Characters') then
+                        if ImGui.Button('Proceed') then
+                            for _,char in ipairs(group) do
+                                if char.Show then
+                                    simpleExec(("DELETE FROM Inventory WHERE Character = '%s' AND Server = '%s'"):format(char.Name, server))
+                                end
+                            end
+                            for i=#sortedGroup,1,-1 do
+                                if group[sortedGroup[i]].Show then table.remove(sortedGroup, i) end
+                            end
+                            for i=#group,1,-1 do
+                                local charName = group[i].Name
+                                if group[i].Show then table.remove(group, i) group[charName] = nil end
+                            end
+                            showPopup = false
+                            ImGui.CloseCurrentPopup()
+                        end
+                        ImGui.SameLine()
+                        if ImGui.Button('Cancel') then
+                            showPopup = false
+                            ImGui.CloseCurrentPopup()
+                        end
+                        ImGui.EndPopup()
+                    end
+                    if ImGui.BeginPopupModal('Save Team', showPopup) then
+                        teamName,_ = ImGui.InputText('Name', teamName)
+                        if ImGui.Button('Save') and teamName ~= '' then
+                            local nameList = ''
+                            local newTeam = {}
+                            for i,char in ipairs(group) do
+                                if char.Show then
+                                    table.insert(newTeam, char.Name)
+                                    nameList = nameList .. char.Name .. ','
+                                end
+                            end
+                            simpleExec(("INSERT INTO Settings VALUES ('TEAM:%s', '%s') ON CONFLICT(Key) DO UPDATE SET Value = '%s'"):format(teamName, nameList, nameList))
+                            teams['TEAM:'..teamName] = newTeam
+                            showPopup = false
+                            ImGui.CloseCurrentPopup()
+                            teamName = ''
+                        end
+                        ImGui.SameLine()
+                        if ImGui.Button('Cancel') then
+                            showPopup = false
+                            ImGui.CloseCurrentPopup()
+                            teamName = ''
+                        end
+                        ImGui.EndPopup()
+                    end
+
 					local numColumns = 1
 					for _,char in ipairs(group) do if char.Show then numColumns = numColumns + 1 end end
 					if next(itemChecks) ~= nil then
@@ -1132,7 +1229,7 @@ local function lootedCallback(line, who, item)
                             gear[char.Name][slot].count = (gear[char.Name][slot].count or 0) + 1
                         end
                     end
-                    local stmt = dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'',gear[char.Name][slot].count or 0,gear[char.Name][slot].componentcount or 0,listToScan.id)
+                    local stmt = dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'',gear[char.Name] and gear[char.Name][slot].count or 0,gear[char.Name] and gear[char.Name][slot].componentcount or 0,listToScan.id)
                     exec(stmt, char.Name, listToScan.id, 'inserted')
                 end
             end
