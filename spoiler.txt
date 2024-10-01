@@ -16,11 +16,10 @@ Hail each of the 6 suspects. One will emote one of the following lines:
 
 Whichever one outputs the emote is the killer.
 
-Say 'What' to each suspect. Upon saying 'What', a ground spawn may appear around the zone, which will be the murder weapon.
-
-Also say 'Who' and 'Where' to each suspect, though these may not serve any purpose.
-
-Sometimes, upon hailing (or maybe when saying who or what?), an NPC may spawn somewhere in the zone, such as 'Cloaked Confidante' or 'Elusive Henchman'. Kill them and they may also drop the murder weapon.
+Say 'What' to each suspect. Upon saying 'What', either a mob or ground spawn will spawn somewhere in the zone.
+If an item spawns, then go pick it up and it will be the murder weapon.
+If a mob spawns, go kill it and loot the murder weapon from its corpse. Make sure to let the mob aggro you first, or its loot table can bug.
+The possible mobs are Sinister Conspirator in the library, Cloaked Confidante in the dining hall, Elusive Henchman in the Wedding Hall and Dark Associate in the Dragon Terrace.
 
 Hail the other grey con NPCs on each floor and they will trigger a ground spawn to spawn somewhere in the zone. Find the ground spawn whose lore indicates 'Strong' evidence and this floor is the location.
 The 'Strong' evidence items are:
@@ -39,6 +38,7 @@ Black Drake riddles:
 - 'I'm light as a feather, ...' - Answer: breath
 - 'I disappear as soon as you say my name, ...' - Answer: silence
 - 'The more there is the less you see' - Answer: darkness
+- 'What has keys, but unlocks no doors' - Answer: piano
 
 Blue/Red Drake riddle:
 - If the Blue Drake says: 'If you ask the Red Drake, he would say I lie', then respond with Blue Drake.
@@ -48,4 +48,14 @@ Reward:
 - Power of 9 - 1 slot container
 - Eyes of the Ghost - Face with clicky (see invis, movement speed, levitation, ultravision, magnification)
 
-Combine Idol of the Scale or Illuminious Oculus in the Power of 9 to create an enhanced aug.
+Combine Idol of the Scale, Illuminious Oculus, Luckiest of Horseshoes, Tongue of Unspoken Sins, or Eyes of the Ghost in the Power of 9 to create an enhanced aug.
+
+150977 - 9 paths of despair
+150978 - 9 spheres of ascension
+150979 - 9 realms of transition
+150980 - 9 echoes of reflection
+150981 - 9 
+150982 - 9 
+150983 - 9 
+150984 - 9 
+150985 - 9 eyes of the ghost

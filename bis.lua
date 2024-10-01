@@ -1901,7 +1901,7 @@ return {
 			['IncarnateFerocity'] = 'Incarnate Umbra of Ferocity',
 			['TranquilSoul'] = 'The Tranquil Soul/17712',
 			['OtherworldlySoul'] = 'Otherworldly Soul',
-			['Tongue'] = 'Tongue of Unspoken Sins',
+			['Tongue'] = 'Tongue of Unspoken Sins/150979',
 			['BellikosDoll'] = 'Living Bellikos Doll - Tranquility',
 		},
 		['Main'] = {
@@ -2152,10 +2152,16 @@ return {
 			['Radix'] = 'Radix',
 			['Reflection'] = '9 Echoes of Reflection',
 			['Ascension'] = '9 Spheres of Ascension',
+			['Transition'] = '9 Realms of Transition',
+			['Eyes'] = '9 Eyes of the Ghost',
+			['9 Unknown - 150981'] = 'Unknown',
+			['9 Unknown - 150982'] = 'Unknown',
+			['9 Unknown - 150983'] = 'Unknown',
+			['9 Unknown - 150984'] = 'Unknown',
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs', Slots={'Despair','Reflection','Ascension','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
+				{Name='Augs', Slots={'Despair','Ascension','Transition','Reflection','9 Unknown - 150981','9 Unknown - 150982','9 Unknown - 150983','9 Unknown - 150984','Eyes','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}
