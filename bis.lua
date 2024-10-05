@@ -2154,14 +2154,10 @@ return {
 			['Ascension'] = '9 Spheres of Ascension',
 			['Transition'] = '9 Realms of Transition',
 			['Eyes'] = '9 Eyes of the Ghost',
-			['9 Unknown - 150981'] = 'Unknown',
-			['9 Unknown - 150982'] = 'Unknown',
-			['9 Unknown - 150983'] = 'Unknown',
-			['9 Unknown - 150984'] = 'Unknown',
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs', Slots={'Despair','Ascension','Transition','Reflection','9 Unknown - 150981','9 Unknown - 150982','9 Unknown - 150983','9 Unknown - 150984','Eyes','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
+				{Name='Augs', Slots={'Despair','Ascension','Transition','Reflection','Eyes','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}
