@@ -1,3 +1,6 @@
+2.7.0
+- Add lock button
+
 2.6.1
 - Potential fixes to updating bis data when items are looted (but probably still doesn't work anyways)
 - Some item updates

@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '2.6.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '2.7.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -36,7 +36,7 @@ local teams         = {}
 local selectedItemList  = bisConfig.ItemLists[bisConfig.DefaultItemList.group][bisConfig.DefaultItemList.index]
 local itemList          = bisConfig.sebilis
 local selectionChanged  = true
-local settings          = {ShowSlots=true,ShowMissingOnly=false,AnnounceNeeds=false,AnnounceChannel='Group'}
+local settings          = {ShowSlots=true,ShowMissingOnly=false,AnnounceNeeds=false,AnnounceChannel='Group',Locked=false}
 local orderedSkills     = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
 local recipeQuestIdx    = 1
 local ingredientsArray  = {}
@@ -674,6 +674,15 @@ local function VerticalSeparator()
     ImGui.PopStyleColor(3)
 end
 
+local function LockButton(id, isLocked)
+    local lockedIcon = settings.Locked and icons.FA_LOCK .. '##' .. id or icons.FA_UNLOCK .. '##' .. id
+    if ImGui.Button(lockedIcon) then
+        isLocked = not isLocked
+    end
+    return isLocked
+end
+
+local WINDOW_FLAGS = ImGuiWindowFlags.HorizontalScrollbar
 local classes = {Bard='BRD',Beastlord='BST',Berserker='BER',Cleric='CLR',Druid='DRU',Enchanter='ENC',Magician='MAG',Monk='MNK',Necromancer='NEC',Paladin='PAL',Ranger='RNG',Rogue='ROG',['Shadow Knight']='SHD',Shaman='SHM',Warrior='WAR',Wizard='WIZ'}
 local function bisGUI()
     ImGui.SetNextWindowSize(ImVec2(800,500), ImGuiCond.FirstUseEver)
@@ -681,7 +690,9 @@ local function bisGUI()
         openGUI, shouldDrawGUI = ImGui.Begin('BIS Check (' .. meta.version .. ')###BIS Check Mini', openGUI,
             bit32.bor(ImGuiWindowFlags.AlwaysAutoResize, ImGuiWindowFlags.NoResize, ImGuiWindowFlags.NoTitleBar))
     else
-		openGUI, shouldDrawGUI = ImGui.Begin('BIS Check ('.. meta.version ..')###BIS Check', openGUI, ImGuiWindowFlags.HorizontalScrollbar)
+        local windowFlags = WINDOW_FLAGS
+        if settings.Locked then windowFlags = bit32.bor(windowFlags, ImGuiWindowFlags.NoMove, ImGuiWindowFlags.NoResize) end
+		openGUI, shouldDrawGUI = ImGui.Begin('BIS Check ('.. meta.version ..')###BIS Check', openGUI, windowFlags)
 	end
     if shouldDrawGUI then
 		if minimizedGUI then
@@ -700,6 +711,12 @@ local function bisGUI()
                 ImGui.BeginTooltip()
                 ImGui.Text('Minimize')
                 ImGui.EndTooltip()
+            end
+            ImGui.SameLine()
+            local oldLocked = settings.Locked
+            settings.Locked = LockButton('bislocked', settings.Locked)
+            if oldLocked ~= settings.Locked then
+                updateSetting('Locked', settings.Locked)
             end
             ImGui.SameLine()
 			if ImGui.BeginTabBar('bistabs') then
@@ -1228,9 +1245,9 @@ local function lootedCallback(line, who, item)
                         else
                             gear[char.Name][slot].count = (gear[char.Name][slot].count or 0) + 1
                         end
-                        local stmt = dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'',gear[char.Name][slot].count or 0,gear[char.Name][slot].componentcount or 0,listToScan.id)
-                        exec(stmt, char.Name, listToScan.id, 'inserted')
                     end
+                    local stmt = dbfmt:format(char.Name,char.Class,server,slot:gsub('\'','\'\''),item:gsub('\'','\'\''),'',gear[char.Name] and gear[char.Name][slot].count or 0,gear[char.Name] and gear[char.Name][slot].componentcount or 0,listToScan.id)
+                    exec(stmt, char.Name, listToScan.id, 'inserted')
                 end
             end
         end
