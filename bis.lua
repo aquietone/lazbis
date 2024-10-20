@@ -1808,7 +1808,6 @@ return {
 			['BellikosClaws'] = 'Splintered Bellikos Claws',
 			['BellikosFang'] = 'Fragmented Bellikos Fang',
 			['EyeMight'] = 'Eye of Might',
-			['FrozenOre'] = 'Frozen Ore/150215',
 		},
 		['Beastlord'] = {
 			['BellikosClaws'] = 'Splintered Bellikos Claws',
@@ -2055,19 +2054,19 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Echoes',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
-			['Despair'] = '9 Paths of Despair',
+			['Idol'] = '9 Paths of Despair',
 		},
 		['Berserker'] = {
 			['ImbuedRune'] = 'Imbued Rune of Overpowering Frenzy',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
-			['Despair'] = '9 Paths of Despair',
+			['Idol'] = '9 Paths of Despair',
 		},
 		['Beastlord'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mikkily\'s Healing',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
-			['Despair'] = '9 Paths of Despair',
+			['Idol'] = '9 Paths of Despair',
 		},
 		['Cleric'] = {
 			['ImbuedRune'] = 'Imbued Rune of Vie',
@@ -2093,7 +2092,7 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Dragon Fang',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
-			['Despair'] = '9 Paths of Despair',
+			['Idol'] = '9 Paths of Despair',
 		},
 		['Necromancer'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dark Salve',
@@ -2104,7 +2103,7 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Piety',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
-			['Despair'] = '9 Paths of Despair',
+			['Idol'] = '9 Paths of Despair',
 		},
 		['Ranger'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jolting Snapkicks',
@@ -2115,13 +2114,13 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Assault',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
-			['Despair'] = '9 Paths of Despair',
+			['Idol'] = '9 Paths of Despair',
 		},
 		['Shadow Knight'] = {
 			['ImbuedRune'] = 'Imbued Rune of Agony and Hate',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
-			['Despair'] = '9 Paths of Despair',
+			['Idol'] = '9 Paths of Despair',
 		},
 		['Shaman'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Panther',
@@ -2132,7 +2131,7 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Brutal Onslaught',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
-			['Despair'] = '9 Paths of Despair',
+			['Idol'] = '9 Paths of Despair',
 		},
 		['Wizard'] = {
 			['ImbuedRune'] = 'Imbued Rune of Mana Weave',
@@ -2150,14 +2149,14 @@ return {
 			['BIC4'] = 'Black Gemstone of Torture',
 			['EOC'] = 'Essence of Creation/150402',
 			['Radix'] = 'Radix',
-			['Reflection'] = '9 Echoes of Reflection',
-			['Ascension'] = '9 Spheres of Ascension',
-			['Transition'] = '9 Realms of Transition',
+			['Oculus'] = '9 Echoes of Reflection',
+			['Horseshoe'] = '9 Spheres of Ascension',
+			['Tongue'] = '9 Realms of Transition',
 			['Eyes'] = '9 Eyes of the Ghost',
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs', Slots={'Despair','Ascension','Transition','Reflection','Eyes','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
+				{Name='Augs', Slots={'Idol','Horseshoe','Tongue','Oculus','Eyes','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}

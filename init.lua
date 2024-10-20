@@ -1327,8 +1327,9 @@ local function init(args)
     mq.event('rMeSayItems', 'You tell your raid, #2#', sayCallback, {keepLinks = true})
     mq.event('gsayItems', '#1# tells the group, #2#', sayCallback, {keepLinks = true})
     mq.event('gMeSayItems', 'You tell your party, #2#', sayCallback, {keepLinks = true})
-    mq.event('otherLootedItem', '#*#--#1# has looted a #2#.--#*#', lootedCallback, {keepLinks = true})
-    mq.event('youLootedItem', '#*#--#1# have looted a #2#.--#*#', lootedCallback, {keepLinks = true})
+    -- loot callback doesn't work right, just disable them for now
+    -- mq.event('otherLootedItem', '#*#--#1# has looted a #2#.--#*#', lootedCallback, {keepLinks = true})
+    -- mq.event('youLootedItem', '#*#--#1# have looted a #2#.--#*#', lootedCallback, {keepLinks = true})
 
     mq.imgui.init('BISCheck', bisGUI)
 end
