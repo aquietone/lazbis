@@ -1167,20 +1167,20 @@ return {
 			['Lord Pickclaw (Runnyeye)'] = 'Thumb Metacarpal/33167/33168/33169/33170/33171',
 			['Redwind (Everfrost)'] = 'Thumb Proximal Phalanx/33167/33168/33169/33170/33171',
 			['Tier 2 Complete'] = 'Jonas Dagmire\'s Skeletal Thumb/33167/33168/33169/33170/33171',
-			['Rosch Var\'L\'Vlor (SK)'] = 'Forefinger Distal Phalanx/33168/33169/33170/33171',
-			['Lord Gimblox (SolA)'] = 'Forefinger Middle Phalanx/33168/33169/33170/33171',
-			['Skeleton Lrodd (Befallen)'] = 'Forefinger Proximal Phalanx/33168/33169/33170/33171',
-			['Spectres (Oasis)'] = 'Forefinger Metacarpal/33168/33169/33170/33171',
+			['Rosch Var\'L\'Vlor (SK)'] = 'Forefinger Distal Phalanx/33167/33168/33169/33170/33171',
+			['Lord Gimblox (SolA)'] = 'Forefinger Middle Phalanx/33167/33168/33169/33170/33171',
+			['Skeleton Lrodd (Befallen)'] = 'Forefinger Proximal Phalanx/33167/33168/33169/33170/33171',
+			['Spectres (Oasis)'] = 'Forefinger Metacarpal/33167/33168/33169/33170/33171',
 			['Tier 3 Complete'] = 'Jonas Dagmire\'s Skeletal Forefinger/33168/33169/33170/33171',
-			['Gorillas (CT)'] = 'Ring Finger Distal Phalanx/33169/33170/33171',
-			['Ambassador Dvinn (CB)'] = 'Ring Finger Middle Phalanx/33169/33170/33171',
-			['Froglok Shin Lord (GukTop)'] = 'Ring Finger Proximal Phalanx/33169/33170/33171',
-			['Death Beetles (Unrest)'] = 'Ring Finger Metacarpal/33169/33170/33171',
-			['Tier 4 Complete'] = 'Jonas Dagmire\'s Skeletal Ring Finger/33169/33170/33171',
-			['Ground Spawn (Mistmoore)'] = 'Little Finger Distal Phalanx/33170/33171',
-			['Slizik The Mighty (Hole)'] = 'Little Finger Middle Phalanx/33170/33171',
-			['Ground Spawn (SplitPaw)'] = 'Little Finger Proximal Phalanx/33170/33171',
-			['Frenzied Ghoul (GukBottom)'] = 'Little Finger Metacarpal/33170/33171',
+			['Gorillas (CT)'] = 'Ring Finger Distal Phalanx/33169/33168/33170/33171',
+			['Ambassador Dvinn (CB)'] = 'Ring Finger Middle Phalanx/33168/33169/33170/33171',
+			['Froglok Shin Lord (GukTop)'] = 'Ring Finger Proximal Phalanx/33168/33169/33170/33171',
+			['Death Beetles (Unrest)'] = 'Ring Finger Metacarpal/33168/33169/33170/33171',
+			['Tier 4 Complete'] = 'Jonas Dagmire\'s Skeletal Ring Finger/33168/33174/33169/33170/33171',
+			['Ground Spawn (Mistmoore)'] = 'Little Finger Distal Phalanx/33175/33168/33170/33171',
+			['Slizik The Mighty (Hole)'] = 'Little Finger Middle Phalanx/33175/33168/33170/33171',
+			['Ground Spawn (SplitPaw)'] = 'Little Finger Proximal Phalanx/33175/33168/33170/33171',
+			['Frenzied Ghoul (GukBottom)'] = 'Little Finger Metacarpal/33175/33168/33170/33171',
 			['Tier 5 Complete'] = 'Jonas Dagmire\'s Skeletal Little Finger/33170/33171',
 			['Middle Finger (Mayong)'] = 'Jonas Dagmire\'s Skeletal Middle Finger/33171',
 		},
@@ -1874,6 +1874,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -1887,6 +1888,7 @@ return {
 			['Deep Emerald Stone'] = 'Deep Emerald Stone',
 			['Radiant Geode'] = 'Radiant Geode',
 			['Mallet of the Marauder'] = 'Mallet of the Marauder',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Berserker'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -1895,6 +1897,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -1908,6 +1911,7 @@ return {
 			['Deep Emerald Stone'] = 'Deep Emerald Stone',
 			['Radiant Geode'] = 'Radiant Geode',
 			['Bludgeon of the Brute'] = 'Bludgeon of the Brute',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Beastlord'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -1916,6 +1920,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -1932,6 +1937,7 @@ return {
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Bludgeon of the Brute'] = 'Bludgeon of the Brute',
 			['Mallet of the Marauder'] = 'Mallet of the Marauder',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Cleric'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -1940,6 +1946,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -1951,6 +1958,7 @@ return {
 			['Malevolent Effigy'] = 'Malevolent Effigy',
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Staff of the Subjugator'] = 'Staff of the Subjugator',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Druid'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -1959,6 +1967,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -1970,6 +1979,7 @@ return {
 			['Malevolent Effigy'] = 'Malevolent Effigy',
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Staff of the Subjugator'] = 'Staff of the Subjugator',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Enchanter'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -1978,6 +1988,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -1989,6 +2000,7 @@ return {
 			['Malevolent Effigy'] = 'Malevolent Effigy',
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Staff of the Subjugator'] = 'Staff of the Subjugator',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Magician'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -1997,6 +2009,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2008,6 +2021,7 @@ return {
 			['Malevolent Effigy'] = 'Malevolent Effigy',
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Staff of the Subjugator'] = 'Staff of the Subjugator',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Monk'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2016,6 +2030,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2030,6 +2045,7 @@ return {
 			['Radiant Geode'] = 'Radiant Geode',
 			['Bludgeon of the Brute'] = 'Bludgeon of the Brute',
 			['Mallet of the Marauder'] = 'Mallet of the Marauder',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Necromancer'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2038,6 +2054,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2049,6 +2066,7 @@ return {
 			['Malevolent Effigy'] = 'Malevolent Effigy',
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Staff of the Subjugator'] = 'Staff of the Subjugator',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Paladin'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2057,6 +2075,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2074,6 +2093,7 @@ return {
 			['Experimental Device'] = 'Experimental Device',
 			['Corundum Infused Granite'] = 'Corundum Infused Granite',
 			['Lance of the Legionnaire'] = 'Lance of the Legionnaire',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Ranger'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2082,6 +2102,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2098,6 +2119,7 @@ return {
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Bludgeon of the Brute'] = 'Bludgeon of the Brute',
 			['Mallet of the Marauder'] = 'Mallet of the Marauder',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Rogue'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2105,6 +2127,7 @@ return {
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
@@ -2119,6 +2142,7 @@ return {
 			['Deep Emerald Stone'] = 'Deep Emerald Stone',
 			['Radiant Geode'] = 'Radiant Geode',
 			['Mallet of the Marauder'] = 'Mallet of the Marauder',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Shadow Knight'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2127,6 +2151,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2144,6 +2169,7 @@ return {
 			['Experimental Device'] = 'Experimental Device',
 			['Corundum Infused Granite'] = 'Corundum Infused Granite',
 			['Lance of the Legionnaire'] = 'Lance of the Legionnaire',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Shaman'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2152,6 +2178,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2163,6 +2190,7 @@ return {
 			['Malevolent Effigy'] = 'Malevolent Effigy',
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Staff of the Subjugator'] = 'Staff of the Subjugator',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Warrior'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2171,6 +2199,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2187,6 +2216,7 @@ return {
 			['Corundum Infused Granite'] = 'Corundum Infused Granite',
 			['Bludgeon of the Brute'] = 'Bludgeon of the Brute',
 			['Mallet of the Marauder'] = 'Mallet of the Marauder',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Wizard'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2195,6 +2225,7 @@ return {
 			['Shard of True Power'] = 'Shard of True Power',
 			['Shard of Phosphorescent Power'] = 'Shard of Phosphorescent Power',
 			['Authentic Treasure Map'] = 'Authentic Treasure Map',
+			['Corrupted Netherstone'] = 'Corrupted Netherstone',
 			['Creepy Bone Chips'] = 'Creepy Bone Chips',
 			['Lucent Crystal'] = 'Lucent Crystal',
 			['Brilliant Geode'] = 'Brilliant Geode',
@@ -2206,6 +2237,7 @@ return {
 			['Malevolent Effigy'] = 'Malevolent Effigy',
 			['Vapor of Vitality'] = 'Vapor of Vitality',
 			['Staff of the Subjugator'] = 'Staff of the Subjugator',
+			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
 		},
 		['Template'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2225,7 +2257,7 @@ return {
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs/Items', Slots={'Rallosian Power Gem','Imbued Feather','Authentic Treasure Map','Shard of True Power','Shard of Phosphorescent Power','Authentic Treasure Map','Creepy Bone Chips','Lucent Crystal','Brilliant Geode','Luminescent Geode Cluster','Honed Geode Cluster','Hardened Bone Shard','Resilient Sphere','Ancient Gnawbone','Asp\'s Fang','Stone of Greatness','Deep Emerald Stone','Radiant Geode','Malevolent Effigy','Vapor of Vitality','Staff of the Subjugator','Bludgeon of the Brute','Mallet of the Marauder','Lance of the Legionnaire','Experimental Device','Corundum Infused Granite'}},
+				{Name='Augs/Items', Slots={'Ancient Gnawbone','Asp\'s Fang','Authentic Treasure Map','Bludgeon of the Brute','Brilliant Geode','Corrupted Netherstone','Corundum Infused Granite','Creepy Bone Chips','Deep Emerald Stone','Experimental Device','Hardened Bone Shard','Honed Geode Cluster','Imbued Feather','Lance of the Legionnaire','Lucent Crystal','Luminescent Geode Cluster','Malevolent Effigy','Mallet of the Marauder','Radiant Geode','Rallosian Power Gem','Resilient Sphere','Shard of Phosphorescent Power','Shard of True Power','Shrunken Gnoll Head','Staff of the Subjugator','Stone of Greatness','Vapor of Vitality',}},
 			}
 		}
 	},
@@ -2248,6 +2280,7 @@ return {
 			['EyeMight'] = 'Eye of Might',
 			['EyeComprehension'] = 'Eye of Comprehension',
 			['FrozenOre'] = 'Frozen Ore/150215',
+			['Minion\'s'] = 'Minion\'s Memento',
 		},
 		['Cleric'] = {
 			['BellikosEye'] = 'Obsidian Bellikos Eye',
@@ -2259,15 +2292,20 @@ return {
 			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['EyeComprehension'] = 'Eye of Comprehension',
 			['Shattered Gnoll Slayer'] = 'Shattered Gnoll Slayer',
+			['Crystalized'] = 'Crystalized Soul Gem',
+			['Minion\'s'] = 'Minion\'s Memento',
 		},
 		['Enchanter'] = {
 			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['EyeComprehension'] = 'Eye of Comprehension',
 			['Tarnished Skeleton Key'] = 'Tarnished Skeleton Key',
+			['Crystalized'] = 'Crystalized Soul Gem',
+			['Minion\'s'] = 'Minion\'s Memento',
 		},
 		['Magician'] = {
 			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['EyeComprehension'] = 'Eye of Comprehension',
+			['Minion\'s'] = 'Minion\'s Memento',
 		},
 		['Monk'] = {
 			['BellikosClaws'] = 'Splintered Bellikos Claws',
@@ -2279,6 +2317,7 @@ return {
 			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['EyeComprehension'] = 'Eye of Comprehension',
 			['Graverobber\'s Icon'] = 'Graverobber\'s Icon',
+			['Minion\'s'] = 'Minion\'s Memento',
 		},
 		['Paladin'] = {
 			['BellikosClaws'] = 'Splintered Bellikos Claws',
@@ -2308,11 +2347,15 @@ return {
 			['EyeMight'] = 'Eye of Might',
 			['EyeComprehension'] = 'Eye of Comprehension',
 			['FrozenOre'] = 'Frozen Ore/150215',
+			['Crystalized'] = 'Crystalized Soul Gem',
+			['Minion\'s'] = 'Minion\'s Memento',
 		},
 		['Shaman'] = {
 			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['EyeComprehension'] = 'Eye of Comprehension',
 			['Shattered Gnoll Slayer'] = 'Shattered Gnoll Slayer',
+			['Crystalized'] = 'Crystalized Soul Gem',
+			['Minion\'s'] = 'Minion\'s Memento',
 		},
 		['Warrior'] = {
 			['BellikosClaws'] = 'Splintered Bellikos Claws',
@@ -2346,7 +2389,7 @@ return {
 				{Name='Incarnate', Slots={'IncarnateCleaving','IncarnateDeflection','IncarnateEvasion','IncarnateFerocity'}},
 				{Name='Kithicor', Slots={'BellikosClaws','BellikosFang','BellikosEye','BellikosTear','BellikosDoll'}},
 				{Name='Other', Slots={'TranquilSoul','OtherworldlySoul','Tongue','FrozenOre','Shattered Gnoll Slayer','Tarnished Skeleton Key','Graverobber\'s Icon','Battered Smuggler\'s Barrel'}},
-				{Name='Clickies', Slots={'EyeMight','EyeComprehension'}}
+				{Name='Clickies', Slots={'EyeMight','EyeComprehension','Crystalized','Minion\'s'}}
 			}
 		}
 	},
@@ -2382,18 +2425,22 @@ return {
 		['Cleric'] = {
 			['Manastone'] = 'Manastone',
 			['SnakeFlute'] = 'Snake Charmer\'s Flute/40459',
+			['Bifold'] = 'Bifold Focus of the Evil Eye',
 		},
 		['Druid'] = {
 			['Manastone'] = 'Manastone',
 			['SnakeFlute'] = 'Snake Charmer\'s Flute/40459',
+			['Bifold'] = 'Bifold Focus of the Evil Eye',
 		},
 		['Enchanter'] = {
 			['Manastone'] = 'Manastone',
 			['SnakeFlute'] = 'Snake Charmer\'s Flute/40459',
+			['Bifold'] = 'Bifold Focus of the Evil Eye',
 		},
 		['Magician'] = {
 			['Manastone'] = 'Manastone',
 			['SnakeFlute'] = 'Snake Charmer\'s Flute/40459',
+			['Bifold'] = 'Bifold Focus of the Evil Eye',
 		},
 		['Monk'] = {
 			['IdolScale'] = 'Idol of the Scale/150977',
@@ -2408,6 +2455,7 @@ return {
 		['Necromancer'] = {
 			['Manastone'] = 'Manastone',
 			['SnakeFlute'] = 'Snake Charmer\'s Flute/40459',
+			['Bifold'] = 'Bifold Focus of the Evil Eye',
 		},
 		['Paladin'] = {
 			['BruteForce(Bash)'] = 'Focus Rune of Brute Force',
@@ -2425,6 +2473,7 @@ return {
 			['Striking(Kick)'] = 'Focus Rune of Striking',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
 			['Dragorn'] = 'Dragorn War Mask',
+			['Bifold'] = 'Bifold Focus of the Evil Eye',
 		},
 		['Rogue'] = {
 			['IdolScale'] = 'Idol of the Scale/150977',
@@ -2460,6 +2509,7 @@ return {
 		['Wizard'] = {
 			['Manastone'] = 'Manastone',
 			['SnakeFlute'] = 'Snake Charmer\'s Flute/40459',
+			['Bifold'] = 'Bifold Focus of the Evil Eye',
 		},
 		['Template'] = {
 			['EnchantedJewel(Shielding)'] = 'Enchanted Jewel of Shielding',
@@ -2485,7 +2535,7 @@ return {
 				{Name='Planar', Slots={'AdeptBlows(Tiger Claw)','BruteForce(Bash)','DexterousStriking(Flying Kick)','EnchantedJewel(Shielding)','EscalatingOnslaught(HStr)','FoulPlay(Backstab)','FuriousAssault(Frenzy)','MysticalAegis(Spell Shield)','Prowess(Offense)','Striking(Kick)'}},
 				{Name='Diamond Coins', Slots={'Manastone'}},
 				{Name='Gold Coins', Slots={'DarkArachnids','Dragorn','WarPirate'}},
-				{Name='Celestial Crests', Slots={'BloodDrinker','IdolScale','Lucky Copper/Silver','Lucky Grass','Lucky Horseshoe','Mount','Oculous','VenomVial',}},
+				{Name='Celestial Crests', Slots={'BloodDrinker','IdolScale','Lucky Copper/Silver','Lucky Grass','Lucky Horseshoe','Mount','Oculous','VenomVial','Bifold',}},
 				{Name='Player Made', Slots={'BoarWhistle','SnakeFlute',}},
 			}
 		}
