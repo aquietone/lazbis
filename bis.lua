@@ -1363,6 +1363,7 @@ return {
 			['Forceful Rejuvenation'] = 'Cunning Necklace of Dark Rituals',
 			['Retreat'] = 'Shadowy Silken Veil of Gazing',
 			['Dimensional Shield'] = 'Elusive Ritual Talisman of Fate',
+			['Ageless Enmity'] = 'Rancorous Mantle of Ill Omen',
 		},
 		['Rogue'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40849',
@@ -2400,7 +2401,7 @@ return {
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['Striking(Kick)'] = 'Focus Rune of Striking',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 			['VenomVial'] = 'Bottomless Venom Vial',
 		},
 		['Berserker'] = {
@@ -2409,7 +2410,7 @@ return {
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 			['VenomVial'] = 'Bottomless Venom Vial',
 		},
 		['Beastlord'] = {
@@ -2419,7 +2420,7 @@ return {
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['Striking(Kick)'] = 'Focus Rune of Striking',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 			['VenomVial'] = 'Bottomless Venom Vial',
 		},
 		['Cleric'] = {
@@ -2449,7 +2450,7 @@ return {
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 			['VenomVial'] = 'Bottomless Venom Vial',
 		},
 		['Necromancer'] = {
@@ -2463,7 +2464,7 @@ return {
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 			['IdolScale'] = 'Idol of the Scale/150977',
 		},
 		['Ranger'] = {
@@ -2472,7 +2473,7 @@ return {
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['Striking(Kick)'] = 'Focus Rune of Striking',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 			['Bifold'] = 'Bifold Focus of the Evil Eye',
 		},
 		['Rogue'] = {
@@ -2481,7 +2482,7 @@ return {
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 			['VenomVial'] = 'Bottomless Venom Vial',
 		},
 		['Shadow Knight'] = {
@@ -2491,7 +2492,7 @@ return {
 			['BoarWhistle'] = 'Boar Caller\'s Whistle/150851',
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 		},
 		['Shaman'] = {
 			['Manastone'] = 'Manastone',
@@ -2504,7 +2505,7 @@ return {
 			['BloodDrinker'] = 'Blood Drinker\'s Coating',
 			['Striking(Kick)'] = 'Focus Rune of Striking',
 			['EscalatingOnslaught(HStr)'] = 'Planar Alloy of Escalating Onslaught',
-			['Dragorn'] = 'Dragorn War Mask',
+			['Dragorn(+ 10 to Wep Skills'] = 'Dragorn War Mask',
 		},
 		['Wizard'] = {
 			['Manastone'] = 'Manastone',
@@ -2525,16 +2526,16 @@ return {
 			['Lucky Grass'] = 'Lucky Grass Trinket',
 			['Oculous'] = 'Illuminious Oculus/150980',
 			['Mount'] = 'Whirligig Flyer Control Device/Ornate Flying Carpet/39635',
-			['WarPirate'] = 'Visage of the War Pirate',
 			['DarkArachnids'] = 'Visage of the Dark Arachnids',
 			['Lucky Horseshoe'] = 'Luckiest of Horseshoes/150978',
+			['War Bear Saddle(Or any other AC Mount)'] = 'War Bear Saddle/39635',
 		},
 		['Main'] = {
 			['Slots'] = {
 				{Name='Discordian', Slots={'Annihilation(Spell Damage)','Evasion(Avoidance)','MysticalAegis(DoT Shield)','Precision(Accuracy)','Rapidity(Attack)','Tenacity(Defense)',}},
 				{Name='Planar', Slots={'AdeptBlows(Tiger Claw)','BruteForce(Bash)','DexterousStriking(Flying Kick)','EnchantedJewel(Shielding)','EscalatingOnslaught(HStr)','FoulPlay(Backstab)','FuriousAssault(Frenzy)','MysticalAegis(Spell Shield)','Prowess(Offense)','Striking(Kick)'}},
 				{Name='Diamond Coins', Slots={'Manastone'}},
-				{Name='Gold Coins', Slots={'DarkArachnids','Dragorn','WarPirate'}},
+				{Name='Gold Coins', Slots={'Dragorn(+ 10 to Wep Skills)','War Bear Saddle(Or any other AC Mount)','DarkArachnids(Does not stack with other Dodge)','WarPirate(Does not stack with Brell)'}},
 				{Name='Celestial Crests', Slots={'BloodDrinker','IdolScale','Lucky Copper/Silver','Lucky Grass','Lucky Horseshoe','Mount','Oculous','VenomVial','Bifold',}},
 				{Name='Player Made', Slots={'BoarWhistle','SnakeFlute',}},
 			}
