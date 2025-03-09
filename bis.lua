@@ -1933,7 +1933,7 @@ return {
 			['FlowerAug4 (Crit)'] = 'Noxious Bloom of Feeble Finesse',
 			['FlowerAug5 (Dodge)'] = 'Noxious Bloom of Languid Limbs',
 			['FlowerAug6 (Healing)'] = 'Noxious Bloom of Meager Mettle',
-			['FlowerAug7 (Reduce Mana Cost'] = 'Noxious Bloom of Wavering Willpower',
+			['FlowerAug7 (Reduce Mana Cost)'] = 'Noxious Bloom of Wavering Willpower',
 			['SlimeAug1 (Poison)'] = 'Corrosive Slime of Suffering',
 			['SlimeAug2 (Cold)'] = 'Frigid Slime of Suffering',
 			['SlimeAug3 (Disease)'] = 'Necrotic Slime of Suffering',
