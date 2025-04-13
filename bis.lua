@@ -72,6 +72,7 @@ return {
 			['DSK1'] = 'Choker of Imprisoned Visions/28118',
 			['DSK2'] = 'Plagueborn Cape/27618/Warbeads of the Magus',
 			['DSK3'] = 'Earring of Dark Conflict/28115',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Berserker'] = {
 			['Chest'] = 'Wrathbringer\'s Chain Chestguard of the Vindicator/31706',
@@ -95,6 +96,7 @@ return {
 			['Aug1'] = 'Bone Shard of Wickedness',
 			['DSK1'] = 'Shroud of Eternal Agony/28119',
 			['DSK2'] = 'Choker of Imprisoned Visions/28118',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Beastlord'] = {
 			['Chest'] = 'Savagesoul Jerkin of the Wilds/32484',
@@ -120,6 +122,7 @@ return {
 			['DSK1'] = 'Belt of Contempt/28109',
 			['DSK2'] = 'Plagueborn Cape/27618/Warbeads of the Magus',
 			['DSK3'] = 'Earring of Dark Conflict/28115',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Cleric'] = {
 			['Chest'] = 'Faithbringer\'s Breastplate of Conviction/32251',
@@ -143,6 +146,7 @@ return {
 			['Ranged'] = 'Globe of Voltage/28111',
 			['DSK1'] = 'Shroud of the Subjugated Kuuan',
 			['DSK2'] = 'Aegis of the Dragorn Elders/28114',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Druid'] = {
 			['Chest'] = 'Everspring Jerkin of the Tangled Briars/32264',
@@ -167,6 +171,7 @@ return {
 			['DSK1'] = 'Shroud of Eternal Agony/28119',
 			['DSK2'] = 'Earring of Dark Conflict/28115',
 			['DSK3'] = 'Shroud of the Subjugated Kuuan',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Enchanter'] = {
 			['Chest'] = 'Mindreaver\'s Vest of Coercion/32376',
@@ -190,6 +195,7 @@ return {
 			['Ranged'] = 'Sorrowmourn Gemstone/28189',
 			['DSK1'] = 'Shroud of Eternal Agony/28119',
 			['DSK2'] = 'Shroud of the Subjugated Kuuan',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Magician'] = {
 			['Chest'] = 'Glyphwielder\'s Tunic of the Summoner/32356',
@@ -213,6 +219,7 @@ return {
 			['Ranged'] = 'Sorrowmourn Gemstone/28189',
 			['DSK1'] = 'Shroud of Eternal Agony/28119',
 			['DSK2'] = 'Shroud of the Subjugated Kuuan',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Monk'] = {
 			['Feet'] = 'Fiercehand Tabis of the Focused/31679',
@@ -235,6 +242,7 @@ return {
 			['Secondary'] = 'Flayed Flesh Handwraps',
 			['Ranged'] = 'Symbol of the Overlord/40814',
 			['Aug2'] = 'Blood-Polished Gemstone',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Necromancer'] = {
 			['Chest'] = 'Blightbringer\'s Tunic of the Grave/32453',
@@ -259,6 +267,7 @@ return {
 			['DSK1'] = 'Shroud of Eternal Agony/28119',
 			['DSK2'] = 'Shroud of the Subjugated Kuuan',
 			['DSK3'] = 'Belt of the Stagnant/28112',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Paladin'] = {
 			['Chest'] = 'Dawnseeker\'s Chestpiece of the Defender/32455',
@@ -281,9 +290,11 @@ return {
 			['Secondary'] = 'Shield of the Lightning Lord',
 			['Ranged'] = 'Totem of the Chimera',
 			['Aug1'] = 'Bone Shard of Wickedness',
+			['Aug3(Pally)'] = 'Blade of Forgotten Faith/150283',
 			['DSK1'] = 'Shoulderpads of Warfare/28116',
 			['DSK2'] = 'Golem Stone Face Guard/28117',
 			['DSK3'] = 'Symbol of the Overlord/40814',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Ranger'] = {
 			['Chest'] = 'Bladewhisper Chain Vest of Journeys/32480',
@@ -312,6 +323,7 @@ return {
 			['DSK4'] = 'Plagueborn Cape/Warbeads of the Magus/27618',
 			['DSK5'] = 'Stud of Chilling Precision/27623',
 			['DSK6'] = 'Symbol of the Overlord/40814',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Rogue'] = {
 			['Chest'] = 'Whispering Tunic of Shadows/31682',
@@ -335,6 +347,7 @@ return {
 			['Ranged'] = 'Symbol of the Overlord/40814',
 			['Aug2'] = 'Blood-Polished Gemstone',
 			['DSK1'] = 'Choker of Imprisoned Visions/28118',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Shadow Knight'] = {
 			['Chest'] = 'Duskbringer\'s Plate Chestguard of the Hateful/32463',
@@ -357,10 +370,12 @@ return {
 			['Secondary'] = 'Shield of the Lightning Lord',
 			['Ranged'] = 'Totem of the Chimera',
 			['Aug1'] = 'Bone Shard of Wickedness',
+			['Aug4(SK)'] = 'Morguecaller/150282',
 			['DSK1'] = 'Shoulderpads of Warfare/28116',
 			['DSK2'] = 'Golem Stone Face Guard/28117',
 			['DSK3'] = 'Ring of Disdain/28110',
 			['DSK4'] = 'Symbol of the Overlord/40814',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Shaman'] = {
 			['Chest'] = 'Ritualchanter\'s Tunic of the Ancestors/32261',
@@ -385,6 +400,7 @@ return {
 			['DSK1'] = 'Shroud of Eternal Agony/28119',
 			['DSK2'] = 'Shroud of the Subjugated Kuuan',
 			['DSK3'] = 'Belt of the Stagnant/28112',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Warrior'] = {
 			['Chest'] = 'Gladiator\'s Plate Chestguard of War/31669',
@@ -404,6 +420,7 @@ return {
 			['Finger1'] = 'Ring of the Beast/28113',
 			['Finger2'] = 'Rigid Ring of Prowess/28120',
 			['MainHand'] = 'Kreljnok\'s Sword of Eternal Power/Globe of Discordant Energy/40473',
+			['OffHand(War)'] = 'Ruinous Razor-edged ShanTok/40819',
 			['Secondary'] = 'Shield of the Lightning Lord/28366',
 			['Ranged'] = 'Totem of the Chimera/28361',
 			['Aug1'] = 'Bone Shard of Wickedness',
@@ -411,6 +428,7 @@ return {
 			['DSK1'] = 'Shoulderpads of Warfare/28116',
 			['DSK2'] = 'Stud of Chilling Precision/27623',
 			['DSK3'] = 'Symbol of the Overlord/40814',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Wizard'] = {
 			['Chest'] = 'Academic\'s Robe of the Arcanists/32347',
@@ -434,13 +452,14 @@ return {
 			['Ranged'] = 'Sorrowmourn Gemstone/28189',
 			['DSK1'] = 'Shroud of Eternal Agony/28119',
 			['DSK2'] = 'Shroud of the Subjugated Kuuan',
+			['Mask'] = 'Mirrored Mask',
 		},
 		['Main'] = {
 			['Slots'] = {
 				{Name='Mini Augs', Slots={'MiniAug1','MiniAug2','MiniAug3','MiniAug4','MiniAug5','MiniAug6','MiniAug7','MiniAug8','MiniAug9','MiniAug10','MiniAug11'}},
 				{Name='Visibles', Slots={'Arms','Chest','Feet','Hands','Head','Legs','Wrists',}},
 				{Name='Non-Visibles', Slots={'Back','Ear1','Ear2','Face','Finger1','Finger2','Neck','Shoulder','Waist',}},
-				{Name='Weapons', Slots={'MainHand','Secondary','Ranged','Charm','Aug1','Aug2'}},
+				{Name='Weapons', Slots={'Offhand(War)','MainHand','Secondary','Ranged','Charm','Aug1','Aug2','Aug3(Pally)','Aug4(SK)','Mask'}},
 				{Name='DSK Focus', Slots={'DSK1','DSK2','DSK3','DSK4','DSK5'}},
 			},
 		},
@@ -480,50 +499,59 @@ return {
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Berserker'] = {
 			['Rune'] = 'Rapid Focus Rune: Destroyer\'s Volley/Rapid Focus Glyph: Destroyer\'s Volley',
 			['Boots (Potent Prowess)'] = 'Fabled Dwarven Work Boots',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Beastlord'] = {
 			['Rune'] = 'Destructive Focus Rune: Reptilian Venom/Destructive Focus Glyph: Reptilian Venom',
 			['Boots (Potent Prowess)'] = 'Fabled Dwarven Work Boots',
 			['Globe'] = 'Fabled Globe of Mist',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Cleric'] = {
 			['Rune'] = 'Enduring Focus Rune: Pious Elixir of Divinity/Enduring Focus Glyph: Pious Elixir of Divinity',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
 			['Hammer (DA)'] = 'Fabled Torklar\'s Battle Hammer',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Druid'] = {
 			['Rune'] = 'Destructive Focus Rune: Wasp Swarm/Destructive Focus Glyph: Wasp Swarm',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Enchanter'] = {
 			['Rune'] = 'Destructive Focus Rune: Mind Shatter/Destructive Focus Glyph: Mind Shatter',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Magician'] = {
 			['Rune'] = 'Destructive Focus Rune: Spear of Ro/Destructive Focus Glyph: Spear of Ro',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Monk'] = {
 			['Rune'] = 'Rapid Focus Rune: Dragon Fang/Rapid Focus Glyph: Dragon Fang',
 			['Boots (Potent Prowess)'] = 'Fabled Dwarven Work Boots',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Necromancer'] = {
 			['Rune'] = 'Destructive Focus Rune: Chaos Plague/Destructive Focus Glyph: Chaos Plague',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Paladin'] = {
 			['Rune'] = 'Mending Focus Rune: Light of Piety/Mending Focus Glyph: Light of Piety',
@@ -532,6 +560,7 @@ return {
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Hammer (DA)'] = 'Fabled Torklar\'s Battle Hammer',
 			['Ornament'] = 'Fabled Knight\'s Devotion Ornament',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Ranger'] = {
 			['Rune'] = 'Destructive Focus Rune: Scorched Earth/Destructive Focus Glyph: Scorched Earth',
@@ -539,12 +568,14 @@ return {
 			['Boots (Potent Prowess)'] = 'Fabled Dwarven Work Boots',
 			['Globe'] = 'Fabled Globe of Mist',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Rogue'] = {
 			['Rune'] = 'Rapid Focus Rune: Assault/Rapid Focus Glyph: Assault',
 			['Boots (Potent Prowess)'] = 'Fabled Dwarven Work Boots',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Shadow Knight'] = {
 			['Rune'] = 'Destructive Focus Rune: Touch of the Devourer/Destructive Focus Glyph: Touch of the Devourer',
@@ -553,22 +584,26 @@ return {
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Hammer (DA)'] = 'Fabled Torklar\'s Battle Hammer',
 			['Ornament'] = 'Fabled Knight\'s Devotion Ornament',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Shaman'] = {
 			['Rune'] = 'Destructive Focus Rune: Blood of Yoppa/Destructive Focus Glyph: Blood of Yoppa',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Warrior'] = {
 			['Rune'] = 'Rapid Focus Rune: Mock and Flaunt/Rapid Focus Glyph: Mock and Flaunt',
 			['Mantle (Unwavering Defense)'] = 'Fabled Bloodstained Mantle',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Wizard'] = {
 			['Rune'] = 'Destructive Focus Rune: Ether Flame/Destructive Focus Glyph: Ether Flame',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
+			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
 		},
 		['Template'] = {
 			['Bracelet (Boon of the Ancients)'] = 'Fabled Ivory Bracelet',
@@ -576,7 +611,7 @@ return {
 		['Main'] = {
 			['Slots'] = {
 				{Name='Augs', Slots={'Globe', 'Heart', 'Rune', 'Ornament'}},
-				{Name='Clickies', Slots={'Boots (Potent Prowess)', 'Bracelet (Boon of the Ancients)', 'Cap (Scribes Endurance)', 'Hammer (DA)', 'Mantle (Unwavering Defense)', 'Ring (Pestilence Bolt)'}},
+				{Name='Clickies', Slots={'Boots (Potent Prowess)', 'Bracelet (Boon of the Ancients)', 'Cap (Scribes Endurance)', 'Hammer (DA)', 'Mantle (Unwavering Defense)', 'Ring (Pestilence Bolt)','FabledBrew (Hops)',}},
 				{Name='Paper Tanks', Slots={'Arrow'}},
 			}
 		}
@@ -740,7 +775,7 @@ return {
 			['Neck'] = 'Advocate\'s Amethyst Lavalliere',
 			['Back'] = 'Gilded Cloak of Grandeur',
 			['Face'] = 'Eerie Veil of the Enigma',
-			['Secondary'] = 'Furtive Aegis of the Sanguine',
+			['Secondary'] = 'Furtive Aegis of the Sanguine/24142',
 			['Ranged'] = 'Lantern of the Ruined Lands',
 			['RangedAug'] = 'Bone Chips',
 			['Aug1'] = 'Hideous Hex of Benevolent Efficiency',
@@ -1059,7 +1094,7 @@ return {
 			['Ear2'] = 'Aristocrat\'s Opulent Adornment',
 			['Finger1'] = 'Circlet of Convalescence',
 			['Finger2'] = 'Luminary\'s Lavish Loop',
-			['Secondary'] = 'Furtive Aegis of the Sanguine',
+			['Secondary'] = 'Furtive Aegis of the Sanguine/24142',
 			['Ranged'] = 'Lantern of the Ruined Lands',
 			['RangedAug'] = 'Bone Chips',
 			['Aug1'] = 'Hideous Hex of Benevolent Efficiency',
@@ -2975,21 +3010,29 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Vie',
 			['Food'] = 'Sleek Spring Roll Sampler',
 			['Drink'] = 'Darting Dragonroot Daiquiri',
+			['Tacvi Clicky'] = 'Weighted Hammer of Conviction',
+			['Veeshan Clicky'] = 'Aged Shissar Apothic Staff',
 		},
 		['Druid'] = {
 			['ImbuedRune'] = 'Imbued Rune of the Immolating Sun',
 			['Food'] = 'Sleek Spring Roll Sampler',
 			['Drink'] = 'Darting Dragonroot Daiquiri',
+			['Tacvi Clicky'] = 'Kelp-Covered Hammer',
+			['Veeshan Clicky'] = 'Aged Dragon Spine Staff',
 		},
 		['Enchanter'] = {
 			['ImbuedRune'] = 'Imbued Rune of Tashan\'s Echo',
 			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
+			['Tacvi Clicky'] = 'Hammer of Delusions',
+			['Veeshan Clicky'] = 'Aged Shissar Focus Staff',
 		},
 		['Magician'] = {
 			['ImbuedRune'] = 'Imbued Rune of Jerikor\'s Renewal',
 			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
+			['Tacvi Clicky'] = 'Dagger of Evil Summons',
+			['Veeshan Clicky'] = 'Aged Sarnak Channeler Staff',
 		},
 		['Monk'] = {
 			['ImbuedRune'] = 'Imbued Rune of Dragon Fang',
@@ -3001,6 +3044,8 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Dark Salve',
 			['Food'] = 'Sleek Spring Roll Sampler',
 			['Drink'] = 'Darting Dragonroot Daiquiri',
+			['Tacvi Clicky'] = 'Dagger of Death',
+			['Veeshan Clicky'] = 'Aged Shissar Deathspeaker Staff',
 		},
 		['Paladin'] = {
 			['ImbuedRune'] = 'Imbued Rune of Piety',
@@ -3029,6 +3074,8 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of the Panther',
 			['Food'] = 'Sleek Spring Roll Sampler',
 			['Drink'] = 'Darting Dragonroot Daiquiri',
+			['Tacvi Clicky'] = 'Zun\'Muram\'s Spear of Doom',
+			['Veeshan Clicky'] = 'Aged Hammer of the Dragonborn',
 		},
 		['Warrior'] = {
 			['ImbuedRune'] = 'Imbued Rune of Brutal Onslaught',
@@ -3040,6 +3087,8 @@ return {
 			['ImbuedRune'] = 'Imbued Rune of Mana Weave',
 			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
+			['Tacvi Clicky'] = 'Scepter of Incantations',
+			['Veeshan Clicky'] = 'Aged Shissar Elementalist\'s Staff',
 		},
 		['Template'] = {
 			['FabledBrew'] = 'Fabled Blackout Brew',
@@ -3061,7 +3110,7 @@ return {
 			['Slots'] = {
 				{Name='Augs', Slots={'Eyes','Tongue','Idol','Oculus','Horseshoe','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
-				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm'}},
+				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm','Tacvi Clicky','Veeshan Clicky'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}
 			}
 		}
