@@ -500,6 +500,7 @@ return {
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Berserker'] = {
 			['Rune'] = 'Rapid Focus Rune: Destroyer\'s Volley/Rapid Focus Glyph: Destroyer\'s Volley',
@@ -507,6 +508,7 @@ return {
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Beastlord'] = {
 			['Rune'] = 'Destructive Focus Rune: Reptilian Venom/Destructive Focus Glyph: Reptilian Venom',
@@ -514,6 +516,7 @@ return {
 			['Globe'] = 'Fabled Globe of Mist',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Cleric'] = {
 			['Rune'] = 'Enduring Focus Rune: Pious Elixir of Divinity/Enduring Focus Glyph: Pious Elixir of Divinity',
@@ -521,24 +524,28 @@ return {
 			['Globe'] = 'Fabled Globe of Mist',
 			['Hammer (DA)'] = 'Fabled Torklar\'s Battle Hammer',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Druid'] = {
 			['Rune'] = 'Destructive Focus Rune: Wasp Swarm/Destructive Focus Glyph: Wasp Swarm',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Enchanter'] = {
 			['Rune'] = 'Destructive Focus Rune: Mind Shatter/Destructive Focus Glyph: Mind Shatter',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Magician'] = {
 			['Rune'] = 'Destructive Focus Rune: Spear of Ro/Destructive Focus Glyph: Spear of Ro',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Monk'] = {
 			['Rune'] = 'Rapid Focus Rune: Dragon Fang/Rapid Focus Glyph: Dragon Fang',
@@ -546,12 +553,14 @@ return {
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Necromancer'] = {
 			['Rune'] = 'Destructive Focus Rune: Chaos Plague/Destructive Focus Glyph: Chaos Plague',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Paladin'] = {
 			['Rune'] = 'Mending Focus Rune: Light of Piety/Mending Focus Glyph: Light of Piety',
@@ -561,6 +570,7 @@ return {
 			['Hammer (DA)'] = 'Fabled Torklar\'s Battle Hammer',
 			['Ornament'] = 'Fabled Knight\'s Devotion Ornament',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Ranger'] = {
 			['Rune'] = 'Destructive Focus Rune: Scorched Earth/Destructive Focus Glyph: Scorched Earth',
@@ -569,6 +579,7 @@ return {
 			['Globe'] = 'Fabled Globe of Mist',
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Rogue'] = {
 			['Rune'] = 'Rapid Focus Rune: Assault/Rapid Focus Glyph: Assault',
@@ -576,6 +587,7 @@ return {
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Shadow Knight'] = {
 			['Rune'] = 'Destructive Focus Rune: Touch of the Devourer/Destructive Focus Glyph: Touch of the Devourer',
@@ -585,12 +597,14 @@ return {
 			['Hammer (DA)'] = 'Fabled Torklar\'s Battle Hammer',
 			['Ornament'] = 'Fabled Knight\'s Devotion Ornament',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Shaman'] = {
 			['Rune'] = 'Destructive Focus Rune: Blood of Yoppa/Destructive Focus Glyph: Blood of Yoppa',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Warrior'] = {
 			['Rune'] = 'Rapid Focus Rune: Mock and Flaunt/Rapid Focus Glyph: Mock and Flaunt',
@@ -598,12 +612,14 @@ return {
 			['Ring (Pestilence Bolt)'] = 'Fabled Jagged Band',
 			['Heart'] = 'Fabled Ghoul\'s Heart',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Wizard'] = {
 			['Rune'] = 'Destructive Focus Rune: Ether Flame/Destructive Focus Glyph: Ether Flame',
 			['Cap (Scribes Endurance)'] = 'Fabled Savant\'s Cap',
 			['Globe'] = 'Fabled Globe of Mist',
 			['FabledBrew (Hops)'] = 'Fabled Blackout Brew',
+			['Shield for Radix'] = 'Ancient Shield of Corrupted Tranquility/150402',
 		},
 		['Template'] = {
 			['Bracelet (Boon of the Ancients)'] = 'Fabled Ivory Bracelet',
@@ -611,7 +627,7 @@ return {
 		['Main'] = {
 			['Slots'] = {
 				{Name='Augs', Slots={'Globe', 'Heart', 'Rune', 'Ornament'}},
-				{Name='Clickies', Slots={'Boots (Potent Prowess)', 'Bracelet (Boon of the Ancients)', 'Cap (Scribes Endurance)', 'Hammer (DA)', 'Mantle (Unwavering Defense)', 'Ring (Pestilence Bolt)','FabledBrew (Hops)',}},
+				{Name='Clickies', Slots={'Boots (Potent Prowess)', 'Bracelet (Boon of the Ancients)', 'Cap (Scribes Endurance)', 'Hammer (DA)', 'Mantle (Unwavering Defense)', 'Ring (Pestilence Bolt)','FabledBrew (Hops)','Shield for Radix',}},
 				{Name='Paper Tanks', Slots={'Arrow'}},
 			}
 		}
@@ -3105,10 +3121,11 @@ return {
 			['Horseshoe'] = '9 Spheres of Ascension',
 			['Tongue'] = '9 Realms of Transition',
 			['Eyes'] = '9 Eyes of the Ghost',
+			['Keepsakes Instance'] = 'Symbol of Uhl\'Zaroth',
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs', Slots={'Eyes','Tongue','Idol','Oculus','Horseshoe','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
+				{Name='Augs', Slots={'Eyes','Tongue','Idol','Oculus','Horseshoe','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer','Keepsakes Instance'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm','Tacvi Clicky','Veeshan Clicky'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}
