@@ -653,7 +653,6 @@ return {
 			['Face'] = 'Bandana of Brazen Banditry',
 			['Waist'] = 'Shabby Crimson Sash',
 			['Secondary'] = 'Shimmer of Strife',
-			['MainHand'] = 'Grim Silhouette',
 			['Ranged'] = 'Lightstone of the Ruined Lands',
 			['RangedAug'] = 'Rat Ears',
 			['Aug1'] = 'Hideous Hex of Benevolent Extension',
@@ -2239,6 +2238,7 @@ return {
 			['Corundum Infused Granite'] = 'Corundum Infused Granite',
 			['Lance of the Legionnaire'] = 'Lance of the Legionnaire',
 			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
+			['Void Rune of Sacrifice'] = 'Void Rune of Sacrifice',
 		},
 		['Ranger'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2315,6 +2315,7 @@ return {
 			['Corundum Infused Granite'] = 'Corundum Infused Granite',
 			['Lance of the Legionnaire'] = 'Lance of the Legionnaire',
 			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
+			['Void Rune of Sacrifice'] = 'Void Rune of Sacrifice',
 		},
 		['Shaman'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2362,6 +2363,7 @@ return {
 			['Bludgeon of the Brute'] = 'Bludgeon of the Brute',
 			['Mallet of the Marauder'] = 'Mallet of the Marauder',
 			['Shrunken Gnoll Head'] = 'Shrunken Gnoll Head',
+			['Void Rune of Sacrifice'] = 'Void Rune of Sacrifice',
 		},
 		['Wizard'] = {
 			['Rallosian Power Gem'] = 'Rallosian Power Gem',
@@ -2402,7 +2404,7 @@ return {
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs/Items', Slots={'Ancient Gnawbone','Asp\'s Fang','Authentic Treasure Map','Bludgeon of the Brute','Brilliant Geode','Corrupted Netherstone','Corundum Infused Granite','Creepy Bone Chips','Deep Emerald Stone','Experimental Device','Hardened Bone Shard','Honed Geode Cluster','Imbued Feather','Lance of the Legionnaire','Lucent Crystal','Luminescent Geode Cluster','Malevolent Effigy','Mallet of the Marauder','Radiant Geode','Rallosian Power Gem','Resilient Sphere','Shard of Phosphorescent Power','Shard of True Power','Shrunken Gnoll Head','Staff of the Subjugator','Stone of Greatness','Vapor of Vitality',}},
+				{Name='Augs/Items', Slots={'Ancient Gnawbone','Asp\'s Fang','Authentic Treasure Map','Bludgeon of the Brute','Brilliant Geode','Corrupted Netherstone','Corundum Infused Granite','Creepy Bone Chips','Deep Emerald Stone','Experimental Device','Hardened Bone Shard','Honed Geode Cluster','Imbued Feather','Lance of the Legionnaire','Lucent Crystal','Luminescent Geode Cluster','Malevolent Effigy','Mallet of the Marauder','Radiant Geode','Rallosian Power Gem','Resilient Sphere','Shard of Phosphorescent Power','Shard of True Power','Shrunken Gnoll Head','Staff of the Subjugator','Stone of Greatness','Vapor of Vitality','Void Rune of Sacrifice',}},
 			}
 		}
 	},
