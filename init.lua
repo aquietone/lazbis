@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta          = {version = '3.1.7', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta          = {version = '3.1.8', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq            = require('mq')
 local ImGui         = require('ImGui')
 local bisConfig     = require('bis')
@@ -725,7 +725,7 @@ local function bisGUI()
 				if ImGui.BeginTabItem('Gear') then
 					local origSelectedItemList = selectedItemList
 					ImGui.PushItemWidth(150)
-					ImGui.SetNextWindowSize(150, 285)
+					ImGui.SetNextWindowSize(150, 350)
 					if ImGui.BeginCombo('Item List', selectedItemList.name) then
 						for _, group in ipairs(bisConfig.Groups) do
 							ImGui.TextColored(1, 1, 0, 1, group)

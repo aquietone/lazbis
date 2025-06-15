@@ -2527,16 +2527,13 @@ return {
 			['IncarnateEvasion'] = 'Incarnate Umbra of Evasion/151032',
 			['IncarnateFerocity'] = 'Incarnate Umbra of Ferocity/151033',
 			['TranquilSoul'] = 'The Tranquil Soul/17712',
-			['OtherworldlySoul'] = 'Otherworldly Soul',
 			['Tongue'] = 'Tongue of Unspoken Sins/150979',
-			['BellikosDoll'] = 'Living Bellikos Doll - Tranquility',
 		},
 		['Main'] = {
 			['Slots'] = {
 				{Name='Arcane', Slots={'ArcaneDestruction','ArcaneMending','ArcanePersistence','ArcaneSuffering'}},
 				{Name='Incarnate', Slots={'IncarnateCleaving','IncarnateDeflection','IncarnateEvasion','IncarnateFerocity'}},
-				{Name='Kithicor', Slots={'BellikosClaws','BellikosFang','BellikosEye','BellikosTear','BellikosDoll'}},
-				{Name='Other', Slots={'TranquilSoul','OtherworldlySoul','Tongue','FrozenOre','Shattered Gnoll Slayer','Tarnished Skeleton Key','Graverobber\'s Icon','Battered Smuggler\'s Barrel'}},
+				{Name='Other', Slots={'TranquilSoul','Tongue','FrozenOre','Shattered Gnoll Slayer','Tarnished Skeleton Key','Graverobber\'s Icon','Battered Smuggler\'s Barrel'}},
 				{Name='Clickies', Slots={'EyeMight','EyeComprehension','Crystalized','Minion\'s'}}
 			}
 		}
@@ -3010,24 +3007,29 @@ return {
 	},
 	['questitems'] = {
 		['Bard'] = {
+			['BellikosClaws'] = 'Splintered Bellikos Claws',
 			['ImbuedRune'] = 'Imbued Rune of Echoes',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
 			['Idol'] = '9 Paths of Despair',
 		},
 		['Berserker'] = {
+			['BellikosFang'] = 'Fragmented Bellikos Fang',
 			['ImbuedRune'] = 'Imbued Rune of Overpowering Frenzy',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
 			['Idol'] = '9 Paths of Despair',
 		},
 		['Beastlord'] = {
+			['BellikosClaws'] = 'Splintered Bellikos Claws',
 			['ImbuedRune'] = 'Imbued Rune of Mikkily\'s Healing',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
 			['Idol'] = '9 Paths of Despair',
 		},
 		['Cleric'] = {
+			['BellikosEye'] = 'Obsidian Bellikos Eye',
+			['BellikosFang'] = 'Fragmented Bellikos Fang',
 			['ImbuedRune'] = 'Imbued Rune of Vie',
 			['Food'] = 'Sleek Spring Roll Sampler',
 			['Drink'] = 'Darting Dragonroot Daiquiri',
@@ -3035,6 +3037,7 @@ return {
 			['Veeshan Clicky'] = 'Aged Shissar Apothic Staff',
 		},
 		['Druid'] = {
+			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['ImbuedRune'] = 'Imbued Rune of the Immolating Sun',
 			['Food'] = 'Sleek Spring Roll Sampler',
 			['Drink'] = 'Darting Dragonroot Daiquiri',
@@ -3042,6 +3045,7 @@ return {
 			['Veeshan Clicky'] = 'Aged Dragon Spine Staff',
 		},
 		['Enchanter'] = {
+			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['ImbuedRune'] = 'Imbued Rune of Tashan\'s Echo',
 			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
@@ -3049,6 +3053,7 @@ return {
 			['Veeshan Clicky'] = 'Aged Shissar Focus Staff',
 		},
 		['Magician'] = {
+			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['ImbuedRune'] = 'Imbued Rune of Jerikor\'s Renewal',
 			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
@@ -3056,12 +3061,15 @@ return {
 			['Veeshan Clicky'] = 'Aged Sarnak Channeler Staff',
 		},
 		['Monk'] = {
+			['BellikosClaws'] = 'Splintered Bellikos Claws',
+			['BellikosFang'] = 'Fragmented Bellikos Fang',
 			['ImbuedRune'] = 'Imbued Rune of Dragon Fang',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
 			['Idol'] = '9 Paths of Despair',
 		},
 		['Necromancer'] = {
+			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['ImbuedRune'] = 'Imbued Rune of Dark Salve',
 			['Food'] = 'Sleek Spring Roll Sampler',
 			['Drink'] = 'Darting Dragonroot Daiquiri',
@@ -3069,29 +3077,40 @@ return {
 			['Veeshan Clicky'] = 'Aged Shissar Deathspeaker Staff',
 		},
 		['Paladin'] = {
+			['BellikosClaws'] = 'Splintered Bellikos Claws',
+			['BellikosTear'] = 'Hardened Tear of the Bellikos',
+			['BellikosFang'] = 'Fragmented Bellikos Fang',
 			['ImbuedRune'] = 'Imbued Rune of Piety',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
 			['Idol'] = '9 Paths of Despair',
 		},
 		['Ranger'] = {
+			['BellikosClaws'] = 'Splintered Bellikos Claws',
+			['BellikosEye'] = 'Obsidian Bellikos Eye',
+			['BellikosFang'] = 'Fragmented Bellikos Fang',
 			['ImbuedRune'] = 'Imbued Rune of Jolting Snapkicks',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
 		},
 		['Rogue'] = {
+			['BellikosClaws'] = 'Splintered Bellikos Claws',
 			['ImbuedRune'] = 'Imbued Rune of Assault',
 			['Food'] = 'Hunter\'s Meat and Taters',
 			['Drink'] = 'Stalker\'s Spirit Slush',
 			['Idol'] = '9 Paths of Despair',
 		},
 		['Shadow Knight'] = {
+			['BellikosClaws'] = 'Splintered Bellikos Claws',
+			['BellikosTear'] = 'Hardened Tear of the Bellikos',
+			['BellikosFang'] = 'Fragmented Bellikos Fang',
 			['ImbuedRune'] = 'Imbued Rune of Agony and Hate',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
 			['Idol'] = '9 Paths of Despair',
 		},
 		['Shaman'] = {
+			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['ImbuedRune'] = 'Imbued Rune of the Panther',
 			['Food'] = 'Sleek Spring Roll Sampler',
 			['Drink'] = 'Darting Dragonroot Daiquiri',
@@ -3099,12 +3118,16 @@ return {
 			['Veeshan Clicky'] = 'Aged Hammer of the Dragonborn',
 		},
 		['Warrior'] = {
+			['BellikosClaws'] = 'Splintered Bellikos Claws',
+			['BellikosTear'] = 'Hardened Tear of the Bellikos',
+			['BellikosFang'] = 'Fragmented Bellikos Fang',
 			['ImbuedRune'] = 'Imbued Rune of Brutal Onslaught',
 			['Food'] = 'Armored Starfish Skewers',
 			['Drink'] = 'Bamboo Defender Margarita',
 			['Idol'] = '9 Paths of Despair',
 		},
 		['Wizard'] = {
+			['BellikosEye'] = 'Obsidian Bellikos Eye',
 			['ImbuedRune'] = 'Imbued Rune of Mana Weave',
 			['Food'] = 'Sorcerer\'s Spice Chicken',
 			['Drink'] = 'Arcane Ambrosia Daiquiri',
@@ -3126,9 +3149,9 @@ return {
 			['Horseshoe'] = '9 Spheres of Ascension',
 			['Tongue'] = '9 Realms of Transition',
 			['Eyes'] = '9 Eyes of the Ghost',
-			['Keepsakes Instance'] = 'Symbol of Uhl\'Zaroth',
-			['Howling Stones Instance'] = 'Woven Fetish of the Trine Sentinel',
-			['Upgraded Lucky Copper/Silver'] = 'Tarnished Coin of the Triad Oath/Blackened Tithe of the Triumvirate',
+			['Symbol'] = 'Symbol of Uhl\'Zaroth',
+			['Lucky Grass Trinket'] = 'Woven Fetish of the Trine Sentinel',
+			['Lucky Copper/Silver'] = 'Tarnished Coin of the Triad Oath/Blackened Tithe of the Triumvirate',
 			['Destruction'] = 'Hexed Umbra of Destruction',
 			['Mending'] = 'Hexed Umbra of Mending',
 			['Persistence'] = 'Hexed Umbra of Persistence',
@@ -3137,12 +3160,17 @@ return {
 			['Deflection'] = 'Hexed Umbra of Deflection',
 			['Evasion'] = 'Hexed Umbra of Evasion',
 			['Ferocity'] = 'Hexed Umbra of Ferocity',
+			['OtherworldlySoul'] = 'Otherworldly Soul',
+			['BellikosDoll'] = 'Living Bellikos Doll - Tranquility',
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs', Slots={'Eyes','Tongue','Idol','Oculus','Horseshoe','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer','Keepsakes Instance','Howling Stones Instance','Upgraded Lucky Copper/Silver'}},
-				{Name='Upgraded Umbras', Slots={'Destruction','Mending','Persistence','Suffering','Cleaving','Deflection','Evasion','Ferocity'}},
-				{Name='Gear', Slots={'EOC','Radix'}},
+				{Name='Power of 3 (HS)', Slots={'Lucky Grass Trinket','Lucky Copper/Silver'}},
+				{Name='Power of 6 (Keepsakes)', Slots={'Symbol','Destruction','Mending','Persistence','Suffering','Cleaving','Deflection','Evasion','Ferocity'}},
+				{Name='Power of 9 (Clue)', Slots={'Eyes', 'Tongue','Idol','Oculus','Horseshoe'}},
+				{Name='Kithicor', Slots={'BellikosClaws','BellikosFang','BellikosEye','BellikosTear','BellikosDoll'}},
+				{Name='Powersource', Slots={'EOC','Radix','OtherworldlySoul'}},
+				{Name='Augs', Slots={'BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm','Tacvi Clicky','Veeshan Clicky'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}
 			}
