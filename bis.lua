@@ -1251,6 +1251,7 @@ return {
 			['Frenzied Ghoul (GukBottom)'] = 'Little Finger Metacarpal/33175/33170/33171',
 			['Tier 5 Complete'] = 'Jonas Dagmire\'s Skeletal Little Finger/33170/33171',
 			['Middle Finger (Mayong)'] = 'Jonas Dagmire\'s Skeletal Middle Finger/33171',
+			['Tier 6 Complete'] = 'Jonas Dagmire\'s Skeletal Hand',
 		},
 		['Main'] = {
 			['Slots'] = {
@@ -1259,7 +1260,7 @@ return {
 				{Name='Tier 3', Slots={'Tier 3 Complete','Rosch Var\'L\'Vlor (SK)','Lord Gimblox (SolA)','Skeleton Lrodd (Befallen)','Spectres (Oasis)'}},
 				{Name='Tier 4', Slots={'Tier 4 Complete','Gorillas (CT)','Ambassador Dvinn (CB)','Froglok Shin Lord (GukTop)','Death Beetles (Unrest)'}},
 				{Name='Tier 5', Slots={'Tier 5 Complete','Ground Spawn (Mistmoore)','Slizik The Mighty (Hole)','Ground Spawn (SplitPaw)','Frenzied Ghoul (GukBottom)'}},
-				{Name='Final', Slots={'Middle Finger (Mayong)'}},
+				{Name='Tier 6 (Final)', Slots={'Tier 6 Complete','Middle Finger (Mayong)',}},
 			},
 		},
 		['ShowBaseItemNames'] = {['ALL']=1},
@@ -1569,6 +1570,7 @@ return {
 			['Ageless Enmity'] = 'Rancorous Mantle of Ill Omen',
 			['Rally'] = 'Vigilant Tu\'Nakk Parryblade',
 			['Warlord\'s Bravery'] = 'Obstinate Kunzar Deathguard Shield',
+			['Feral Swipe'] = 'Cunning Razor-edged Claw',
 		},
 		['Wizard'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40854',
@@ -2667,8 +2669,8 @@ return {
 			['Precision(Accuracy)'] = 'Discordian Alloy of Precision',
 			['Rapidity(Attack)'] = 'Discordian Alloy of Rapidity',
 			['Annihilation(Spell Damage)'] = 'Focus Shard of Aggregate Annihilation',
-			['Lucky Copper/Silver'] = 'Lucky Copper/Lucky Silver',
-			['Lucky Grass'] = 'Lucky Grass Trinket',
+			['Lucky Copper/Silver'] = 'Lucky Copper/Lucky Silver/151042/151043',
+			['Lucky Grass'] = 'Lucky Grass Trinket/151044',
 			['Oculous'] = 'Illuminious Oculus/150980',
 			['Mount'] = 'Whirligig Flyer Control Device/Ornate Flying Carpet/39635',
 			['DarkArachnids'] = 'Visage of the Dark Arachnids',
@@ -3125,6 +3127,8 @@ return {
 			['Tongue'] = '9 Realms of Transition',
 			['Eyes'] = '9 Eyes of the Ghost',
 			['Keepsakes Instance'] = 'Symbol of Uhl\'Zaroth',
+			['Howling Stones Instance'] = 'Woven Fetish of the Trine Sentinel',
+			['Upgraded Lucky Copper/Silver'] = 'Tarnished Coin of the Triad Oath/Blackened Tithe of the Triumvirate',
 			['Destruction'] = 'Hexed Umbra of Destruction',
 			['Mending'] = 'Hexed Umbra of Mending',
 			['Persistence'] = 'Hexed Umbra of Persistence',
@@ -3136,7 +3140,7 @@ return {
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Augs', Slots={'Eyes','Tongue','Idol','Oculus','Horseshoe','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer','Keepsakes Instance'}},
+				{Name='Augs', Slots={'Eyes','Tongue','Idol','Oculus','Horseshoe','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer','Keepsakes Instance','Howling Stones Instance','Upgraded Lucky Copper/Silver'}},
 				{Name='Upgraded Umbras', Slots={'Destruction','Mending','Persistance','Suffering','Cleaving','Deflection','Evasion','Ferocity'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm','Tacvi Clicky','Veeshan Clicky'}},
