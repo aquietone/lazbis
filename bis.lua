@@ -3141,7 +3141,7 @@ return {
 		['Main'] = {
 			['Slots'] = {
 				{Name='Augs', Slots={'Eyes','Tongue','Idol','Oculus','Horseshoe','BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer','Keepsakes Instance','Howling Stones Instance','Upgraded Lucky Copper/Silver'}},
-				{Name='Upgraded Umbras', Slots={'Destruction','Mending','Persistance','Suffering','Cleaving','Deflection','Evasion','Ferocity'}},
+				{Name='Upgraded Umbras', Slots={'Destruction','Mending','Persistence','Suffering','Cleaving','Deflection','Evasion','Ferocity'}},
 				{Name='Gear', Slots={'EOC','Radix'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm','Tacvi Clicky','Veeshan Clicky'}},
 				{Name='Food/Drink', Slots={'Food','Drink'}}
