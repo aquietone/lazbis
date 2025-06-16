@@ -70,6 +70,14 @@ local function split(str, char)
 	return string.gmatch(str, '[^' .. char .. ']+')
 end
 
+local function splitToTable(str, char)
+	local t = {}
+	for str in split(str, char) do
+		table.insert(t, str)
+	end
+	return t
+end
+
 local function addCharacter(name, class, offline, show, msg)
 	if not group[name] then
 		if debug then printf('Add character: Name=%s Class=%s Offline=%s Show=%s, Msg=%s', name, class, offline, show, msg) end
@@ -1114,23 +1122,28 @@ local function bisGUI()
 					hideOwnedSpells = ImGui.Checkbox('Missing Only', hideOwnedSpells)
 					ImGui.SameLine()
 					ImGui.TextColored(1, 0, 0, 1, '!!! This tab is under construction, spell data not populated yet !!!')
-					if ImGui.BeginTable('Spells', 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
+					if ImGui.BeginTable('Spells', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
 						ImGui.TableSetupScrollFreeze(0, 1)
 						ImGui.TableSetupColumn('Level', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, 1)
 						ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, 2)
+						ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, 3)
 						ImGui.TableHeadersRow()
 
 						ImGui.TableNextRow()
-						-- ImGui.TableNextColumn()
 						for _,level in ipairs({70,69,68,67,66}) do
 							local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
 							for _,spellName in ipairs(levelSpells) do
+								local spellDetails = splitToTable(spellName, '|')
+								spellName = spellDetails[1]
+								local spellLocation = spellDetails[2]
 								spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
 								if not hideOwnedSpells or spellData[spellName] == 0 then
 									ImGui.TableNextColumn()
 									ImGui.Text('%s', level)
 									ImGui.TableNextColumn()
 									ImGui.TextColored(spellData[spellName] == 0 and 1 or 0, spellData[spellName] ~= 0 and 1 or 0, 0, 1, '%s', spellName)
+									ImGui.TableNextColumn()
+									ImGui.Text('%s', spellLocation)
 								end
 							end
 						end
@@ -1385,6 +1398,15 @@ local function init(args)
 	mq.imgui.init('BISCheck', bisGUI)
 
 	mq.bind('/bis', bisCommand)
+
+	for _,level in ipairs({70,69,68,67,66}) do
+		local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
+		for _,spellName in ipairs(levelSpells) do
+			local spellDetails = splitToTable(spellName, '|')
+			spellName = spellDetails[1]
+			spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
+		end
+	end
 end
 
 init({...})
