@@ -59,11 +59,11 @@ return {
         [68] = {
             'Growl of the Beast|Researched or Muramite Rune',
             'Reptilian Venom|Random Drop',
-            'Spirit of Allandru|Researched or Muramite Rune',
+            'Spirit of Alladnu|Researched or Muramite Rune',
             'Spirit of Irionu|Researched or Muramite Rune',
         },
         [67] = {
-            'Focus of Allandru|Researched or Lesser Rune',
+            'Focus of Alladnu|Researched or Lesser Rune',
             'Muada\'s Mending|Researched or Lesser Rune',
             'Spiritual Vitality|Researched or Lesser Rune',
         },
@@ -441,7 +441,7 @@ return {
             'Hunter\'s Vigor|Researched or Muramite Rune',
         },
         [67] = {
-            'Guard of Earth|Researched or Lesser Rune',
+            'Guard of the Earth|Researched or Lesser Rune',
             'Locust Swarm|Researched or Lesser Rune',
             'Strength of the Hunter|Researched or Lesser Rune',
             'Sylvan Water|Researched or Lesser Rune',
