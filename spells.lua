@@ -1,7 +1,7 @@
 return {
     ['Bard'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -18,7 +18,7 @@ return {
     },
     ['Beastlord'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -35,7 +35,7 @@ return {
     },
     ['Berserker'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -52,7 +52,7 @@ return {
     },
     ['Cleric'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -69,7 +69,7 @@ return {
     },
     ['Druid'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -86,7 +86,7 @@ return {
     },
     ['Enchanter'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -154,7 +154,7 @@ return {
     },
     ['Monk'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -171,7 +171,7 @@ return {
     },
     ['Necromancer'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -188,7 +188,7 @@ return {
     },
     ['Paladin'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -205,7 +205,7 @@ return {
     },
     ['Ranger'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -281,7 +281,7 @@ return {
     },
     ['Shaman'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
@@ -298,10 +298,10 @@ return {
     },
     ['Warrior'] = {
         [70] = {
-            'Unyielding Attention',
+            'Unyielding Attention|HC',
             'Throat Pommel',
             'Third Wind',
-            'Shocking Defense Discipline',
+            'Shocking Defense Discipline|Research',
             'Flaunt',
             'Champion\'s Aura',
         },
@@ -321,7 +321,7 @@ return {
     },
     ['Wizard'] = {
         [70] = {
-            ''
+            
         },
         [69] = {
 
