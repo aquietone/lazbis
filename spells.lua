@@ -209,7 +209,7 @@ return {
             'Hastening of Salik|Researched or Glowing Rune',
             'Illusionist\'s Aura|Random Drop',
             'Mind Shatter|Random Drop',
-            'True Name|Researched or Glowing Rune',
+            'True Name|Random Drop',
             'Unified Alacrity|random Drop',
             'Voice of Clairvoyance|Researched or Glowing Rune',
         },
