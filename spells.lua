@@ -1,339 +1,651 @@
 return {
     ['Bard'] = {
         [70] = {
-            
+            "Ancient: Call of Power|Anguish Rune Turn In",
+            "Arcane Aria|HC Random Drop",
+            "Echoes of the Past|HC Random Drop",
+            "Verse of Veeshan|HC Random Drop",
+            "Voice of the Vampire|Researched or Glowing Rune",
+            "Vulka's Chant of Flame|Researched or Glowing Rune",
+            "Luvwen's Aria of Serenity|Researched or Glowing Rune",
         },
         [69] = {
-
+            "Chorus of Life|Researched or Greater Rune",
+            "Eriki's Psalm of Power|Researched or Greater Rune",
+            "Storm Blade|HC Random Drop",
+            "Dance of a Thousand Blades|HC Random Drop",
+            "Verse of Vesagran|Researched or Greater Rune",
         },
         [68] = {
-
+            "Creeping Dreams|HC Random Drop",
+            "Dirge of Metala|Researched or Muramite Rune",
+            "Vulka's Chant of Poison|Researched or Muramite Rune",
+            "War March of Muram|Researched or Muramite Rune",
+            "Yelhun's Mystic Call|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Angstlich's Wail of Panic|Researched or Lesser Rune",
+            "Cantana of Life|Researched or Lesser Rune",
+            "Luvwen's Lullaby|Researched or Lesser Rune",
+            "Vulka's Chant of Frost|Researched or Lesser Rune",
+            "Zuriki's Song of Shenanigans|Researched or Lesser Rune",
         },
         [66] = {
-
+            "Bellow of Chaos|Researched or Minor Rune",
+            "Luvwen's Aria of Serenity|Researched or Minor Rune",
+            "Vulka's Chant of DIsease|Researched or Minor Rune",
         },
     },
     ['Beastlord'] = {
         [70] = {
-            
+            "Ancient: Savage Ice|Anguish Rune Turn In",
+            "Ferocity of Irionu|Researched or Glowing Rune",
+            "Festering Malady|Researched or Glowing Rune",
+            "Rake|HC Random Drop",
+            "Sha's Legacy|Researched or Glowing Rune",
+            "Spirit of Oroshar|HC Random Drop",
+            "Spirit of Rashara|Researched or Glowing Rune",
+            "Spirit of Sha|HC Random Drop",
+            "Spiritual Rejuvenation|HC Random Drop",
         },
         [69] = {
-
+            "Empathic Fury|HC Random Drop",
+            "Feral Guard|Researched or Greater Rune",
+            "Feral Vigor|Researched or Greater Rune",
+            "Glacier Spear|Researched or Greater Rune",
+            "Growl of the Panther|HC Random Drop",
+            "Spiritual Ascendance|Researched or Greater Rune",
         },
         [68] = {
-
+            "Growl of the Beast|Researched or Muramite Rune",
+            "Reptilian Venom|HC Random Drop",
+            "Spirit of Allandru|Researched or Muramite Rune",
+            "Spirit of Irionu|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Focus of Allandru|Researched or Lesser Rune",
+            "Muada's Mending|Researched or Lesser Rune",
+            "Spiritual Vitality|Researched or Lesser Rune",
         },
         [66] = {
-
+            "Chimera Blood|Researched or Minor Rune",
+            "Healing of MIkkily|Researched or Minor Rune",
         },
     },
     ['Berserker'] = {
         [70] = {
-            
+            "Bewildering Scream|HC Random Drop",
+            "Bloodthirst|Researched",
+            "Third Wind|HC Random Drop",
+            "Vengeful Flurry Discipline|Researched or Glowing Rune",
         },
         [69] = {
-
+            "Baffling Strike|Researched or Greater Rune",
+            "Destroyer's Volley|HC Random Drop",
         },
         [68] = {
-
+            "Mind Strike|Researched or Muramite Rune",
+            "Unflinching Will|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Crippling Strike|Researched or Muramite Rune",
         },
         [66] = {
-
+            "Axe of the Destroyer|Researched or Minor Rune",
+            "Unpredictable Rage Discipline|Researched or Minor Rune",
         },
     },
     ['Cleric'] = {
         [70] = {
-            
+            "Ancient: Hallowed Light|Anguish Rune Turn In",
+            "Ancient: Pious Conscience|Anguish Rune Turn In",
+            "Armor of the Pious|Researched or Glowing Rune",
+            "Balikor's Mark|Researched or Glowing Rune",
+            "Desperate Renewal|HC Random Drop",
+            "Elixir of Divinity|HC Random Drop",
+            "Hand of Conviction|Researched or Glowing Rune",
+            "Placate|Researched or Glowing Rune",
+            "Puratus|HC Random Drop",
+            "Silent Dictation|Researched or Glowing Rune",
+            "Vigilant Condemnation|HC Random Drop",
         },
         [69] = {
-
+            "Aura of Devotion|Researched or Greater Rune",
+            "Calamity|Researched or Greater Rune",
+            "Chromastrike|Researched",
+            "Mark of the Blameless|Researched or Greater Rune",
+            "Ward of Retribution|HC Random Drop",
+            "Word of Vivification|Researched or Minor Rune",
+            "Yaulp VII|Researched or Minor Rune",
         },
         [68] = {
-
+            "Death's Regret|Researched",
+            "Deistic Howl|HC Random Drop",
+            "Desolate Undead|Researched or Muramite Rune",
+            "Hammer of Reproach|Researched or Muramite Rune",
+            "Pious Light|Researched or Minor Rune",
+            "Sound of Divinity|Researched or Minor Rune",
+            "Unswering Hammer of Retribution|Researched or Minor Rune",
         },
         [67] = {
-
+            "Blessing of Devotion|Researched or Lesser Rune",
+            "Conviction|Researched or Lesser Rune",
+            "Panoply of Vie|Researched or Lesser Rune",
+            "Pious Elixir|Researched or Minor Rune",
+            "Reproach|Researched or Minor Rune",
+            "Sermon of Reproach|Researched or Minor Rune",
         },
         [66] = {
-
+            "Confidence|Researched or Minor Rune",
+            "Pious Remedy|Researched or Minor Rune",
+            "Revulsion of Death|Researched or Minor Rune",
+            "Shock of Wonder|Researched or Minor Rune",
+            "Sun Cloak|Researched or Minor Rune",
+            "Symbol of Balikor|Researched or Minor Rune",
+            "Ward of Valiance|Researched or Minor Rune",
         },
     },
     ['Druid'] = {
         [70] = {
-            
+            "Ancient: Chlorobon|Anguish Rune Turn In",
+            "Ancient: Glacier Frost|Anguish Rune Turn In",
+            "Barkspur|HC Random Drop",
+            "Blessing of Steeloak|Researched or Glowing Rune",
+            "Dawnstrike|HC Random Drop",
+            "Glitterfrost|Researched or Glowing Rune",
+            "Hungry Vines|Researched or Glowing Rune",
+            "Legacy of Nettles|Researched or Glowing Rune",
+            "Mask of the Wild|Researched or Glowing Rune",
+            "Moonshadow|HC Random Drop",
+            "Nature Walker's Behest|HC Random Drop",
+            "Nature's Beckon|Researched or Glowing Rune",
+            "Sunburst Blessing|HC Random Drop",
+            "Word of Reconstitution|HC Random Drop",
         },
         [69] = {
-
+            "Blessing of Oak|Researched or Greater Rune",
+            "Oaken Guard|Researched or Greater Rune",
+            "Serpent Vines|HC Random Drop",
+            "Solstice Strike|Researched or Greater Rune",
+            "Spore Spiral|HC Random Drop",
+            "Vengeance of the Sun|Researched or Greater Rune",
         },
         [68] = {
-
+            "Chlorotrope|Researched or Muramite Rune",
+            "Cloak of Nature|Researched or Muramite Rune",
+            "Desolate Summoned|Researched or Muramite Rune",
+            "Nettlecoat|Researched or Muramite Rune",
+            "Skin of the Reptile|HC Random Drop",
+            "Steeloak Skin|Researched or Muramite Rune",
+            "Wasp Swarm|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Circle of Sanctum|HC Random Drop",
+            "Glacier Breath|Researched or Lesser Rune",
+            "Immolation of the Sun|Researched or Lesser Rune",
+            "Lion's Strength|Researched or Lesser Rune",
+            "Nature's Serenity|Researched or Lesser Rune",
+            "Nettle Shield|Researched or Lesser Rune",
+            "Sun's Corona|Researched or Lesser Rune",
+            "Zephyr: Slaughter|Quest",
         },
         [66] = {
-
+            "Circle of Slaughter|HC Random Drop",
+            "Earth Shiver|Researched or Minor Rune",
+            "Instinctual Terror|Researched or Minor Rune",
+            "Oaken Vigor|Researched or Minor Rune",
+            "Stormwatch|Researched or Minor Rune",
+            "Tempest Wind|Researched or Minor Rune",
         },
     },
     ['Enchanter'] = {
         [70] = {
-            
+            "Abashi's Disempowerment|HC Random Drop",
+            "Ancient: Neurosis|Anguish Rune Turn In",
+            "Ancient: Voice of Muram|Anguish Rune Turn In",
+            "Chromoburst|HC Random Drop",
+            "Circle of Alendar|Researched or Glowing Rune",
+            "Echo of Tashan|HC Random Drop",
+            "Focus Ornate Spellcaster's Essence|Researched",
+            "Hastening of Salik|Researched or Glowing Rune",
+            "Illusionist's Aura|HC Random Drop",
+            "Mind Shatter|HC Random Drop",
+            "True Name|Researched or Glowing Rune",
+            "Unified Alacrity|HC Random Drop",
+            "Voice of Clairvoyance|Researched or Glowing Rune",
         },
         [69] = {
-
+            "Arcane Noose|Researched or Greater Rune",
+            "Color Snap|Researched or Greater Rune",
+            "Colored Chaos|HC Random Drop",
+            "Desolate Deeds|Researched or Greater Rune",
+            "Euphoria|Researched or Greater Rune",
+            "Focus Mass Elaborate Spellcaster's Essence|Researched",
+            "Mayhem|Researched or Greater Rune",
+            "Rune of Rikkukin|HC Random Drop",
+            "Wake of Felicity|Researched or Greater Rune",
         },
         [68] = {
-
+            "Circle of Dreams|Researched or Muramite Rune",
+            "Clairvoyance|Researched or Muramite Rune",
+            "Compel|Researched or Muramite Rune",
+            "Echoing Madness|HC Random Drop",
+            "Psychosis|Researched or Muramite Rune",
+            "Wall of Alendar|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Anxiety Attack|Researched or Lesser Rune",
+            "Boon of the Legion|HC Random Drop",
+            "Felicity|Researched or Lesser Rune",
+            "Placate|Researched or Lesser Rune",
+            "Rune of Salik|Researched or Lesser Rune",
+            "Speed of Salik|Researched or Lesser Rune",
         },
         [66] = {
-
+            "Ethereal Rune|Researched or Minor Rune",
+            "Mystic Shield|Researched or Minor Rune",
+            "Salik's Animation|Researched or Minor Rune",
+            "Suppression Field|Researched or Minor Rune",
+            "Synapsis Spasm|Researched or Minor Rune",
         },
     },
     ['Magician'] = {
         [70] = {
-            'Star Scream',
-            'Spear of Ro',
-            'Shock of Myriad Minions',
-            'Rathe\'s Strength',
-            'Raging Servant',
-            'Iceflame Guard',
-            'Grant Spectral Armaments',
-            'Grant Enibik\'s Heirlooms',
-            'Frantic Flames',
-            'Elemental Simulacrum',
-            'Circle of Fireskin',
-            'Child of Earth',
-            'Call of the Heroes',
-            'Ancient: Veil of Pyrilonis',
-            'Ancient: Nova Strike',
+            "Ancient: Nova Strike|Anguish Rune Turn In",
+            "Ancient: Veil of Pyrilonis|Anguish Rune Turn In",
+            "Call of the Heroes|HC Random Drop",
+            "Child of Earth|Researched or Glowing Rune",
+            "Circle of Fireskin|Researched or Glowing Rune",
+            "Elemental Simulacrum|Researched or Glowing Rune",
+            "Focus Elaborate Spellcaster's Essence|PoK Library",
+            "Frantic Flames|HC Random Drop",
+            "Grant Enibik's Heirlooms|HC Random Drop",
+            "Grant Spectral Armaments|HC Random Drop",
+            "Iceflame Guard|HC Random Drop",
+            "Raging Servant|HC Random Drop",
+            "Rathe's Strength|HC Random Drop",
+            "Shock of Myriad Minions|Researched or Glowing Rune",
+            "Spear of Ro|HC Random Drop",
+            "Star Scream|Researched or Glowing Rune",
         },
         [69] = {
-            'Summon: Molten Orb',
-            'Renewal of Jerikor',
-            'Fickle Fire',
-            'Elemental Fury',
-            'Desolate Summoned',
-            'Burning Earth',
-            'Bulwark of Calliav',
+            "Bulwark of Calliav|Researched or Greater Rune",
+            "Burning Bladegusts|Researched or Greater Rune",
+            "Desolate Summoned|Researched or Greater Rune",
+            "Elemental Fury|Researched or Greater Rune",
+            "Fickle Fire|HC Random Drop",
+            "Focus Mass Intricate Spellcaster's Essence|PoK Library",
+            "Renewal of Jerikor|Researched or Greater Rune",
+            "Summon: Molten Orb|HC Random Drop",
         },
         [68] = {
-            'Summon Pouch of Jerikor',
-            'Pyrilen Skin',
-            'Phantom Shield',
-            'Child of Fire',
-            'Burning Aura',
-            'Blade Strike',
+            "Blade Strike|Researched or Muramite Rune",
+            "Burning Aura|HC Random Drop",
+            "Child of Fire|Researched or Muramite Rune",
+            "Phantom Shield|Researched or Muramite Rune",
+            "Pyrilen Skin|Researched or Muramite Rune",
+            "Summon Pouch of Jerikor|Researched or Muramite Rune",
         },
         [67] = {
-            'Summon Staff of the North Wind',
-            'Summon Sphere of Air',
-            'Summon Dagger of the Deep',
-            'Summon Crystal Belt',
-            'Rain of Jerikor',
-            'Child of Water',
+            "Child of Water|Researched or Lesser Rune",
+            "Rain of Jerikor|Researched or Lesser Rune",
+            "Summon Crystal Belt|Researched or Lesser Rune",
+            "Summon Dagger of the Deep|Researched or Lesser Rune",
+            "Summon Sphere of Air|Researched or Lesser Rune",
+            "Summon Staff of the North Wind|Researched or Lesser Rune",
         },
         [66] = {
-            'Summon Fireblade',
-            'Fireskin',
-            'Elemental Aura',
-            'Child of Wind',
-            'Bolt of Jerikor',
+            "Bolt of Jerikor|Researched or Minor Rune",
+            "Child of Wind|Researched or Minor Rune",
+            "Elemental Aura|Researched or Minor Rune",
+            "Fireskin|Researched or Minor Rune",
+            "Summon Calliav's Glowing Bauble|Researched or Minor Rune",
+            "Summon Calliav's Jeweled Bracelet|Researched or Minor Rune",
+            "Summon Calliav's Platinum Choker|Researched or Minor Rune",
+            "Summon Calliav's Runed Mantle|Researched or Minor Rune",
+            "Summon Calliav's Spiked Ring|Researched or Minor Rune",
+            "Summon Calliav's Steel Bracelet|Researched or Minor Rune",
+            "Summon Fireblade|Researched or Minor Rune",
         },
     },
     ['Monk'] = {
         [70] = {
-            
+            "Crystalpalm Discipline|HC Random Drop",
+            "Heel of Kai|HC Random Drop",
+            "Rapid Kick Discipline|Researched or Glowing Rune",
+            "Third Wind|HC Random Drop",
         },
         [69] = {
-
+            "Dragon Fang|HC Random Drop",
+            "Phantom Cry|Researched or Greater Rune",
         },
         [68] = {
-
+            "Counterforce Discipline|Researched or Muramite Rune",
         },
         [67] = {
 
         },
         [66] = {
-
+            "Dreamwalk Discipline|Researched or Minor Rune",
         },
     },
     ['Necromancer'] = {
         [70] = {
-            
+            "Ancient: Allure of Extinction|Anguish Rune Turn In",
+            "Ancient: Curse of Mori|Anguish Rune Turn In",
+            "Ancient: Touch of Orshilak|Anguish Rune Turn In",
+            "Chaos Venom|Researched or Glowing Rune",
+            "Dark Assassin|Researched or Glowing Rune",
+            "Dark Possession|Researched or Glowing Rune",
+            "Death Rune|HC Random Drop",
+            "Desolate Undead|Researched or Glowing Rune",
+            "Dread Pyre|HC Random Drop",
+            "Focus Elaborate Spellcaster's Essence|PoK Library",
+            "Grave Pact|HC Random Drop",
+            "Visceral Vexation|HC Random Drop",
+            "Word of Chaos|Researched or Glowing Rune",
         },
         [69] = {
-
+            "Bullwark of Calliav|Researched or Greater Rune",
+            "Dark Hold|Researched or Greater Rune",
+            "Dark Salve|Researched or Greater Rune",
+            "Dull Pain|Researched or Greater Rune",
+            "Focus Mass Intricate Spellcaster's Essence|PoK Library",
+            "Pyre of Mori|Researched or Greater Rune",
+            "Shadow Orb|HC Random Drop",
+            "Venom of Anguish|HC Random Drop",
         },
         [68] = {
-
+            "Call for Blood|HC Random Drop",
+            "Desecrating Darkness|Researched or Muramite Rune",
+            "Fang of Death|Researched or Muramite Rune",
+            "Scent of Midnight|Researched or Muramite Rune",
+            "Shadow of Death|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Dark Nightmare|Researched or Lesser Rune",
+            "Glyph of Darkness|Researched or Lesser Rune",
+            "Grip of Mori|Researched or Lesser Rune",
+            "Lost Soul|Researched or Lesser Rune",
+            "Soulspike|Researched or Lesser Rune",
+            "Unholy Howl|Researched or Lesser Rune",
         },
         [66] = {
-
+            "Acikin|Researched or Minor Rune",
+            "Chaos Plague|Researched or Minor Rune",
+            "Eidolon Howl|Researched or Minor Rune",
+            "Shadow Guard|Researched or Minor Rune",
         },
     },
     ['Paladin'] = {
         [70] = {
-            
+            "Affirmation|Researched or Glowing Rune",
+            "Ancient: Force of Jeron|Anguish Rune Turn In",
+            "Blessed Aura|HC Random Drop",
+            "Brell's Brawny Bulwark|Researched or Glowing Rune",
+            "Brell's Vibrant Barricade|HC Random Drop",
+            "Hallowforge Discipline|HC Random Drop",
+            "Justice of Marr|HC Random Drop",
+            "Rally|HC Random Drop",
+            "Rampart Discipline|HC Random Drop",
+            "Ward of Tunare|HC Random Drop",
+            "Wave of Piety|Researched or Glowing Rune",
         },
         [69] = {
-
+            "Armor of the Champion|Researched or Greater Rune",
+            "Bulwark of Piety|Researched or Greater Rune",
+            "Guard of Righteousness|HC Random Drop",
+            "Hand of Direction|Researched or Greater Rune",
+            "Pious Cleansing|Researched or Greater Rune",
         },
         [68] = {
-
+            "Jeron's Mark|Researched or Muramite Rune",
+            "Last Rites|Researched",
+            "Light of Piety|Researched or Muramite Rune",
+            "Pious Fury|Researched or Muramite Rune",
+            "Serene Command|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Crusader's Purity|Researched or Lesser Rune",
+            "Silvered Fury|Researched or Lesser Rune",
+            "Spurn Undead|Researched or Lesser Rune",
+            "Symbol of Jeron|Researched or Lesser Rune",
         },
         [66] = {
-
+            "Direction|Researched or Minor Rune",
+            "Force of Piety|Researched or Minor Rune",
+            "Touch of Piety|Researched or Minor Rune",
         },
     },
     ['Ranger'] = {
         [70] = {
-            
+            "Ancient: North Wind|Anguish Rune Turn In",
+            "Call of Lightening|Researched or Glowing Rune",
+            "Elddar's Grasp|HC Random Drop",
+            "Eyes of the Hawk|HC Random Drop",
+            "Onyx Skin|Researched or Glowing Rune",
+            "Scorched Earth|HC Random Drop",
+            "Ward of the Hunter|Researched or Glowing Rune",
         },
         [69] = {
-
+            "Earthen Shackles|HC Random Drop",
+            "Focused Hail of Arrows|HC Random Drop",
+            "Hearth Embers|Researched or Greater Rune",
+            "Howl of the Predator|Researched or Greater Rune",
+            "Nature's Balance|Researched or Greater Rune",
+            "Nature's Denial|Researched or Greater Rune",
+            "Warder's Wrath|HC Random Drop",
         },
         [68] = {
-
+            "Briarcoat|Researched or Muramite Rune",
+            "Frost Wind|Researched or Muramite Rune",
+            "Heartslit|HC Random Drop",
+            "Hunter's Vigor|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Guard of Earth|Researched or Lesser Rune",
+            "Locust Swarm|Researched or Lesser Rune",
+            "Strength of the Hunter|Researched or Lesser Rune",
+            "Sylvan Water|Researched or Lesser Rune",
         },
         [66] = {
-
+            "Flame Snap|Researched or Minor Rune",
+            "Jolting Snapkicks|HC Random Drop",
+            "Nature Veil|Researched or Minor Rune",
+            "Shield of Briar|Researched or Minor Rune",
         },
     },
     ['Rogue'] = {
         [70] = {
-            ''
+            "Assault|HC Random Drop",
+            "Brigand's Gaze|HC Random Drop",
+            "Frenzied Stabbing Discipline|Researched or Glowing Rune",
+            "Posion Spikes Trap|HC Random Drop",
+            "Razorarc|HC Random Drop",
+            "Third Wind|HC Random Drop",
         },
         [69] = {
-
+            "Assassin's Deceit|Researched",
+            "Assassin's Feint|HC Random Drop",
+            "Daggerfall|Researched or Greater Rune",
+            "Pinpoint Vulnerability|HC Random Drop",
         },
         [68] = {
-
+            "Deadly Aim Discipline|Researched or Muramite Rune",
         },
         [67] = {
 
         },
         [66] = {
-
+            "Imperceptible Discipline|Researched or Minor Rune",
         },
     },
     ['Shadow Knight'] = {
         [70] = {
-            'Voice of Innoruuk',
-            'Tuoch of the Devourer',
-            'Theft of Hate',
-            'Theft of Agony',
-            'Rampart Discipline',
-            'Rally',
-            'Decrepit Skin',
-            'Cloak of the Corrupter',
-            'Cloak of Discord',
-            'Ancient: Bite of Muram',
+            "Ancient: Bite of Muram|Anguish Rune Turn In",
+            "Cloak of Discord|Researched or Glowing Rune",
+            "Decrepit Skin|HC Random Drop",
+            "Rally|PoK Library",
+            "Rampart Discipline|HC Random Drop",
+            "Theft of Agony|HC Random Drop",
+            "Theft of Hate|Researched or Glowing Rune",
+            "Touch of the Devourer|Researched or Glowing Rune",
+            "Voice of Innoruuk|HC Random Drop",
         },
         [69] = {
-            'Grasp of Lhranc',
-            'Spear of Muram',
-            'Soul Shield',
-            'Rune of Decay',
-            'Pact of Decay',
-            'Dread Gaze',
+            "Dread Gaze|Researched or Greater Rune",
+            "Grasp of Lhranc|HC Random Drop",
+            "Pact of Decay|Researched or Greater Rune",
+            "Rune of Decay|Researched or Greater Rune",
+            "Soul Shield|HC Random Drop",
+            "Spear of Muram|Researched or Greater Rune",
         },
         [68] = {
-            'Theft of Pain',
-            'Son of Decay',
-            'Scythe of Inruku',
-            'Fickle Shadows',
-            'Blood of Inruku',
+            "Blood of Inruku|Researched or Muramite Rune",
+            "Fickle Shadows|HC Random Drop",
+            "Scythe of Inruku|Researched or Muramite Rune",
+            "Son of Decay|Researched or Muramite Rune",
+            "Theft of Pain|Researched or Muramite Rune",
         },
         [67] = {
-            'Touch of Inruku',
-            'Terror of Discord',
-            'Shroud of Discord',
-            'Shadow Howl',
-            'Inruku\'s Bite',
+            "Inruku's Bite|Researched or Lesser Rune",
+            "Shadow Howl|Researched or Lesser Rune",
+            "Shroud of Discord|Researched or Lesser Rune",
+            "Terror of Discord|Researched or Lesser Rune",
+            "Touch of Inruku|Researched or Lesser Rune",
         },
         [66] = {
-            'Soulless Terror',
-            'Dark Constriction',
-            'Bond of Inruku',
-            'Blood of Discord',
+            "Blood of Discord|Researched or Minor Rune",
+            "Bond of Inruku|Researched or Minor Rune",
+            "Dark Constriction|Researched or Minor Rune",
+            "Soulless Terror|Researched",
         },
     },
     ['Shaman'] = {
         [70] = {
-            
+            "Abashi's Disempowerment|HC Random Drop",
+            "Ancient: Ancestral Calling|Anguish Rune Turn In",
+            "Ancient: Wilslik's Mending|Anguish Rune Turn In",
+            "Blood of Yoppa|Researched or Glowing Rune",
+            "Champion|Researched or Glowing Rune",
+            "Commune with the Wild|HC Random Drop",
+            "Frostfall Boon|HC Random Drop",
+            "Ghost of Renewal|HC Random Drop",
+            "Hungry Plague|HC Random Drop",
+            "Idol of Malos|HC Random Drop",
+            "Jinxed Torment|HC Random Drop",
+            "Nectar of Pain|HC Random Drop",
+            "Spiritual Serenity|Researched or Glowing Rune",
+            "Talisman of Might|Researched or Glowing Rune",
+            "Talisman of the Panther|HC Random Drop",
+            "Talisman of Unification|HC Random Drop",
+            "Talisman of Wunshi|Researched or Glowing Rune",
+            "Transcendent Torpor|HC Random Drop",
+            "Vindictive Spirit|Researched or Glowing Rune",
+            "Word of Reconstitution|HC Random Drop",
         },
         [69] = {
-
+            "Balance of Discord|Researched or Greater Rune",
+            "Breath of Antraygus|HC Random Drop",
+            "Curse of Sisslak|Researched or Greater Rune",
+            "Ice Age|Researched or Greater Rune",
+            "Pure Spirit|Researched or Greater Rune",
+            "Spirit of the Panther|HC Random Drop",
+            "Talisman of Fortitude|Researched or Greater Rune",
+            "Talisman of Perseverance|Researched or Greater Rune",
         },
         [68] = {
-
+            "Lingering Sloth|HC Random Drop",
+            "Pained Memory|Researched or Muramite Rune",
+            "Spirit of Fortitude|Researched or Muramite Rune",
+            "Talisman of Sense|Researched or Muramite Rune",
+            "Wunshi's Focusing|Researched or Muramite Rune",
+            "Yoppa's Mending|Researched or Muramite Rune",
+            "Yoppa's Rain of Venom|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Ancestral Bulwark|Researched or Lesser Rune",
+            "Breath of Wunshi|Researched or Lesser Rune",
+            "Farrel's Companion|Researched or Lesser Rune",
+            "Spirit of Might|Researched or Lesser Rune",
+            "Spirit Veil|Researched or Lesser Rune",
         },
         [66] = {
-
+            "Crippling Spasm|Researched or Minor Rune",
+            "Putrid Decay|Researched or Minor Rune",
+            "Spirit of Perseverance|Researched or Minor Rune",
+            "Spirit of Sense|Researched or Minor Rune",
+            "Yoppa's Spear of Venom|Researched or Minor Rune",
         },
     },
     ['Warrior'] = {
         [70] = {
-            'Unyielding Attention|HC',
-            'Throat Pommel',
-            'Third Wind',
-            'Shocking Defense Discipline|Research',
-            'Flaunt',
-            'Champion\'s Aura',
+            "Champion's Aura|Glowing Rune",
+            "Flaunt|HC Random Drop",
+            "Shocking Defense Discipline|Researched or Minor Rune",
+            "Third Wind|HC Random Drop",
+            "Unyielding Attention|HC Random Drop",
         },
         [69] = {
-            'Vortex Blade',
-            'Throat Jab',
+            "Throat Jab|Researched or Greater Rune",
+            "Vortex Blade|HC Random Drop",
         },
         [68] = {
-            'Brutal Onslaught Discipline',
+            "Brutal Onslaught Discipline|Researched or Minor Rune",
         },
         [67] = {
 
         },
         [66] = {
-            'Aura of Runes Discipline'
+            "Aura of Runes Discipline|Researched or Minor Rune"
         },
     },
     ['Wizard'] = {
         [70] = {
-            
+            "Ancient: Core Fire|Anguish Rune Turn In",
+            "Ancient: Spear of Gelaqua|Anguish Rune Turn In",
+            "Bulwark of Calrena|Researched or Glowing Rune",
+            "Chaos Flame|HC Random Drop",
+            "Circle of Thunder|Researched or Glowing Rune",
+            "Corona Flare|Researched or Glowing Rune",
+            "Ether Flame|HC Random Drop",
+            "Fire Rune|HC Random Drop",
+            "Focus Elaborate Spellcaster's Essence|PoK Library",
+            "Gelid Rains|Researched or Glowing Rune",
+            "Ice Block|HC Random Drop",
+            "Telakemara|HC Random Drop",
+            "Telekara|Researched or Glowing Rune",
         },
         [69] = {
-
+            "Claw of Vox|HC Random Drop",
+            "Ether Ward|Researched or Greater Rune",
+            "Focus Mass Intricate Spellcaster's Essence|PoK Library",
+            "Gelidin Comet|Researched or Greater Rune",
+            "Mana Weave|HC Random Drop",
+            "Meteor Storm|Researched or Greater Rune",
+            "Solist's Frozen Sword|Researched or Greater Rune",
+            "Spark of Ice|Researched or Greater Rune",
         },
         [68] = {
-
+            "Clinging Frost|HC Random Drop",
+            "Ether Skin|Researched or Muramite Rune",
+            "Firebane|Researched or Muramite Rune",
+            "Sanctum Portal|HC Random Drop",
+            "Wildmagic Burst|Researched or Muramite Rune",
+            "Spark of Thunder|Researched or Muramite Rune",
+            "Thundaka|Researched or Muramite Rune",
         },
         [67] = {
-
+            "Circle of Fire|Researched or Lesser Rune",
+            "Lightningbane|Researched or Lesser Rune",
+            "Phase Walk|Researched or Lesser Rune",
+            "Translocate: Slaughter|Quest",
         },
         [66] = {
-
+            "Ether Shield|Researched or Minor Rune",
+            "Icebane|Researched or Minor Rune",
+            "Spark of Fire|Researched or Minor Rune",
+            "Tears of the Sun|Researched or Minor Rune",
         },
     },
 }

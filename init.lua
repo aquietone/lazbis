@@ -44,6 +44,7 @@ local ingredientsArray	= {}
 local reapplyFilter		= false
 local slots				= {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource'}
 local spellData			= {}
+local groupSpellData	= {}
 local hideOwnedSpells	= false
 
 local debug			= false
@@ -429,6 +430,24 @@ local function actorCallback(msg)
 		for _,empty in ipairs(content.empties) do
 			message = message .. empty .. ', '
 		end
+	elseif content.id == 'searchspells' then
+		local missingSpells = {}
+		for _,level in ipairs({70,69,68,67,66}) do
+			local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
+			for _,spellName in ipairs(levelSpells) do
+				local spellDetails = splitToTable(spellName, '|')
+				spellName = spellDetails[1]
+				local spellLocation = spellDetails[2]
+				spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
+				if spellData[spellName] == 0 then
+					table.insert(missingSpells, {level, spellName, spellLocation})
+				end
+			end
+		end
+		msg:send({id='spellsresult', missingSpells=missingSpells, Name=mq.TLO.Me.CleanName()})
+	elseif content.id == 'spellsresult' then
+		if content.Name == mq.TLO.Me.CleanName() then return end
+		groupSpellData[content.Name] = content.missingSpells
 	end
 end
 
@@ -1121,34 +1140,71 @@ local function bisGUI()
 				if ImGui.BeginTabItem('Spells') then
 					hideOwnedSpells = ImGui.Checkbox('Missing Only', hideOwnedSpells)
 					ImGui.SameLine()
-					ImGui.TextColored(1, 0, 0, 1, '!!! This tab is under construction, spell data not populated yet !!!')
-					if ImGui.BeginTable('Spells', 3, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
+					if ImGui.Button('Refresh') then selectionChanged = true end
+					ImGui.SameLine()
+					ImGui.TextColored(1, 0, 0, 1, 'Note: Other toons only send missing spells')
+					local numSpellDataToons = 1
+					for _,_ in pairs(groupSpellData) do numSpellDataToons = numSpellDataToons + 1 end
+					ImGui.Columns(3)
+					ImGui.Text('%s', mq.TLO.Me.CleanName())
+					if ImGui.BeginTable('Spells', 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), -1, 300) then
 						ImGui.TableSetupScrollFreeze(0, 1)
-						ImGui.TableSetupColumn('Level', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, 1)
-						ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, 2)
-						ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, 3)
+						ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 2)
+						ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 3)
 						ImGui.TableHeadersRow()
 
-						ImGui.TableNextRow()
 						for _,level in ipairs({70,69,68,67,66}) do
-							local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
-							for _,spellName in ipairs(levelSpells) do
-								local spellDetails = splitToTable(spellName, '|')
-								spellName = spellDetails[1]
-								local spellLocation = spellDetails[2]
-								spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
-								if not hideOwnedSpells or spellData[spellName] == 0 then
-									ImGui.TableNextColumn()
-									ImGui.Text('%s', level)
-									ImGui.TableNextColumn()
-									ImGui.TextColored(spellData[spellName] == 0 and 1 or 0, spellData[spellName] ~= 0 and 1 or 0, 0, 1, '%s', spellName)
-									ImGui.TableNextColumn()
-									ImGui.Text('%s', spellLocation)
+							ImGui.TableNextRow()
+							ImGui.TableNextColumn()
+							if ImGui.TreeNodeEx(level..'##'..mq.TLO.Me.CleanName(), bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
+								local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
+								for _,spellName in ipairs(levelSpells) do
+									local spellDetails = splitToTable(spellName, '|')
+									spellName = spellDetails[1]
+									local spellLocation = spellDetails[2]
+									spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
+									if not hideOwnedSpells or spellData[spellName] == 0 then
+										ImGui.TableNextRow()
+										ImGui.TableNextColumn()
+										ImGui.TextColored(spellData[spellName] == 0 and 1 or 0, spellData[spellName] ~= 0 and 1 or 0, 0, 1, '%s', spellName)
+										ImGui.TableNextColumn()
+										ImGui.Text('%s', spellLocation)
+									end
 								end
+								ImGui.TreePop()
 							end
 						end
 						ImGui.EndTable()
 					end
+					for name,data in pairs(groupSpellData) do
+						ImGui.NextColumn()
+						ImGui.Text('%s', name)
+						if ImGui.BeginTable('Spells'..name, 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), -1, 300) then
+							ImGui.TableSetupScrollFreeze(0, 1)
+							ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 2)
+							ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 3)
+							ImGui.TableHeadersRow()
+
+							for _,level in ipairs({70,69,68,67,66}) do
+								ImGui.TableNextRow()
+								ImGui.TableNextColumn()
+								if ImGui.TreeNodeEx(level..'##'..name, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
+									for _,entry in ipairs(data) do
+										if tonumber(entry[1]) == level then
+											ImGui.TableNextRow()
+											ImGui.TableNextColumn()
+											ImGui.TextColored(1, 0, 0, 1, '%s', entry[2])
+											ImGui.TableNextColumn()
+											ImGui.Text('%s', entry[3])
+										end
+									end
+									ImGui.TreePop()
+								end
+							end
+							ImGui.EndTable()
+						end
+					end
+					ImGui.Columns(1)
 					ImGui.EndTabItem()
 				end
 				for _,infoTab in ipairs(bisConfig.Info) do
@@ -1184,6 +1240,9 @@ local function searchAll()
 	end
 	for _, char in ipairs(group) do
 		actor:send({character=char.Name}, {id='searchempties'})
+	end
+	for _, char in ipairs(group) do
+		actor:send({character=char.Name}, {id='searchspells'})
 	end
 end
 
