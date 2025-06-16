@@ -4,13 +4,14 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta		  = {version = '3.1.8', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.2.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
-local ImGui		 = require('ImGui')
-local bisConfig	 = require('bis')
+local ImGui			= require('ImGui')
+local bisConfig		= require('bis')
+local spellConfig   = require('spells')
 local PackageMan	= require('mq/PackageMan')
-local icons		 = require('mq/icons')
-local sql		   = PackageMan.Require('lsqlite3')
+local icons			= require('mq/icons')
+local sql			= PackageMan.Require('lsqlite3')
 local dbpath		= string.format('%s\\%s', mq.TLO.MacroQuest.Path('resources')(), 'lazbis.db')
 local ok, actors	= pcall(require, 'actors')
 if not ok then
@@ -19,40 +20,42 @@ if not ok then
 end
 
 -- UI States
-local openGUI	   = true
-local shouldDrawGUI = true
-local minimizedGUI  = false
+local openGUI		= true
+local shouldDrawGUI	= true
+local minimizedGUI	= false
 
 -- Character info storage
-local gear		  = {}
-local group		 = {}
-local sortedGroup   = {}
+local gear			= {}
+local group			= {}
+local sortedGroup	= {}
 local itemChecks	= {}
-local tradeskills   = {}
+local tradeskills	= {}
 local emptySlots	= {}
-local teams		 = {}
+local teams			= {}
 
 -- Item list information
-local selectedItemList  = bisConfig.ItemLists[bisConfig.DefaultItemList.group][bisConfig.DefaultItemList.index]
-local itemList		  = bisConfig.sebilis
-local selectionChanged  = true
-local settings		  = {ShowSlots=true,ShowMissingOnly=false,AnnounceNeeds=false,AnnounceChannel='Group',Locked=false}
-local orderedSkills	 = {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
+local selectedItemList	= bisConfig.ItemLists[bisConfig.DefaultItemList.group][bisConfig.DefaultItemList.index]
+local itemList			= bisConfig.sebilis
+local selectionChanged	= true
+local settings			= {ShowSlots=true,ShowMissingOnly=false,AnnounceNeeds=false,AnnounceChannel='Group',Locked=false}
+local orderedSkills		= {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
 local recipeQuestIdx	= 1
-local ingredientsArray  = {}
-local reapplyFilter	 = false
-local slots			 = {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource'}
+local ingredientsArray	= {}
+local reapplyFilter		= false
+local slots				= {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource'}
+local spellData			= {}
+local hideOwnedSpells	= false
 
-local debug		 = false
+local debug			= false
 
 local server		= mq.TLO.EverQuest.Server()
-local dbfmt		 = "INSERT INTO Inventory VALUES ('%s','%s','%s','%s','%s','%s',%d,%d,'%s');\n"
+local dbfmt			= "INSERT INTO Inventory VALUES ('%s','%s','%s','%s','%s','%s',%d,%d,'%s');\n"
 local db
 local actor
 
-local teamName	  = ''
-local showPopup	 = false
-local selectedTeam  = ''
+local teamName		= ''
+local showPopup		= false
+local selectedTeam	= ''
 
 local niceImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/bis.png")
 local iconImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/icon_lazbis.png")
@@ -1107,6 +1110,34 @@ local function bisGUI()
 					end
 					ImGui.EndTabItem()
 				end
+				if ImGui.BeginTabItem('Spells') then
+					hideOwnedSpells = ImGui.Checkbox('Missing Only', hideOwnedSpells)
+					ImGui.SameLine()
+					ImGui.TextColored(1, 0, 0, 1, '!!! This tab is under construction, spell data not populated yet !!!')
+					if ImGui.BeginTable('Spells', 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
+						ImGui.TableSetupScrollFreeze(0, 1)
+						ImGui.TableSetupColumn('Level', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, 1)
+						ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1.0, 2)
+						ImGui.TableHeadersRow()
+
+						ImGui.TableNextRow()
+						-- ImGui.TableNextColumn()
+						for _,level in ipairs({70,69,68,67,66}) do
+							local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
+							for _,spellName in ipairs(levelSpells) do
+								spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
+								if not hideOwnedSpells or spellData[spellName] == 0 then
+									ImGui.TableNextColumn()
+									ImGui.Text('%s', level)
+									ImGui.TableNextColumn()
+									ImGui.TextColored(spellData[spellName] == 0 and 1 or 0, spellData[spellName] ~= 0 and 1 or 0, 0, 1, '%s', spellName)
+								end
+							end
+						end
+						ImGui.EndTable()
+					end
+					ImGui.EndTabItem()
+				end
 				for _,infoTab in ipairs(bisConfig.Info) do
 					if ImGui.BeginTabItem(infoTab.Name) then
 						ImGui.Text(infoTab.Text)
@@ -1271,6 +1302,23 @@ local function writeAllItemLists()
 	end
 end
 
+local function bisCommand(...)
+	local args = {...}
+	if args[1] == 'missing' then
+		local missingSpellsText = {}
+		local classSpells = spellConfig[mq.TLO.Me.Class()]
+		for _,level in ipairs({70,69,68,67,66}) do
+			local levelSpells = classSpells[level]
+			for _,spellName in ipairs(levelSpells) do
+				if spellData[spellName] == 0 then
+					table.insert(missingSpellsText, ('- %s: %s'):format(level, spellName))
+				end
+			end
+		end
+		printf('Missing Spells:\n%s', table.concat(missingSpellsText, '\n'))
+	end
+end
+
 local function init(args)
 	printf('\ag%s\ax started with \ay%d\ax arguments:', meta.name, #args)
 	for i, arg in ipairs(args) do
@@ -1335,6 +1383,8 @@ local function init(args)
 	-- mq.event('youLootedItem', '#*#--#1# have looted a #2#.--#*#', lootedCallback, {keepLinks = true})
 
 	mq.imgui.init('BISCheck', bisGUI)
+
+	mq.bind('/bis', bisCommand)
 end
 
 init({...})
