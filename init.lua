@@ -1145,7 +1145,7 @@ local function bisGUI()
 					ImGui.TextColored(1, 0, 0, 1, 'Note: Other toons only send missing spells')
 					local numSpellDataToons = 1
 					for _,_ in pairs(groupSpellData) do numSpellDataToons = numSpellDataToons + 1 end
-					ImGui.Columns(3)
+					ImGui.Columns(6)
 					ImGui.Text('%s', mq.TLO.Me.CleanName())
 					if ImGui.BeginTable('Spells', 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), -1, 300) then
 						ImGui.TableSetupScrollFreeze(0, 1)
@@ -1176,32 +1176,35 @@ local function bisGUI()
 						end
 						ImGui.EndTable()
 					end
-					for name,data in pairs(groupSpellData) do
-						ImGui.NextColumn()
-						ImGui.Text('%s', name)
-						if ImGui.BeginTable('Spells'..name, 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), -1, 300) then
-							ImGui.TableSetupScrollFreeze(0, 1)
-							ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 2)
-							ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 3)
-							ImGui.TableHeadersRow()
+					for i,char in ipairs(group) do
+						if char.Show and groupSpellData[char.Name] then
+							local data = groupSpellData[char.Name]
+							ImGui.NextColumn()
+							ImGui.Text('%s', char.Name)
+							if ImGui.BeginTable('Spells'..char.Name, 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), -1, 300) then
+								ImGui.TableSetupScrollFreeze(0, 1)
+								ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 2)
+								ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 3)
+								ImGui.TableHeadersRow()
 
-							for _,level in ipairs({70,69,68,67,66}) do
-								ImGui.TableNextRow()
-								ImGui.TableNextColumn()
-								if ImGui.TreeNodeEx(level..'##'..name, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
-									for _,entry in ipairs(data) do
-										if tonumber(entry[1]) == level then
-											ImGui.TableNextRow()
-											ImGui.TableNextColumn()
-											ImGui.TextColored(1, 0, 0, 1, '%s', entry[2])
-											ImGui.TableNextColumn()
-											ImGui.Text('%s', entry[3])
+								for _,level in ipairs({70,69,68,67,66}) do
+									ImGui.TableNextRow()
+									ImGui.TableNextColumn()
+									if ImGui.TreeNodeEx(level..'##'..char.Name, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
+										for _,entry in ipairs(data) do
+											if tonumber(entry[1]) == level then
+												ImGui.TableNextRow()
+												ImGui.TableNextColumn()
+												ImGui.TextColored(1, 0, 0, 1, '%s', entry[2])
+												ImGui.TableNextColumn()
+												ImGui.Text('%s', entry[3])
+											end
 										end
+										ImGui.TreePop()
 									end
-									ImGui.TreePop()
 								end
+								ImGui.EndTable()
 							end
-							ImGui.EndTable()
 						end
 					end
 					ImGui.Columns(1)
