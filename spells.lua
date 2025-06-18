@@ -325,7 +325,7 @@ return {
 
         },
         [66] = {
-            'Dreamwalk Discipline|???',
+            'Dreamwalk Discipline|Researched',
         },
     },
     ['Necromancer'] = {
@@ -432,7 +432,6 @@ return {
             'Howl of the Predator|Researched or Greater Rune',
             'Nature\'s Balance|Researched or Greater Rune',
             'Nature\'s Denial|Researched or Greater Rune',
-            'Warder\'s Wrath|Random Drop',
         },
         [68] = {
             'Briarcoat|Researched or Muramite Rune',
@@ -451,6 +450,7 @@ return {
             'Jolting Snapkicks|Random Drop',
             'Nature Veil|Researched or Minor Rune',
             'Shield of Briar|Researched or Minor Rune',
+            'Bullseye Discipline|Researched or Minor Rune',
         },
     },
     ['Rogue'] = {
@@ -463,7 +463,6 @@ return {
             'Third Wind|Random Drop',
         },
         [69] = {
-            'Assassin\'s Deceit|???',
             'Assassin\'s Feint|Random Drop',
             'Daggerfall|Researched or Greater Rune',
             'Pinpoint Vulnerability|Random Drop',
@@ -531,7 +530,6 @@ return {
             'Ghost of Renewal|Random Drop',
             'Hungry Plague|Random Drop',
             'Idol of Malos|Random Drop',
-            'Jinxed Torment|Random Drop',
             'Nectar of Pain|Random Drop',
             'Spiritual Serenity|Researched or Glowing Rune',
             'Talisman of Might|Researched or Glowing Rune',
@@ -578,15 +576,14 @@ return {
     },
     ['Warrior'] = {
         [70] = {
-            'Champion\'s Aura|???',
+            'Champion\'s Aura|Glowing Rune',
             'Flaunt|Random Drop',
             'Shocking Defense Discipline|Researched or Minor Rune',
             'Third Wind|Random Drop',
-            'Throat Pommel|???',
             'Unyielding Attention|Random Drop',
         },
         [69] = {
-            'Throat Jab|???',
+            'Throat Jab|Researched or Greater Rune',
             'Vortex Blade|Random Drop',
         },
         [68] = {
