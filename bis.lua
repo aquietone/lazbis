@@ -15,6 +15,8 @@ return {
 	-- 	[12]={id='vendoritems',name='Vendor Items'},
 	-- 	[13]={id='focusitems',name='Focus Items'},
 	-- },
+	-- anguish: slot=Wrists, visible=Wrist1,Wrist2, classes=Wrists
+	-- DSK: slot=Wrist1,Wrist2, visible=Wrist1,Wrist2, classes=Wrist1,Wrist2
 	['Groups'] = {'Group Best In Slot', 'Raid Best In Slot', 'Other Checklists'},
 	['DefaultItemList'] = {group='Raid Best In Slot', index=4},
 	['ItemLists'] = {

@@ -4,11 +4,11 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.2.2', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.2.3', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
-local spellConfig   = require('spells')
+local spellConfig	= require('spells')
 local PackageMan	= require('mq/PackageMan')
 local icons			= require('mq/icons')
 local sql			= PackageMan.Require('lsqlite3')
@@ -62,9 +62,9 @@ local niceImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/bis.png")
 local iconImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/icon_lazbis.png")
 
 -- Default to e3bca if mq2mono is loaded, else use dannet
-local broadcast	 = '/e3bca'
-local selectedBroadcast = 1
-local rebroadcast   = false
+local broadcast			= '/e3bca'
+local selectedBroadcast	= 1
+local rebroadcast		= false
 if not mq.TLO.Plugin('mq2mono')() then broadcast = '/dge' end
 
 local function split(str, char)
@@ -1264,17 +1264,20 @@ if mq.LinkTypes then
 end
 local recentlyAnnounced = {}
 local function sayCallback(line, char, message)
+	if not message then message = char end
 	local itemLinks = {}
+	local foundAnyLinks = false
 	if mq.ExtractLinks then
 		local links = mq.ExtractLinks(message)
 		for _,link in ipairs(links) do
 			if link.type == mq.LinkTypes.Item then
 				local item = mq.ParseItemLink(link.link)
 				itemLinks[item.itemName] = link.link
+				foundAnyLinks = true
 			end
 		end
 	end
-	if itemList == nil or group == nil or gear == nil then
+	if itemList == nil or group == nil or gear == nil or not foundAnyLinks then
 		print('g ' .. #group .. ' gear ' .. #gear)
 		return
 	end
@@ -1309,7 +1312,7 @@ local function sayCallback(line, char, message)
 									itemChecks[itemName][char.Name] = hasItem
 									if not hasItem then
 										if not messages[itemName] then
-											if itemLinks[itemName] then messages[itemName] = itemLinks[itemName] .. ' - '  else messages[itemName] = itemName .. ' - ' end
+											if itemLinks[itemName] then messages[itemName] = itemLinks[itemName] .. ' - ' else messages[itemName] = itemName .. ' - ' end
 										end
 										messages[itemName] = messages[itemName] .. char.Name .. ', '
 									end
@@ -1374,6 +1377,21 @@ local function writeAllItemLists()
 		end
 		clearAllDataForCharacter(mq.TLO.Me.CleanName())
 		exec(insertStmt, mq.TLO.Me.CleanName(), nil, 'inserted')
+	end
+end
+
+local function zonedCallback()
+	local zone = mq.TLO.Zone.ShortName()
+	-- Load item list for specific zone if inside raid instance for that zone
+	if bisConfig.ZoneMap[zone] then
+		local newItemList = bisConfig.ItemLists[bisConfig.ZoneMap[zone].group][bisConfig.ZoneMap[zone].index]
+		if newItemList.id ~= selectedItemList.id then
+			selectedItemList = newItemList
+			itemList = bisConfig[selectedItemList.id]
+			selectionChanged = true
+			filter = ''
+			printf('Switched BIS list to %s', zone)
+		end
 	end
 end
 
@@ -1447,12 +1465,13 @@ local function init(args)
 	mq.cmdf('%s /lua run %s 0%s', broadcast, meta.name, debug and ' debug' or '')
 	mq.delay(500)
 
-	mq.event('meSayItems', 'You say, #2#', sayCallback, {keepLinks = true})
+	mq.event('meSayItems', 'You say, #1#', sayCallback, {keepLinks = true})
 	mq.event('sayItems', '#1# says, #2#', sayCallback, {keepLinks = true})
 	mq.event('rsayItems', '#1# tells the raid, #2#', sayCallback, {keepLinks = true})
-	mq.event('rMeSayItems', 'You tell your raid, #2#', sayCallback, {keepLinks = true})
+	mq.event('rMeSayItems', 'You tell your raid, #1#', sayCallback, {keepLinks = true})
 	mq.event('gsayItems', '#1# tells the group, #2#', sayCallback, {keepLinks = true})
-	mq.event('gMeSayItems', 'You tell your party, #2#', sayCallback, {keepLinks = true})
+	mq.event('gMeSayItems', 'You tell your party, #1#', sayCallback, {keepLinks = true})
+	mq.event('zoned', 'You have entered #*#', zonedCallback)
 	-- loot callback doesn't work right, just disable them for now
 	-- mq.event('otherLootedItem', '#*#--#1# has looted a #2#.--#*#', lootedCallback, {keepLinks = true})
 	-- mq.event('youLootedItem', '#*#--#1# have looted a #2#.--#*#', lootedCallback, {keepLinks = true})
