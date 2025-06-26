@@ -1263,12 +1263,11 @@ if mq.LinkTypes then
 	}
 end
 local recentlyAnnounced = {}
-local function sayCallback(line, char, message)
-	if not message then message = char end
+local function sayCallback(line)
 	local itemLinks = {}
 	local foundAnyLinks = false
 	if mq.ExtractLinks then
-		local links = mq.ExtractLinks(message)
+		local links = mq.ExtractLinks(line)
 		for _,link in ipairs(links) do
 			if link.type == mq.LinkTypes.Item then
 				local item = mq.ParseItemLink(link.link)
@@ -1277,10 +1276,10 @@ local function sayCallback(line, char, message)
 			end
 		end
 	end
-	if itemList == nil or group == nil or gear == nil or not foundAnyLinks then
+	if itemList == nil or group == nil or gear == nil or (mq.LinkTypes and not foundAnyLinks) then
 		return
 	end
-	if string.find(message, 'Burns') then
+	if string.find(line, 'Burns') then
 		return
 	end
 	local currentZone = mq.TLO.Zone.ShortName()
@@ -1300,7 +1299,7 @@ local function sayCallback(line, char, message)
 					for slot,item in pairs(itembucket) do
 						if item then
 							for itemName in split(item, '/') do
-								if string.find(message, itemName) then
+								if string.find(line, itemName) then
 									local hasItem = gear[char.Name][slot] ~= nil and (gear[char.Name][slot].count > 0 or (gear[char.Name][slot].componentcount or 0) > 0)
 									if not hasItem and list.id ~= selectedItemList.id then
 										loadSingleRow(list.id, char.Name, itemName)
@@ -1464,12 +1463,12 @@ local function init(args)
 	mq.cmdf('%s /lua run %s 0%s', broadcast, meta.name, debug and ' debug' or '')
 	mq.delay(500)
 
-	mq.event('meSayItems', 'You say, #1#', sayCallback, {keepLinks = true})
-	mq.event('sayItems', '#1# says, #2#', sayCallback, {keepLinks = true})
-	mq.event('rsayItems', '#1# tells the raid, #2#', sayCallback, {keepLinks = true})
-	mq.event('rMeSayItems', 'You tell your raid, #1#', sayCallback, {keepLinks = true})
-	mq.event('gsayItems', '#1# tells the group, #2#', sayCallback, {keepLinks = true})
-	mq.event('gMeSayItems', 'You tell your party, #1#', sayCallback, {keepLinks = true})
+	mq.event('meSayItems', 'You say, #*#', sayCallback, {keepLinks = true})
+	mq.event('sayItems', '#*# says, #*#', sayCallback, {keepLinks = true})
+	mq.event('rsayItems', '#*# tells the raid, #*#', sayCallback, {keepLinks = true})
+	mq.event('rMeSayItems', 'You tell your raid, #*#', sayCallback, {keepLinks = true})
+	mq.event('gsayItems', '#*# tells the group, #*#', sayCallback, {keepLinks = true})
+	mq.event('gMeSayItems', 'You tell your party, #*#', sayCallback, {keepLinks = true})
 	mq.event('zoned', 'You have entered #*#', zonedCallback)
 	-- loot callback doesn't work right, just disable them for now
 	-- mq.event('otherLootedItem', '#*#--#1# has looted a #2#.--#*#', lootedCallback, {keepLinks = true})
