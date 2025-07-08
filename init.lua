@@ -80,8 +80,20 @@ local DZ_NAMES = {
 		{name='Howling Stones', lockout='Echoes of Charasis', zone='The Overthere'},
 		{name='Doll Maker', lockout='Doll Maker', zone='Kithicor Forest'},
 	},
+	OldRaids = {
+		{name='Trial of Hatred', lockout='Proving Grounds: The Mastery of Hatred', zone='MPG'},
+		{name='Trial of Corruption', lockout='Proving Grounds: The Mastery of Corruption', zone='MPG'},
+		{name='Trial of Adaptation', lockout='Proving Grounds: The Mastery of Adaptation', zone='MPG'},
+		{name='Trial of Specialization', lockout='Proving Grounds: The Mastery of Specialization', zone='MPG'},
+		{name='Trial of Foresight', lockout='Proving Grounds: The Mastery of Foresight', zone='MPG'},
+		{name='Trial of Endurance', lockout='Proving Grounds: The Mastery of Endurance', zone='MPG'},
+		{name='Riftseekers', lockout='Riftseeker', zone='Riftseeker'},
+		{name='Tacvi', lockout='Tunat', zone='Txevu', index=3},
+		{name='Txevu', lockout='Txevu', zone='Txevu'},
+		{name='Plane of Time', lockout='Quarm', zone='Plane of Time', index=3}, -- 'Phase 1 Complete', 'Phase 2 Complete', 'Phase 3 Complete', 'Phase 4 Complete', 'Phase 5 Complete', 'Quarm'
+	}
 }
-local dzInfo = {[mq.TLO.Me.CleanName()] = {Raid={}, Group={}}}
+local dzInfo = {[mq.TLO.Me.CleanName()] = {Raid={}, Group={}, OldRaids={}}}
 
 local niceImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/bis.png")
 local iconImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/icon_lazbis.png")
@@ -1264,6 +1276,7 @@ local function bisGUI()
 						end
 						ImGui.TableHeadersRow()
 
+						-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
 						for _,category in ipairs({'Raid','Group'}) do
 							ImGui.TableNextRow()
 							ImGui.TableNextColumn()
@@ -1285,7 +1298,7 @@ local function bisGUI()
 													ImGui.EndTooltip()
 												end
 											else
-												ImGui.TextColored(0,1,0,1, icons.FA_CHECK)
+												ImGui.TextColored(0,1,0,1, icons.FA_PLAY)
 											end
 										end
 									end
@@ -1500,20 +1513,21 @@ local function bisCommand(...)
 		printf('Missing Spells:\n%s', table.concat(missingSpellsText, '\n'))
 	elseif args[1] == 'lockouts' then
 		local output = ''
+		-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
 		for _,category in ipairs({'Raid','Group'}) do
-			output = output .. '\aw=====================================\ax\n'
-			for _,dz in ipairs(DZ_NAMES[category]) do
-				output = output .. '\ay' .. dz.name .. '\ax \ar' .. category .. '\ax (\ag' .. dz.zone .. '\ax): '
-				for _,char in ipairs(group) do
-					if char.Show and not char.Offline then
-						if dzInfo[char.Name] and dzInfo[char.Name][category] and dzInfo[char.Name][category][dz.name] then output = output .. '\ar' .. char.Name .. '\ax, ' else output = output .. '\ag' .. char.Name .. '\ax, ' end
+			if not args[2] or args[2]:lower() == category:lower() then 
+				for _,dz in ipairs(DZ_NAMES[category]) do
+					output = output .. '\ay' .. dz.name .. '\ax \ar' .. category .. '\ax (\ag' .. dz.zone .. '\ax): '
+					for _,char in ipairs(group) do
+						if char.Show and not char.Offline then
+							if dzInfo[char.Name] and dzInfo[char.Name][category] and dzInfo[char.Name][category][dz.name] then output = output .. '\ar' .. char.Name .. '\ax, ' else output = output .. '\ag' .. char.Name .. '\ax, ' end
+						end
 					end
+					output = output .. '\n'
 				end
-				output = output .. '\n'
+				print(output)
 			end
 		end
-		output = output .. '\aw=====================================\ax'
-		print(output)
 	end
 end
 
@@ -1522,6 +1536,7 @@ local function populateDZInfo()
 	mq.delay(1)
 	mq.TLO.Window('DynamicZoneWnd').DoClose()
 	mq.delay(1)
+	-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
 	for _,category in ipairs({'Raid','Group'}) do
 		for _,dz in ipairs(DZ_NAMES[category]) do
 			local idx = mq.TLO.Window('DynamicZoneWnd/DZ_TimerList').List(dz.lockout,dz.index or 2)()
