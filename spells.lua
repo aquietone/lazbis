@@ -531,7 +531,6 @@ return {
             'Ghost of Renewal|Random Drop',
             'Hungry Plague|Random Drop',
             'Idol of Malos|Random Drop',
-            'Jinxed Torment|Random Drop',
             'Nectar of Pain|Random Drop',
             'Spiritual Serenity|Researched or Glowing Rune',
             'Talisman of Might|Researched or Glowing Rune',

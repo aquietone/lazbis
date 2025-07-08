@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.2.5', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.2.6', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -923,54 +923,55 @@ local function bisGUI()
 						end
 						ImGui.SameLine()
 						ImGui.Text('Linked items:')
-						ImGui.BeginTable('linked items', numColumns, bit32.bor(ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY), -1.0, 115)
-						ImGui.TableSetupScrollFreeze(0, 1)
-						ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), 250, 0)
-						for i,char in ipairs(group) do
-							if char.Show then
-								ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
-							end
-						end
-						ImGui.TableHeadersRow()
-		
-						for itemName, _ in pairs(itemChecks) do
-							ImGui.TableNextRow()
-							ImGui.TableSetColumnIndex(0)
-							if ImGui.Button('X##' .. itemName) then
-								itemChecks[itemName] = nil
-							end
-							ImGui.SameLine()
-							if ImGui.Button('Announce##'..itemName) then
-								local message = getAnnounceChannel()
-								local doSend = false
-								message = message .. itemName .. ' - '
-								for _,name in ipairs(sortedGroup) do
-									local char = group[name]
-									if itemChecks[itemName][char.Name] == false then
-										-- message = message .. string.format('%s(%s)', char.Name, classes[char.Class]) .. ', '
-										message = message .. char.Name .. ', '
-										doSend = true
-									end
+						if ImGui.BeginTable('linked items', numColumns, bit32.bor(ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY), -1.0, 115) then
+							ImGui.TableSetupScrollFreeze(0, 1)
+							ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), 250, 0)
+							for i,char in ipairs(group) do
+								if char.Show then
+									ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
 								end
-								if doSend then mq.cmd(message) end
 							end
-							ImGui.SameLine()
-							ImGui.Text(itemName)
-							if itemChecks[itemName] then
-								for _,char in ipairs(group) do
-									if char.Show then
-										ImGui.TableNextColumn()
-										if itemChecks[itemName][char.Name] ~= nil then
-											local hasItem = itemChecks[itemName][char.Name]
-											ImGui.PushStyleColor(ImGuiCol.Text, hasItem and 0 or 1, hasItem and 1 or 0, 0.1, 1)
-											ImGui.Text(hasItem and 'HAVE' or 'NEED')
-											ImGui.PopStyleColor()
+							ImGui.TableHeadersRow()
+			
+							for itemName, _ in pairs(itemChecks) do
+								ImGui.TableNextRow()
+								ImGui.TableSetColumnIndex(0)
+								if ImGui.Button('X##' .. itemName) then
+									itemChecks[itemName] = nil
+								end
+								ImGui.SameLine()
+								if ImGui.Button('Announce##'..itemName) then
+									local message = getAnnounceChannel()
+									local doSend = false
+									message = message .. itemName .. ' - '
+									for _,name in ipairs(sortedGroup) do
+										local char = group[name]
+										if itemChecks[itemName][char.Name] == false then
+											-- message = message .. string.format('%s(%s)', char.Name, classes[char.Class]) .. ', '
+											message = message .. char.Name .. ', '
+											doSend = true
+										end
+									end
+									if doSend then mq.cmd(message) end
+								end
+								ImGui.SameLine()
+								ImGui.Text(itemName)
+								if itemChecks[itemName] then
+									for _,char in ipairs(group) do
+										if char.Show then
+											ImGui.TableNextColumn()
+											if itemChecks[itemName][char.Name] ~= nil then
+												local hasItem = itemChecks[itemName][char.Name]
+												ImGui.PushStyleColor(ImGuiCol.Text, hasItem and 0 or 1, hasItem and 1 or 0, 0.1, 1)
+												ImGui.Text(hasItem and 'HAVE' or 'NEED')
+												ImGui.PopStyleColor()
+											end
 										end
 									end
 								end
 							end
+							ImGui.EndTable()
 						end
-						ImGui.EndTable()
 					end
 		
 					if ImGui.BeginTable('gear', numColumns, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
@@ -1308,6 +1309,7 @@ local function sayCallback(line)
 									end
 									itemChecks[itemName] = itemChecks[itemName] or {}
 									itemChecks[itemName][char.Name] = hasItem
+									if debug then printf('list.id=%s slot=%s item=%s hasItem=%s', list.id, slot, item, hasItem) end
 									if not hasItem then
 										if not messages[itemName] then
 											if itemLinks[itemName] then messages[itemName] = itemLinks[itemName] .. ' - ' else messages[itemName] = itemName .. ' - ' end
