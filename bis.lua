@@ -4158,7 +4158,7 @@ return {
 	},
 	['Links'] = {
 		{label='Project Lazarus Wiki', url='https://www.lazaruseq.com/'},
-		{label='Allaclone', url='https://www.lazaruseq.com/Alla/'},
+		{label='Allaclone', url='https://www.lazaruseq.com/alla'},
 		{label='Lazarus BIS GitHub', url='https://www.github.com/aquietone/lazbis'},
 		{label='Discord', url='https://discord.com/channels/548643730714918913/1274138262063157289'}
 	},

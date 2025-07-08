@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.2.6', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.3.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -57,6 +57,31 @@ local actor
 local teamName		= ''
 local showPopup		= false
 local selectedTeam	= ''
+
+local DZ_NAMES = {
+	Raid = {
+		{name='Crest Event', lockout='Threads_of_Chaos', zone='Qeynos Hills (BB)'},
+		{name='Fippy', lockout='=Broken World', zone='HC Qeynos Hills (pond)'},
+		{name='$$PAID$$ Fippy', lockout='Broken World [Time Keeper]', zone='Plane of Time'},
+		{name='DSK', lockout='=Dreadspire_HC', zone='Castle Mistmoore'},
+		{name='$$PAID$$ DSK', lockout='Dreadspire_HC [Time Keeper]', zone='Plane of Time'},
+		{name='Veksar', lockout='A Lake of Ill Omens', zone='Lake of Ill Omen'},
+		{name='Anguish', lockout='=Overlord Mata Muram', zone='Wall of Slaughter', index=3},
+		{name='Trak', lockout='Trakanon_Final', zone='HC Sebilis'},
+		{name='FUKU', lockout='Unrest, The Fabled Undead Knight', zone='Unrest'}
+	},
+	Group = {
+		{name='Venril Sathir', lockout='Revenge on Venril Sathir', zone='Karnors Castle'},
+		{name='Fenrir', lockout='Bloodfang', zone='West Karana'},
+		{name='Selana', lockout='Moonshadow', zone='West Karana'},
+		{name='Finish Them Off', lockout='Finish them off', zone='Castle Mistmoore'},
+		{name='Keepsakes', lockout='Keepsakes', zone='Surefall Glade'},
+		{name='Ayonae', lockout='Confront the Maestra', zone='Surefall Glade'},
+		{name='Howling Stones', lockout='Echoes of Charasis', zone='The Overthere'},
+		{name='Doll Maker', lockout='Doll Maker', zone='Kithicor Forest'},
+	},
+}
+local dzInfo = {[mq.TLO.Me.CleanName()] = {Raid={}, Group={}}}
 
 local niceImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/bis.png")
 local iconImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/icon_lazbis.png")
@@ -448,6 +473,11 @@ local function actorCallback(msg)
 	elseif content.id == 'spellsresult' then
 		if content.Name == mq.TLO.Me.CleanName() then return end
 		groupSpellData[content.Name] = content.missingSpells
+	elseif content.id == 'dzquery' then
+		msg:send({id='dzresult', lockouts=dzInfo[mq.TLO.Me.CleanName()], Name=mq.TLO.Me.CleanName()})
+	elseif content.id == 'dzresult' then
+		if content.Name == mq.TLO.Me.CleanName() then return end
+		dzInfo[content.Name] = content.lockouts
 	end
 end
 
@@ -714,6 +744,100 @@ local function LockButton(id, isLocked)
 	return isLocked
 end
 
+local function drawCharacterMenus()
+	ImGui.PushItemWidth(150)
+	if ImGui.BeginCombo('##Characters', 'Characters') then
+		for teamName,_ in pairs(teams) do
+			local _,pressed = ImGui.Checkbox(teamName:gsub('TEAM:', 'Team: '), selectedTeam == teamName)
+			if pressed then if selectedTeam ~= teamName then selectedTeam = teamName changeBroadcastMode(teamName) else selectedTeam = '' end end
+		end
+		local _,pressed = ImGui.Checkbox('All Online', selectedBroadcast == 1)
+		if pressed then changeBroadcastMode(1) end
+		_,pressed = ImGui.Checkbox('All Offline', selectedBroadcast == 2)
+		if pressed then changeBroadcastMode(2) end
+		_,pressed = ImGui.Checkbox('Group', selectedBroadcast == 3)
+		if pressed then changeBroadcastMode(3) end
+		for i,name in ipairs(sortedGroup) do
+			local char = group[name]
+			_,pressed = ImGui.Checkbox(char.Name, char.Show or false)
+			if pressed then
+				char.Show = not char.Show
+				changeBroadcastMode(4)
+			end
+		end
+		ImGui.EndCombo()
+	end
+	ImGui.PopItemWidth()
+	ImGui.SameLine()
+	if ImGui.Button('Save Character Set') then
+		showPopup = true
+		ImGui.OpenPopup('Save Team')
+		ImGui.SetNextWindowSize(200, 90)
+	end
+	ImGui.SameLine()
+	if ImGui.Button('Delete Character Set') then
+		if selectedTeam then
+			simpleExec(("DELETE FROM Settings WHERE Key = '%s'"):format(selectedTeam))
+			teams[teamName] = nil
+		end
+	end
+	ImGui.SameLine()
+	if ImGui.Button('Delete Selected Characters') then
+		showPopup = true
+		ImGui.OpenPopup('Delete Characters')
+		ImGui.SetNextWindowSize(200, 90)
+	end
+	if ImGui.BeginPopupModal('Delete Characters') then
+		if ImGui.Button('Proceed') then
+			for _,char in ipairs(group) do
+				if char.Show then
+					simpleExec(("DELETE FROM Inventory WHERE Character = '%s' AND Server = '%s'"):format(char.Name, server))
+				end
+			end
+			for i=#sortedGroup,1,-1 do
+				if group[sortedGroup[i]].Show then table.remove(sortedGroup, i) end
+			end
+			for i=#group,1,-1 do
+				local charName = group[i].Name
+				if group[i].Show then table.remove(group, i) group[charName] = nil end
+			end
+			showPopup = false
+			ImGui.CloseCurrentPopup()
+		end
+		ImGui.SameLine()
+		if ImGui.Button('Cancel') then
+			showPopup = false
+			ImGui.CloseCurrentPopup()
+		end
+		ImGui.EndPopup()
+	end
+	if ImGui.BeginPopupModal('Save Team', showPopup) then
+		teamName,_ = ImGui.InputText('Name', teamName)
+		if ImGui.Button('Save') and teamName ~= '' then
+			local nameList = ''
+			local newTeam = {}
+			for i,char in ipairs(group) do
+				if char.Show then
+					table.insert(newTeam, char.Name)
+					nameList = nameList .. char.Name .. ','
+				end
+			end
+			simpleExec(("INSERT INTO Settings VALUES ('TEAM:%s', '%s') ON CONFLICT(Key) DO UPDATE SET Value = '%s'"):format(teamName, nameList, nameList))
+			teams['TEAM:'..teamName] = newTeam
+			showPopup = false
+			ImGui.CloseCurrentPopup()
+			teamName = ''
+		end
+		ImGui.SameLine()
+		if ImGui.Button('Cancel') then
+			showPopup = false
+			ImGui.CloseCurrentPopup()
+			teamName = ''
+		end
+		ImGui.EndPopup()
+	end
+end
+
 local WINDOW_FLAGS = ImGuiWindowFlags.HorizontalScrollbar
 local classes = {Bard='BRD',Beastlord='BST',Berserker='BER',Cleric='CLR',Druid='DRU',Enchanter='ENC',Magician='MAG',Monk='MNK',Necromancer='NEC',Paladin='PAL',Ranger='RNG',Rogue='ROG',['Shadow Knight']='SHD',Shaman='SHM',Warrior='WAR',Wizard='WIZ'}
 local function bisGUI()
@@ -822,97 +946,8 @@ local function bisGUI()
 					ImGui.SameLine()
 					VerticalSeparator()
 					ImGui.SameLine()
-					ImGui.PushItemWidth(150)
-					if ImGui.BeginCombo('##Characters', 'Characters') then
-						for teamName,_ in pairs(teams) do
-							local _,pressed = ImGui.Checkbox(teamName:gsub('TEAM:', 'Team: '), selectedTeam == teamName)
-							if pressed then if selectedTeam ~= teamName then selectedTeam = teamName changeBroadcastMode(teamName) else selectedTeam = '' end end
-						end
-						local _,pressed = ImGui.Checkbox('All Online', selectedBroadcast == 1)
-						if pressed then changeBroadcastMode(1) end
-						_,pressed = ImGui.Checkbox('All Offline', selectedBroadcast == 2)
-						if pressed then changeBroadcastMode(2) end
-						_,pressed = ImGui.Checkbox('Group', selectedBroadcast == 3)
-						if pressed then changeBroadcastMode(3) end
-						for i,name in ipairs(sortedGroup) do
-							local char = group[name]
-							_,pressed = ImGui.Checkbox(char.Name, char.Show or false)
-							if pressed then
-								char.Show = not char.Show
-								changeBroadcastMode(4)
-							end
-						end
-						ImGui.EndCombo()
-					end
-					ImGui.PopItemWidth()
-					ImGui.SameLine()
-					if ImGui.Button('Save Character Set') then
-						showPopup = true
-						ImGui.OpenPopup('Save Team')
-						ImGui.SetNextWindowSize(200, 90)
-					end
-					ImGui.SameLine()
-					if ImGui.Button('Delete Character Set') then
-						if selectedTeam then
-							simpleExec(("DELETE FROM Settings WHERE Key = '%s'"):format(selectedTeam))
-							teams[teamName] = nil
-						end
-					end
-					ImGui.SameLine()
-					if ImGui.Button('Delete Selected Characters') then
-						showPopup = true
-						ImGui.OpenPopup('Delete Characters')
-						ImGui.SetNextWindowSize(200, 90)
-					end
-					if ImGui.BeginPopupModal('Delete Characters') then
-						if ImGui.Button('Proceed') then
-							for _,char in ipairs(group) do
-								if char.Show then
-									simpleExec(("DELETE FROM Inventory WHERE Character = '%s' AND Server = '%s'"):format(char.Name, server))
-								end
-							end
-							for i=#sortedGroup,1,-1 do
-								if group[sortedGroup[i]].Show then table.remove(sortedGroup, i) end
-							end
-							for i=#group,1,-1 do
-								local charName = group[i].Name
-								if group[i].Show then table.remove(group, i) group[charName] = nil end
-							end
-							showPopup = false
-							ImGui.CloseCurrentPopup()
-						end
-						ImGui.SameLine()
-						if ImGui.Button('Cancel') then
-							showPopup = false
-							ImGui.CloseCurrentPopup()
-						end
-						ImGui.EndPopup()
-					end
-					if ImGui.BeginPopupModal('Save Team', showPopup) then
-						teamName,_ = ImGui.InputText('Name', teamName)
-						if ImGui.Button('Save') and teamName ~= '' then
-							local nameList = ''
-							local newTeam = {}
-							for i,char in ipairs(group) do
-								if char.Show then
-									table.insert(newTeam, char.Name)
-									nameList = nameList .. char.Name .. ','
-								end
-							end
-							simpleExec(("INSERT INTO Settings VALUES ('TEAM:%s', '%s') ON CONFLICT(Key) DO UPDATE SET Value = '%s'"):format(teamName, nameList, nameList))
-							teams['TEAM:'..teamName] = newTeam
-							showPopup = false
-							ImGui.CloseCurrentPopup()
-							teamName = ''
-						end
-						ImGui.SameLine()
-						if ImGui.Button('Cancel') then
-							showPopup = false
-							ImGui.CloseCurrentPopup()
-							teamName = ''
-						end
-						ImGui.EndPopup()
-					end
+					
+					drawCharacterMenus()
 
 					local numColumns = 1
 					for _,char in ipairs(group) do if char.Show then numColumns = numColumns + 1 end end
@@ -1144,6 +1179,10 @@ local function bisGUI()
 					if ImGui.Button('Refresh') then selectionChanged = true end
 					ImGui.SameLine()
 					ImGui.TextColored(1, 0, 0, 1, 'Note: Other toons only send missing spells')
+					ImGui.SameLine()
+					VerticalSeparator()
+					ImGui.SameLine()
+					drawCharacterMenus()
 					local numSpellDataToons = 1
 					for _,_ in pairs(groupSpellData) do numSpellDataToons = numSpellDataToons + 1 end
 					ImGui.Columns(6)
@@ -1211,6 +1250,53 @@ local function bisGUI()
 					ImGui.Columns(1)
 					ImGui.EndTabItem()
 				end
+				if ImGui.BeginTabItem('Lockouts') then
+					drawCharacterMenus()
+					local numColumns = 1
+					for _,char in ipairs(group) do if char.Show and not char.Offline then numColumns = numColumns + 1 end end
+					if ImGui.BeginTable('Lockouts', numColumns, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY, ImGuiTableFlags.Sortable)) then
+						ImGui.TableSetupScrollFreeze(0, 1)
+						ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 1)
+						for i,char in ipairs(group) do
+							if char.Show and not char.Offline then
+								ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+							end
+						end
+						ImGui.TableHeadersRow()
+
+						for _,category in ipairs({'Raid','Group'}) do
+							ImGui.TableNextRow()
+							ImGui.TableNextColumn()
+							if ImGui.TreeNodeEx(category, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
+								for _,instance in ipairs(DZ_NAMES[category]) do
+									ImGui.TableNextRow()
+									ImGui.TableNextColumn()
+									ImGui.Text('%s (%s)', instance.name, instance.zone)
+									for _,char in ipairs(group) do
+										if char.Show and not char.Offline then
+											ImGui.TableNextColumn()
+											if not dzInfo[char.Name] then
+												ImGui.Text(icons.FA_SPINNER)
+											elseif dzInfo[char.Name][category] and dzInfo[char.Name][category][instance.name] then
+												ImGui.TextColored(1,0,0,1, icons.MD_BLOCK)
+												if ImGui.IsItemHovered() then
+													ImGui.BeginTooltip()
+													ImGui.TextColored(0,1,1,1, 'Available in: %s', dzInfo[char.Name][category][instance.name])
+													ImGui.EndTooltip()
+												end
+											else
+												ImGui.TextColored(0,1,0,1, icons.FA_CHECK)
+											end
+										end
+									end
+								end
+								ImGui.TreePop()
+							end
+						end
+						ImGui.EndTable()
+					end
+					ImGui.EndTabItem()
+				end
 				for _,infoTab in ipairs(bisConfig.Info) do
 					if ImGui.BeginTabItem(infoTab.Name) then
 						ImGui.Text(infoTab.Text)
@@ -1247,6 +1333,9 @@ local function searchAll()
 	end
 	for _, char in ipairs(group) do
 		actor:send({character=char.Name}, {id='searchspells'})
+	end
+	for _, char in ipairs(group) do
+		actor:send({character=char.Name}, {id='dzquery'})
 	end
 end
 
@@ -1409,6 +1498,37 @@ local function bisCommand(...)
 			end
 		end
 		printf('Missing Spells:\n%s', table.concat(missingSpellsText, '\n'))
+	elseif args[1] == 'lockouts' then
+		local output = ''
+		for _,category in ipairs({'Raid','Group'}) do
+			output = output .. '\aw=====================================\ax\n'
+			for _,dz in ipairs(DZ_NAMES[category]) do
+				output = output .. '\ay' .. dz.name .. '\ax \ar' .. category .. '\ax (\ag' .. dz.zone .. '\ax): '
+				for _,char in ipairs(group) do
+					if char.Show and not char.Offline then
+						if dzInfo[char.Name] and dzInfo[char.Name][category] and dzInfo[char.Name][category][dz.name] then output = output .. '\ar' .. char.Name .. '\ax, ' else output = output .. '\ag' .. char.Name .. '\ax, ' end
+					end
+				end
+				output = output .. '\n'
+			end
+		end
+		output = output .. '\aw=====================================\ax'
+		print(output)
+	end
+end
+
+local function populateDZInfo()
+	mq.TLO.Window('DynamicZoneWnd').DoOpen()
+	mq.delay(1)
+	mq.TLO.Window('DynamicZoneWnd').DoClose()
+	mq.delay(1)
+	for _,category in ipairs({'Raid','Group'}) do
+		for _,dz in ipairs(DZ_NAMES[category]) do
+			local idx = mq.TLO.Window('DynamicZoneWnd/DZ_TimerList').List(dz.lockout,dz.index or 2)()
+			if idx then
+				dzInfo[mq.TLO.Me.CleanName()][category][dz.name] = mq.TLO.Window('DynamicZoneWnd/DZ_TimerList').List(idx,1)()
+			end
+		end
 	end
 end
 
@@ -1426,6 +1546,7 @@ local function init(args)
 	end
 	if args[1] == '0' then openGUI = false end
 	actor = actors.register(actorCallback)
+	populateDZInfo()
 	if args[1] == '0' then
 		mq.delay(100)
 		actor:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name()})

@@ -1,3 +1,6 @@
+3.3.0
+- Add DZ lockout tab and `/bis lockouts` command
+
 3.2.3
 - Switch item list when entering a zone with an item list
 
