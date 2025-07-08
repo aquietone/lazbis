@@ -1291,14 +1291,14 @@ local function bisGUI()
 											if not dzInfo[char.Name] then
 												ImGui.Text(icons.FA_SPINNER)
 											elseif dzInfo[char.Name][category] and dzInfo[char.Name][category][instance.name] then
-												ImGui.TextColored(1,0,0,1, icons.MD_BLOCK)
+												ImGui.TextColored(1,0,0,1, icons.FA_LOCK)
 												if ImGui.IsItemHovered() then
 													ImGui.BeginTooltip()
 													ImGui.TextColored(0,1,1,1, 'Available in: %s', dzInfo[char.Name][category][instance.name])
 													ImGui.EndTooltip()
 												end
 											else
-												ImGui.TextColored(0,1,0,1, icons.FA_PLAY)
+												ImGui.TextColored(0,1,0,1, icons.FA_UNLOCK)
 											end
 										end
 									end
