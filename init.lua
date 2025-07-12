@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.3.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.3.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -119,7 +119,7 @@ end
 local function addCharacter(name, class, offline, show, msg)
 	if not group[name] then
 		if debug then printf('Add character: Name=%s Class=%s Offline=%s Show=%s, Msg=%s', name, class, offline, show, msg) end
-		local char = {Name=name, Class=class, Offline=offline, Show=show}
+		local char = {Name=name, Class=class, Offline=offline, Show=show, PingTime=mq.gettime()}
 		group[name] = char
 		table.insert(group, char)
 		table.insert(sortedGroup, char.Name)
@@ -131,6 +131,7 @@ local function addCharacter(name, class, offline, show, msg)
 	elseif msg and group[name].Offline then
 		if debug then printf('Add character: Name=%s Class=%s Offline=%s Show=%s, Msg=%s', name, class, offline, show, msg) end
 		group[name].Offline = false
+		group[name].PingTime=mq.gettime()
 		if selectedBroadcast == 1 or (selectedBroadcast == 3 and mq.TLO.Group.Member(name)()) then
 			group[name].Show = true
 		end
@@ -490,6 +491,13 @@ local function actorCallback(msg)
 	elseif content.id == 'dzresult' then
 		if content.Name == mq.TLO.Me.CleanName() then return end
 		dzInfo[content.Name] = content.lockouts
+	elseif content.id == 'pingreq' then
+		msg:send({id='pingresp', Name=mq.TLO.Me.CleanName(), time=mq.gettime()})
+	elseif content.id == 'pingresp' then
+		if content.Name == mq.TLO.Me.CleanName() then return end
+		if not group[content.Name] then return end
+		group[content.Name].Offline = false
+		group[content.Name].PingTime = content.time
 	end
 end
 
@@ -1051,7 +1059,7 @@ local function bisGUI()
 									end
 									ImGui.TreePop()
 								end
-								if catName == 'Gear' and selectedItemList.id == 'questitems' then
+								if catName == 'Powersource' and selectedItemList.id == 'questitems' then
 									ImGui.TableNextRow()
 									ImGui.TableNextColumn()
 									if ImGui.TreeNodeEx('Tradeskills', bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
@@ -1336,19 +1344,25 @@ end
 
 local function searchAll()
 	for _, char in ipairs(group) do
-		actor:send({character=char.Name}, {id='search', list=selectedItemList.id})
+		if not char.Offline then actor:send({character=char.Name}, {id='search', list=selectedItemList.id}) end
 	end
 	for _, char in ipairs(group) do
-		actor:send({character=char.Name}, {id='tsquery'})
+		if not char.Offline then actor:send({character=char.Name}, {id='tsquery'}) end
 	end
 	for _, char in ipairs(group) do
-		actor:send({character=char.Name}, {id='searchempties'})
+		if not char.Offline then actor:send({character=char.Name}, {id='searchempties'}) end
 	end
 	for _, char in ipairs(group) do
-		actor:send({character=char.Name}, {id='searchspells'})
+		if not char.Offline then actor:send({character=char.Name}, {id='searchspells'}) end
 	end
 	for _, char in ipairs(group) do
-		actor:send({character=char.Name}, {id='dzquery'})
+		if not char.Offline then actor:send({character=char.Name}, {id='dzquery'}) end
+	end
+end
+
+local function doPing()
+	for _,char in ipairs(group) do
+		if not char.Offline then actor:send({character=char.Name}, {id='pingreq'}) end
 	end
 end
 
@@ -1402,7 +1416,7 @@ local function sayCallback(line)
 					for slot,item in pairs(itembucket) do
 						if item then
 							for itemName in split(item, '/') do
-								if string.find(line, itemName) then
+								if string.find(line, itemName:gsub('-','%%-')) then
 									local hasItem = gear[char.Name][slot] ~= nil and (gear[char.Name][slot].count > 0 or (gear[char.Name][slot].componentcount or 0) > 0)
 									if not hasItem and list.id ~= selectedItemList.id then
 										loadSingleRow(list.id, char.Name, itemName)
@@ -1627,6 +1641,7 @@ local function init(args)
 end
 
 init({...})
+local lastPingTime = mq.gettime() + 60000
 while openGUI do
 	mq.delay(1000)
 	if rebroadcast then
@@ -1645,6 +1660,16 @@ while openGUI do
 	for itemName,lastAnnounced in pairs(recentlyAnnounced) do
 		if mq.gettime() - lastAnnounced > 30000 then
 			recentlyAnnounced[itemName] = nil
+		end
+	end
+	local curTime = mq.gettime()
+	if curTime - lastPingTime > 60000 then
+		doPing()
+		group[mq.TLO.Me.CleanName()].PingTime = curTime
+	end
+	for _,char in ipairs(group) do
+		if curTime - char.PingTime > 120000 then
+			char.Offline = true
 		end
 	end
 	mq.doevents()
