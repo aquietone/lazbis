@@ -3165,13 +3165,14 @@ return {
 			['Ferocity'] = 'Hexed Umbra of Ferocity',
 			['OtherworldlySoul'] = 'Otherworldly Soul',
 			['BellikosDoll'] = 'Living Bellikos Doll - Tranquility',
+			['DollmakersKey'] = 'Dollmaker\'s Key',
 		},
 		['Main'] = {
 			['Slots'] = {
 				{Name='Power of 3 (HS)', Slots={'Lucky Grass Trinket','Lucky Copper/Silver'}},
 				{Name='Power of 6 (Keepsakes)', Slots={'Symbol','Destruction','Mending','Persistence','Suffering','Cleaving','Deflection','Evasion','Ferocity'}},
 				{Name='Power of 9 (Clue)', Slots={'Eyes', 'Tongue','Idol','Oculus','Horseshoe'}},
-				{Name='Kithicor', Slots={'BellikosClaws','BellikosFang','BellikosEye','BellikosTear','BellikosDoll'}},
+				{Name='Kithicor', Slots={'BellikosClaws','BellikosFang','BellikosEye','BellikosTear','BellikosDoll','DollmakersKey'}},
 				{Name='Powersource', Slots={'EOC','Radix','OtherworldlySoul'}},
 				{Name='Augs', Slots={'BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
 				{Name='Other', Slots={'ImbuedRune','FabledBrew','LazCharm','Tacvi Clicky','Veeshan Clicky'}},

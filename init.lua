@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.3.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.4.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -23,28 +23,30 @@ end
 local openGUI		= true
 local shouldDrawGUI	= true
 local minimizedGUI	= false
+local currentTab	= nil
 
 -- Character info storage
-local gear			= {}
-local group			= {}
-local sortedGroup	= {}
-local itemChecks	= {}
-local tradeskills	= {}
-local emptySlots	= {}
-local teams			= {}
+local gear				= {}
+local group				= {}
+local sortedGroup		= {}
+local itemChecks		= {}
+local tradeskills		= {}
+local emptySlots		= {}
+local teams				= {}
+local spellData			= {}
+local groupSpellData	= {}
 
 -- Item list information
 local selectedItemList	= bisConfig.ItemLists[bisConfig.DefaultItemList.group][bisConfig.DefaultItemList.index]
 local itemList			= bisConfig.sebilis
 local selectionChanged	= true
+local firstTimeLoad		= true
 local settings			= {ShowSlots=true,ShowMissingOnly=false,AnnounceNeeds=false,AnnounceChannel='Group',Locked=false}
 local orderedSkills		= {'Baking', 'Blacksmithing', 'Brewing', 'Fletching', 'Jewelry Making', 'Pottery', 'Tailoring'}
 local recipeQuestIdx	= 1
 local ingredientsArray	= {}
 local reapplyFilter		= false
 local slots				= {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource'}
-local spellData			= {}
-local groupSpellData	= {}
 local hideOwnedSpells	= false
 
 local debug			= false
@@ -149,12 +151,18 @@ end
 local function initTables()
 	local foundInventory = false
 	local foundSettings = false
+	local foundTradeskills = false
+	local foundSpells = false
 	local function versioncallback(udata,cols,values,names)
 		for i=1,cols do
 			if values[i] == 'Inventory' then
 				foundInventory = true
 			elseif values[i] == 'Settings' then
 				foundSettings = true
+			elseif values[i] == 'Tradeskills' then
+				foundTradeskills = true
+			elseif values[i] == 'Spells' then
+				foundSpells = true
 			end
 		end
 		return 0
@@ -170,6 +178,12 @@ local function initTables()
 	simpleExec([[DROP TABLE IF EXISTS Info]])
 	if not foundSettings then
 		simpleExec([[CREATE TABLE IF NOT EXISTS Settings (Key TEXT UNIQUE NOT NULL, Value TEXT NOT NULL)]])
+	end
+	if not foundTradeskills then
+		simpleExec([[CREATE TABLE IF NOT EXISTS Tradeskills (Character TEXT NOT NULL, Class TEXT NOT NULL, Server TEXT NOT NULL, Tradeskill TEXT NOT NULL, Value INTEGER NOT NULL)]])
+	end
+	if not foundSpells then
+		simpleExec([[CREATE TABLE IF NOT EXISTS Spells (Character TEXT NOT NULL, Class TEXT NOT NULL, Server TEXT NOT NULL, SpellName TEXT NOT NULL, Level INTEGER NOT NULL, Location TEXT NOT NULL)]])
 	end
 	-- check version and handle any migrations, none atm
 	simpleExec(("INSERT INTO Settings VALUES ('Version', '%s') ON CONFLICT(Key) DO UPDATE SET Value = '%s'"):format(meta.version, meta.version))
@@ -235,6 +249,16 @@ local function clearCategoryDataForCharacter(name, category)
 	exec(deleteStmt, name, category, 'deleted')
 end
 
+local function clearTradeskillDataForCharacter(name)
+local deleteStmt = ("DELETE FROM Tradeskills WHERE Character = '%s' AND Server = '%s'"):format(name, server)
+	exec(deleteStmt, name, nil, 'deleted')
+end
+
+local function clearSpellDataForCharacter(name)
+	local deleteStmt = ("DELETE FROM Spells WHERE Character = '%s' AND Server = '%s'"):format(name, server)
+	exec(deleteStmt, name, nil, 'deleted')
+end
+
 local function resolveInvSlot(invslot)
 	if invslot == 'Bank' then return ' (Bank)' end
 	local numberinvslot = tonumber(invslot)
@@ -289,6 +313,44 @@ local function loadInv(category)
 	reapplyFilter = true
 end
 
+local function tsRowCallback(udata,cols,values,names)
+	if group[values[1]] and not group[values[1]].Offline then return 0 end
+	addCharacter(values[1], values[2], true, false)
+	tradeskills[values[1]] = tradeskills[values[1]] or {}
+	tradeskills[values[1]][values[4]] = tonumber(values[5])
+	return 0
+end
+
+local function loadTradeskillsFromDB()
+	for _,char in ipairs(group) do
+		if char.Offline then tradeskills[char.Name] = {} end
+	end
+	repeat
+		local result = db:exec(string.format("SELECT * FROM Tradeskills WHERE Server = '%s';", server), tsRowCallback)
+		if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
+	until result ~= sql.BUSY
+	reapplyFilter = true
+end
+
+local function spellRowCallback(udata,cols,values,names)
+	if group[values[1]] and not group[values[1]].Offline then return 0 end
+	addCharacter(values[1], values[2], true, false)
+	groupSpellData[values[1]] = groupSpellData[values[1]] or {}
+	table.insert(groupSpellData[values[1]], {values[5], values[4], values[6]})
+	return 0
+end
+
+local function loadSpellsFromDB()
+	for _,char in ipairs(group) do
+		if char.Offline then groupSpellData[char.Name] = {} end
+	end
+	repeat
+		local result = db:exec(string.format("SELECT * FROM Spells WHERE Server = '%s';", server), spellRowCallback)
+		if result == sql.BUSY then print('\arDatabase was busy!') mq.delay(math.random(10,50)) end
+	until result ~= sql.BUSY
+	reapplyFilter = true
+end
+
 local foundItem = nil
 local function singleRowCallback(udata,cols,values,names)
 	foundItem = {Character=values[1], Count=tonumber(values[7]), ItemName=values[6] and values[5], ComponentCount=tonumber(values[8])}
@@ -307,6 +369,29 @@ local function dumpInv(name, category)
 	clearCategoryDataForCharacter(name, category)
 
 	insertCharacterDataForCategory(name, category)
+end
+
+local function dumpTradeskills(name, skills)
+	clearTradeskillDataForCharacter(name)
+	-- name,class,server,skill,value
+	local char = group[name]
+	local stmt = "\n"
+	for skill,value in pairs(skills) do
+		stmt = stmt .. ("INSERT INTO Tradeskills VALUES ('%s','%s','%s','%s',%d);\n"):format(name, char.Class, server, skill, value)
+	end
+	exec(stmt, name, 'Tradeskills', 'inserted')
+end
+
+local function dumpSpells(name, spells)
+	clearSpellDataForCharacter(name)
+	if not spells then return end
+	-- name,class,server,skill,value
+	local char = group[name]
+	local stmt = "\n"
+	for _,missingSpell in ipairs(spells) do
+		stmt = stmt .. ("INSERT INTO Spells VALUES ('%s','%s','%s','%s',%d,'%s');\n"):format(name, char.Class, server, missingSpell[2]:gsub('\'','\'\''), missingSpell[1], missingSpell[3] and missingSpell[3]:gsub('\'','\'\'') or '')
+	end
+	exec(stmt, name, 'Spells', 'inserted')
 end
 
 local function searchItemsInList(list)
@@ -379,6 +464,35 @@ local function searchItemsInList(list)
 	return results
 end
 
+local function loadTradeskills()
+	return {
+		Blacksmithing = mq.TLO.Me.Skill('blacksmithing')(),
+		Baking = mq.TLO.Me.Skill('baking')(),
+		Brewing = mq.TLO.Me.Skill('brewing')(),
+		Tailoring = mq.TLO.Me.Skill('tailoring')(),
+		Pottery = mq.TLO.Me.Skill('pottery')(),
+		['Jewelry Making'] = mq.TLO.Me.Skill('jewelry making')(),
+		Fletching = mq.TLO.Me.Skill('fletching')(),
+	}
+end
+
+local function loadMissingSpells()
+	local missingSpells = {}
+	for _,level in ipairs({70,69,68,67,66}) do
+		local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
+		for _,spellName in ipairs(levelSpells) do
+			local spellDetails = splitToTable(spellName, '|')
+			spellName = spellDetails[1]
+			local spellLocation = spellDetails[2]
+			spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
+			if spellData[spellName] == 0 then
+				table.insert(missingSpells, {level, spellName, spellLocation})
+			end
+		end
+	end
+	return missingSpells
+end
+
 -- Actor message handler
 local function actorCallback(msg)
 	local content = msg()
@@ -418,15 +532,7 @@ local function actorCallback(msg)
 		dumpInv(char.Name, content.list)
 	elseif content.id == 'tsquery' then
 		if debug then printf('=== MSG: id=%s', content.id) end
-		local skills = {
-			Blacksmithing = mq.TLO.Me.Skill('blacksmithing')(),
-			Baking = mq.TLO.Me.Skill('baking')(),
-			Brewing = mq.TLO.Me.Skill('brewing')(),
-			Tailoring = mq.TLO.Me.Skill('tailoring')(),
-			Pottery = mq.TLO.Me.Skill('pottery')(),
-			['Jewelry Making'] = mq.TLO.Me.Skill('jewelry making')(),
-			Fletching = mq.TLO.Me.Skill('fletching')(),
-		}
+		local skills = loadTradeskills()
 		if debug then printf('>>> SEND MSG: id=%s Name=%s Skills=%s', content.id, mq.TLO.Me.CleanName(), skills) end
 		msg:send({id='tsresult', Skills=skills, Name=mq.TLO.Me.CleanName()})
 	elseif content.id == 'tsresult' then
@@ -437,6 +543,7 @@ local function actorCallback(msg)
 		for name,skill in pairs(content.Skills) do
 			tradeskills[char.Name][name] = skill
 		end
+		dumpTradeskills(char.Name, tradeskills[char.Name])
 	elseif content.id == 'searchempties' then
 		local empties={}
 		for i = 0, 21 do
@@ -469,23 +576,11 @@ local function actorCallback(msg)
 			message = message .. empty .. ', '
 		end
 	elseif content.id == 'searchspells' then
-		local missingSpells = {}
-		for _,level in ipairs({70,69,68,67,66}) do
-			local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
-			for _,spellName in ipairs(levelSpells) do
-				local spellDetails = splitToTable(spellName, '|')
-				spellName = spellDetails[1]
-				local spellLocation = spellDetails[2]
-				spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
-				if spellData[spellName] == 0 then
-					table.insert(missingSpells, {level, spellName, spellLocation})
-				end
-			end
-		end
-		msg:send({id='spellsresult', missingSpells=missingSpells, Name=mq.TLO.Me.CleanName()})
+		msg:send({id='spellsresult', missingSpells=loadMissingSpells(), Name=mq.TLO.Me.CleanName()})
 	elseif content.id == 'spellsresult' then
 		if content.Name == mq.TLO.Me.CleanName() then return end
 		groupSpellData[content.Name] = content.missingSpells
+		dumpSpells(content.Name, groupSpellData[content.Name])
 	elseif content.id == 'dzquery' then
 		msg:send({id='dzresult', lockouts=dzInfo[mq.TLO.Me.CleanName()], Name=mq.TLO.Me.CleanName()})
 	elseif content.id == 'dzresult' then
@@ -766,7 +861,7 @@ end
 
 local function drawCharacterMenus()
 	ImGui.PushItemWidth(150)
-	if ImGui.BeginCombo('##Characters', 'Characters') then
+	if ImGui.BeginCombo('##Characters', 'Characters', ImGuiComboFlags.HeightLarge) then
 		for teamName,_ in pairs(teams) do
 			local _,pressed = ImGui.Checkbox(teamName:gsub('TEAM:', 'Team: '), selectedTeam == teamName)
 			if pressed then if selectedTeam ~= teamName then selectedTeam = teamName changeBroadcastMode(teamName) else selectedTeam = '' end end
@@ -897,6 +992,7 @@ local function bisGUI()
 			ImGui.SameLine()
 			if ImGui.BeginTabBar('bistabs') then
 				if ImGui.BeginTabItem('Gear') then
+					currentTab = 'Gear'
 					local origSelectedItemList = selectedItemList
 					ImGui.PushItemWidth(150)
 					ImGui.SetNextWindowSize(150, 350)
@@ -1085,6 +1181,7 @@ local function bisGUI()
 					ImGui.EndTabItem()
 				end
 				if ImGui.BeginTabItem('Empties') then
+					currentTab = 'Empties'
 					local hadEmpties = false
 					for char,empties in pairs(emptySlots) do
 						if empties then
@@ -1105,6 +1202,7 @@ local function bisGUI()
 					ImGui.EndTabItem()
 				end
 				if bisConfig.StatFoodRecipes and ImGui.BeginTabItem('Stat Food') then
+					currentTab = 'Stat Food'
 					if ImGui.BeginTabBar('##statfoodtabs') then
 						if ImGui.BeginTabItem('Recipes') then
 							for _,recipe in ipairs(bisConfig.StatFoodRecipes) do
@@ -1194,6 +1292,7 @@ local function bisGUI()
 					ImGui.EndTabItem()
 				end
 				if ImGui.BeginTabItem('Spells') then
+					currentTab = 'Spells'
 					hideOwnedSpells = ImGui.Checkbox('Missing Only', hideOwnedSpells)
 					ImGui.SameLine()
 					if ImGui.Button('Refresh') then selectionChanged = true end
@@ -1271,6 +1370,7 @@ local function bisGUI()
 					ImGui.EndTabItem()
 				end
 				if ImGui.BeginTabItem('Lockouts') then
+					currentTab = 'Lockouts'
 					drawCharacterMenus()
 					local numColumns = 1
 					for _,char in ipairs(group) do if char.Show and not char.Offline then numColumns = numColumns + 1 end end
@@ -1320,11 +1420,13 @@ local function bisGUI()
 				end
 				for _,infoTab in ipairs(bisConfig.Info) do
 					if ImGui.BeginTabItem(infoTab.Name) then
+						currentTab = infoTab.Name
 						ImGui.Text(infoTab.Text)
 						ImGui.EndTabItem()
 					end
 				end
 				if ImGui.BeginTabItem('Links') then
+					currentTab = 'Links'
 					for _,link in ipairs(bisConfig.Links) do
 						DrawTextLink(link.label, link.url)
 					end
@@ -1343,20 +1445,31 @@ local function bisGUI()
 end
 
 local function searchAll()
-	for _, char in ipairs(group) do
-		if not char.Offline then actor:send({character=char.Name}, {id='search', list=selectedItemList.id}) end
+	if currentTab == 'Gear' or firstTimeLoad then
+		for _, char in ipairs(group) do
+			if not char.Offline then
+				actor:send({character=char.Name}, {id='search', list=selectedItemList.id})
+				if selectedItemList.id == 'questitems' or firstTimeLoad then actor:send({character=char.Name}, {id='tsquery'}) end
+			end
+		end
 	end
-	for _, char in ipairs(group) do
-		if not char.Offline then actor:send({character=char.Name}, {id='tsquery'}) end
+	-- for _, char in ipairs(group) do
+	-- 	if not char.Offline then actor:send({character=char.Name}, {id='tsquery'}) end
+	-- end
+	if currentTab == 'Empties' or firstTimeLoad then
+		for _, char in ipairs(group) do
+			if not char.Offline then actor:send({character=char.Name}, {id='searchempties'}) end
+		end
 	end
-	for _, char in ipairs(group) do
-		if not char.Offline then actor:send({character=char.Name}, {id='searchempties'}) end
+	if currentTab == 'Spells' or firstTimeLoad then
+		for _, char in ipairs(group) do
+			if not char.Offline then actor:send({character=char.Name}, {id='searchspells'}) end
+		end
 	end
-	for _, char in ipairs(group) do
-		if not char.Offline then actor:send({character=char.Name}, {id='searchspells'}) end
-	end
-	for _, char in ipairs(group) do
-		if not char.Offline then actor:send({character=char.Name}, {id='dzquery'}) end
+	if currentTab == 'Lockouts' or firstTimeLoad then
+		for _, char in ipairs(group) do
+			if not char.Offline then actor:send({character=char.Name}, {id='dzquery'}) end
+		end
 	end
 end
 
@@ -1483,17 +1596,26 @@ local function lootedCallback(line, who, item)
 end
 
 local function writeAllItemLists()
-	addCharacter(mq.TLO.Me.CleanName(), mq.TLO.Me.Class.Name(), false, true)
+	local name = mq.TLO.Me.CleanName()
+	addCharacter(name, mq.TLO.Me.Class.Name(), false, true)
 	local insertStmt = ''
 	for _,group in ipairs(bisConfig.Groups) do
 		for _,list in ipairs(bisConfig.ItemLists[group]) do
 			itemList = bisConfig[list.id]
-			gear[mq.TLO.Me.CleanName()] = searchItemsInList(list.id)
-			insertStmt = insertStmt .. buildInsertStmt(mq.TLO.Me.CleanName(), list.id)
+			gear[name] = searchItemsInList(list.id)
+			insertStmt = insertStmt .. buildInsertStmt(name, list.id)
 		end
-		clearAllDataForCharacter(mq.TLO.Me.CleanName())
-		exec(insertStmt, mq.TLO.Me.CleanName(), nil, 'inserted')
+		clearAllDataForCharacter(name)
+		exec(insertStmt, name, nil, 'inserted')
 	end
+	-- clear spell data
+	clearSpellDataForCharacter(name)
+	-- insert spell data
+	dumpSpells(name, loadMissingSpells())
+	-- clear tradeskill data
+	clearTradeskillDataForCharacter(name)
+	-- insert tradeskill data
+	dumpTradeskills(mq.TLO.Me.CleanName(), loadTradeskills())
 end
 
 local function zonedCallback()
@@ -1629,15 +1751,6 @@ local function init(args)
 	mq.imgui.init('BISCheck', bisGUI)
 
 	mq.bind('/bis', bisCommand)
-
-	for _,level in ipairs({70,69,68,67,66}) do
-		local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
-		for _,spellName in ipairs(levelSpells) do
-			local spellDetails = splitToTable(spellName, '|')
-			spellName = spellDetails[1]
-			spellData[spellName] = spellData[spellName] or mq.TLO.Me.Book(spellName)() or mq.TLO.Me.CombatAbility(spellName)() or 0
-		end
-	end
 end
 
 init({...})
@@ -1656,7 +1769,14 @@ while openGUI do
 		selectionChanged = true
 		rebroadcast = false
 	end
-	if selectionChanged then selectionChanged = false searchAll() loadInv(selectedItemList.id) end
+	if selectionChanged then
+		selectionChanged = false
+		searchAll()
+		if currentTab == 'Gear' or firstTimeLoad then loadInv(selectedItemList.id) end
+		if (currentTab == 'Gear' and selectedItemList.id == 'questitems') or firstTimeLoad then loadTradeskillsFromDB() end
+		if currentTab == 'Spells' or firstTimeLoad then loadSpellsFromDB() end
+		if firstTimeLoad then firstTimeLoad = false end
+	end
 	for itemName,lastAnnounced in pairs(recentlyAnnounced) do
 		if mq.gettime() - lastAnnounced > 30000 then
 			recentlyAnnounced[itemName] = nil
