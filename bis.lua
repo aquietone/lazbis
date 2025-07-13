@@ -1203,12 +1203,13 @@ return {
 				{Name='Non-Visibles', Slots={'Back','Ear1','Ear2','Face','Finger1','Finger2','Neck','Shoulder','Waist',}},
 				{Name='Weapons', Slots={'MainHand','Secondary','Ranged','RangedAug','Charm','Clicky'}},
 				{Name='Books', Slots={'Book1','Book2','Book3','Wand'}},
-				{Name='Augs', Slots={'Aug1','Aug2','Aug3','Aug4','Aug5','Aug6','Aug7','Aug8','Aug9','Aug10','Aug11','Aug12','Aug13'}},
+				{Name='Augs', Slots={'Middle Finger (Mayong)','Aug1','Aug2','Aug3','Aug4','Aug5','Aug6','Aug7','Aug8','Aug9','Aug10','Aug11','Aug12','Aug13'}},
 			},
 		},
 		['Template'] = {
 			['Charm'] = 'Geode of Unyielding Avarice',
 			['Wand'] = 'Wand of Ruptured Reality',
+			['Middle Finger (Mayong)'] = 'Jonas Dagmire\'s Skeletal Middle Finger/33171',
 		},
 		['Visible'] = {
 			['Wrist1'] = 'Vessel of the Ascendant Bracer',
