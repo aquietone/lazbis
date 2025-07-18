@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.4.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.4.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -70,7 +70,7 @@ local DZ_NAMES = {
 		{name='Veksar', lockout='A Lake of Ill Omens', zone='Lake of Ill Omen'},
 		{name='Anguish', lockout='=Overlord Mata Muram', zone='Wall of Slaughter', index=3},
 		{name='Trak', lockout='Trakanon_Final', zone='HC Sebilis'},
-		{name='FUKU', lockout='Unrest, The Fabled Undead Knight', zone='Unrest'}
+		{name='FUKU', lockout='The Fabled Undead Knight', zone='Unrest'}
 	},
 	Group = {
 		{name='Venril Sathir', lockout='Revenge on Venril Sathir', zone='Karnors Castle'},
