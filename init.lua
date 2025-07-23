@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.4.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.5.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -48,8 +48,6 @@ local ingredientsArray	= {}
 local reapplyFilter		= false
 local slots				= {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource'}
 local hideOwnedSpells	= false
-
-local debug			= false
 
 local server		= mq.TLO.EverQuest.Server()
 local dbfmt			= "INSERT INTO Inventory VALUES ('%s','%s','%s','%s','%s','%s',%d,%d,'%s');\n"
@@ -104,6 +102,11 @@ local iconImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/icon_lazbis.
 local broadcast			= '/e3bca'
 local selectedBroadcast	= 1
 local rebroadcast		= false
+local isBackground		= false
+local dumpInv			= false
+local grouponly			= false
+local argopts			= {['0']=function() isBackground=true end, debug=function() debug = true end, dumpinv=function() dumpInv = true end, group=function() grouponly = true broadcast = '/e3bcg' if not mq.TLO.Plugin('mq2mono')() then broadcast = '/dgge' end end}
+local debug				= false
 if not mq.TLO.Plugin('mq2mono')() then broadcast = '/dge' end
 
 local function split(str, char)
@@ -365,7 +368,7 @@ local function loadSingleRow(category, charName, itemName)
 	until result ~= sql.BUSY
 end
 
-local function dumpInv(name, category)
+local function doDumpInv(name, category)
 	clearCategoryDataForCharacter(name, category)
 
 	insertCharacterDataForCategory(name, category)
@@ -498,18 +501,21 @@ local function actorCallback(msg)
 	local content = msg()
 	if debug then printf('<<< MSG RCVD: id=%s', content.id) end
 	if content.id == 'hello' then
-		if debug then printf('=== MSG: id=%s Name=%s Class=%s', content.id, content.Name, content.Class) end
-		if not openGUI then return end
+		if debug then printf('=== MSG: id=%s Name=%s Class=%s group=%s', content.id, content.Name, content.Class, content.group) end
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
+		if isBackground then return end
 		addCharacter(content.Name, content.Class, false, true, msg)
 	elseif content.id == 'search' then
 		if debug then printf('=== MSG: id=%s list=%s', content.id, content.list) end
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
 		-- {id='search', list='dsk'}
 		local results = searchItemsInList(content.list)
 		if debug then printf('>>> SEND MSG: id=%s Name=%s list=%s class=%s', content.id, mq.TLO.Me.CleanName(), content.list, mq.TLO.Me.Class.Name()) end
-		msg:send({id='result', Name=mq.TLO.Me.CleanName(), list=content.list, class=mq.TLO.Me.Class.Name(), results=results})
+		msg:send({id='result', Name=mq.TLO.Me.CleanName(), list=content.list, class=mq.TLO.Me.Class.Name(), results=results, group=content.group})
 	elseif content.id == 'result' then
 		if debug then printf('=== MSG: id=%s Name=%s list=%s class=%s', content.id, content.Name, content.list, content.class) end
-		if not openGUI then return end
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
+		if isBackground then return end
 		-- {id='result', Name='name', list='dsk', class='Warrior', results={slot1=1, slot2=0}}
 		local results = content.results
 		if results == nil then return end
@@ -529,15 +535,17 @@ local function actorCallback(msg)
 			end
 		end
 		reapplyFilter = true
-		dumpInv(char.Name, content.list)
+		doDumpInv(char.Name, content.list)
 	elseif content.id == 'tsquery' then
 		if debug then printf('=== MSG: id=%s', content.id) end
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
 		local skills = loadTradeskills()
 		if debug then printf('>>> SEND MSG: id=%s Name=%s Skills=%s', content.id, mq.TLO.Me.CleanName(), skills) end
-		msg:send({id='tsresult', Skills=skills, Name=mq.TLO.Me.CleanName()})
+		msg:send({id='tsresult', Skills=skills, Name=mq.TLO.Me.CleanName(), group=content.group})
 	elseif content.id == 'tsresult' then
 		if debug then printf('=== MSG: id=%s Name=%s Skills=%s', content.id, content.Name, content.Skills) end
-		if not openGUI then return end
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
+		if isBackground then return end
 		local char = group[content.Name]
 		tradeskills[char.Name] = tradeskills[char.Name] or {}
 		for name,skill in pairs(content.Skills) do
@@ -545,6 +553,7 @@ local function actorCallback(msg)
 		end
 		dumpTradeskills(char.Name, tradeskills[char.Name])
 	elseif content.id == 'searchempties' then
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
 		local empties={}
 		for i = 0, 21 do
 			local slot = mq.TLO.InvSlot(i).Item
@@ -565,10 +574,11 @@ local function actorCallback(msg)
 			end
 		end
 		if debug then printf('>>> SEND MSG: id=%s Name=%s empties=%s', content.id, mq.TLO.Me.CleanName(), empties) end
-		msg:send({id='emptiesresult', empties=empties, Name=mq.TLO.Me.CleanName()})
+		msg:send({id='emptiesresult', empties=empties, Name=mq.TLO.Me.CleanName(), group=content.group})
 	elseif content.id == 'emptiesresult' then
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
 		if debug then printf('=== MSG: id=%s Name=%s empties=%s', content.id, content.Name, content.empties) end
-		if not openGUI then return end
+		if isBackground then return end
 		emptySlots[content.Name] = content.empties
 		local message = 'Empties for ' .. content.Name .. ' - '
 		if not content.empties then return end
@@ -576,21 +586,30 @@ local function actorCallback(msg)
 			message = message .. empty .. ', '
 		end
 	elseif content.id == 'searchspells' then
-		msg:send({id='spellsresult', missingSpells=loadMissingSpells(), Name=mq.TLO.Me.CleanName()})
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
+		msg:send({id='spellsresult', missingSpells=loadMissingSpells(), Name=mq.TLO.Me.CleanName(), group=content.group})
 	elseif content.id == 'spellsresult' then
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
 		if content.Name == mq.TLO.Me.CleanName() then return end
+		if isBackground then return end
 		groupSpellData[content.Name] = content.missingSpells
 		dumpSpells(content.Name, groupSpellData[content.Name])
 	elseif content.id == 'dzquery' then
-		msg:send({id='dzresult', lockouts=dzInfo[mq.TLO.Me.CleanName()], Name=mq.TLO.Me.CleanName()})
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
+		msg:send({id='dzresult', lockouts=dzInfo[mq.TLO.Me.CleanName()], Name=mq.TLO.Me.CleanName(), group=content.group})
 	elseif content.id == 'dzresult' then
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
 		if content.Name == mq.TLO.Me.CleanName() then return end
+		if isBackground then return end
 		dzInfo[content.Name] = content.lockouts
 	elseif content.id == 'pingreq' then
-		msg:send({id='pingresp', Name=mq.TLO.Me.CleanName(), time=mq.gettime()})
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
+		msg:send({id='pingresp', Name=mq.TLO.Me.CleanName(), time=mq.gettime(), group=content.group})
 	elseif content.id == 'pingresp' then
+		if content.group and content.group ~= mq.TLO.Group.Leader() then return end
 		if content.Name == mq.TLO.Me.CleanName() then return end
 		if not group[content.Name] then return end
+		if isBackground then return end
 		group[content.Name].Offline = false
 		group[content.Name].PingTime = content.time
 	end
@@ -600,21 +619,23 @@ local function changeBroadcastMode(tempBroadcast)
 	local origBroadcast = broadcast
 
 	local bChanged = false
-	if not mq.TLO.Plugin('mq2mono')() then
-		if tempBroadcast == 3 and broadcast ~= '/dgge' then
-			broadcast = '/dgge'
-			bChanged = true
-		elseif broadcast ~= '/dge' then
-			broadcast = '/dge'
-			bChanged = true
-		end
-	else
-		if tempBroadcast == 3 and broadcast ~= '/e3bcg' then
-			broadcast = '/e3bcg'
-			bChanged = true
-		elseif broadcast ~= '/e3bca' then
-			broadcast = '/e3bca'
-			bChanged = true
+	if not grouponly then
+		if not mq.TLO.Plugin('mq2mono')() then
+			if tempBroadcast == 3 and broadcast ~= '/dgge' then
+				broadcast = '/dgge'
+				bChanged = true
+			elseif broadcast ~= '/dge' then
+				broadcast = '/dge'
+				bChanged = true
+			end
+		else
+			if tempBroadcast == 3 and broadcast ~= '/e3bcg' then
+				broadcast = '/e3bcg'
+				bChanged = true
+			elseif broadcast ~= '/e3bca' then
+				broadcast = '/e3bca'
+				bChanged = true
+			end
 		end
 	end
 	if tempBroadcast == 1 or tempBroadcast == 3 then
@@ -1444,38 +1465,39 @@ local function bisGUI()
 	end
 end
 
+local function resolveGroupId()
+	return grouponly and mq.TLO.Group.Leader() or nil
+end
+
 local function searchAll()
 	if currentTab == 'Gear' or firstTimeLoad then
 		for _, char in ipairs(group) do
 			if not char.Offline then
-				actor:send({character=char.Name}, {id='search', list=selectedItemList.id})
+				actor:send({character=char.Name}, {id='search', list=selectedItemList.id, group=resolveGroupId()})
 				if selectedItemList.id == 'questitems' or firstTimeLoad then actor:send({character=char.Name}, {id='tsquery'}) end
 			end
 		end
 	end
-	-- for _, char in ipairs(group) do
-	-- 	if not char.Offline then actor:send({character=char.Name}, {id='tsquery'}) end
-	-- end
 	if currentTab == 'Empties' or firstTimeLoad then
 		for _, char in ipairs(group) do
-			if not char.Offline then actor:send({character=char.Name}, {id='searchempties'}) end
+			if not char.Offline then actor:send({character=char.Name}, {id='searchempties', group=resolveGroupId()}) end
 		end
 	end
 	if currentTab == 'Spells' or firstTimeLoad then
 		for _, char in ipairs(group) do
-			if not char.Offline then actor:send({character=char.Name}, {id='searchspells'}) end
+			if not char.Offline then actor:send({character=char.Name}, {id='searchspells', group=resolveGroupId()}) end
 		end
 	end
 	if currentTab == 'Lockouts' or firstTimeLoad then
 		for _, char in ipairs(group) do
-			if not char.Offline then actor:send({character=char.Name}, {id='dzquery'}) end
+			if not char.Offline then actor:send({character=char.Name}, {id='dzquery', group=resolveGroupId()}) end
 		end
 	end
 end
 
 local function doPing()
 	for _,char in ipairs(group) do
-		if not char.Offline then actor:send({character=char.Name}, {id='pingreq'}) end
+		if not char.Offline then actor:send({character=char.Name}, {id='pingreq', group=resolveGroupId()}) end
 	end
 end
 
@@ -1683,24 +1705,37 @@ local function populateDZInfo()
 	end
 end
 
-local function init(args)
+local function resolveArgs(args)
 	printf('\ag%s\ax started with \ay%d\ax arguments:', meta.name, #args)
 	for i, arg in ipairs(args) do
 		printf('args[%d]: %s', i, arg)
 	end
-	if args[1] == 'debug' or args[2] == 'debug' then debug = true end
-	if args[1] ~= '0' then initDB() end
-	if args[1] == 'dumpinv' then
+	for _,arg in ipairs(args) do
+		if argopts[arg] then
+			argopts[arg]()
+		end
+	end
+	if not isBackground then
+		initDB()
+	else
+		openGUI = false
+	end
+	if dumpInv then
 		writeAllItemLists()
 		openGUI = false
 		return
 	end
-	if args[1] == '0' then openGUI = false end
+	if isBackground then openGUI = false end
+end
+
+local function init(args)
+	resolveArgs(args)
+
 	actor = actors.register(actorCallback)
 	populateDZInfo()
-	if args[1] == '0' then
+	if isBackground then
 		mq.delay(100)
-		actor:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name()})
+		actor:send({id='hello',Name=mq.TLO.Me(),Class=mq.TLO.Me.Class.Name(),group=resolveGroupId()})
 		while true do
 			mq.delay(1000)
 		end
@@ -1734,7 +1769,7 @@ local function init(args)
 
 	mq.cmdf('%s /lua stop %s', broadcast, meta.name)
 	mq.delay(500)
-	mq.cmdf('%s /lua run %s 0%s', broadcast, meta.name, debug and ' debug' or '')
+	mq.cmdf('%s /lua run %s 0%s%s', broadcast, meta.name, resolveGroupId() and ' group' or '', debug and ' debug' or '')
 	mq.delay(500)
 
 	mq.event('meSayItems', 'You say, #*#', sayCallback, {keepLinks = true})
@@ -1764,7 +1799,7 @@ while openGUI do
 		for _,c in ipairs(group) do if c.Name ~= mq.TLO.Me.CleanName() then c.Offline = true printf('set %s offline', c.Name) end end
 
 		mq.delay(500)
-		mq.cmdf('%s /lua run %s 0%s', broadcast, meta.name, debug and ' debug' or '')
+		mq.cmdf('%s /lua run %s 0%s%s', broadcast, meta.name, resolveGroupId() and ' group' or '', debug and ' debug' or '')
 		mq.delay(500)
 		selectionChanged = true
 		rebroadcast = false

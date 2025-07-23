@@ -1,3 +1,7 @@
+3.5.0
+- Add `group` startup argument which will limit all interactions to group keyed off the group leader so multiple groups can run BIS with separate drivers.
+- While running with `group` arg, changing selected characters will not result in switching broadcast modes.
+
 3.4.0
 - Persist missing spells and tradeskills information for offline toons
 
