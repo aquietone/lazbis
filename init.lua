@@ -1722,8 +1722,7 @@ local function resolveArgs(args)
 	end
 	if dumpInv then
 		writeAllItemLists()
-		openGUI = false
-		return
+		mq.exit()
 	end
 	if isBackground then openGUI = false end
 end
