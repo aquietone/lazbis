@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.5.0', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.5.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -612,6 +612,7 @@ local function actorCallback(msg)
 		if isBackground then return end
 		group[content.Name].Offline = false
 		group[content.Name].PingTime = content.time
+		if debug then printf('char pingtime updated %s %s', content.Name, content.time) end
 	end
 end
 
@@ -1788,7 +1789,7 @@ local function init(args)
 end
 
 init({...})
-local lastPingTime = mq.gettime() + 60000
+local lastPingTime = mq.gettime() + 15000
 while openGUI do
 	mq.delay(1000)
 	if rebroadcast then
@@ -1817,12 +1818,15 @@ while openGUI do
 		end
 	end
 	local curTime = mq.gettime()
-	if curTime - lastPingTime > 60000 then
+	if curTime - lastPingTime > 25000 then
+		if debug then printf('send ping') end
 		doPing()
 		group[mq.TLO.Me.CleanName()].PingTime = curTime
+		lastPingTime = curTime
 	end
 	for _,char in ipairs(group) do
-		if curTime - char.PingTime > 120000 then
+		if curTime - char.PingTime > 90000 then
+			if debug then printf('char hasnt responded %s %s %s', char.Name, curTime, char.PingTime) end
 			char.Offline = true
 		end
 	end
