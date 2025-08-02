@@ -1389,7 +1389,7 @@ return {
 		},
 		['Cleric'] = {
 			['Glyphed Sarnak Skull'] = 'Glyphed Sarnak Skull/40851',
-			['Glyph Aug'] = 'Enduring Focus Glyph: Pious Elixir',
+			['Glyph Aug'] = 'Enduring Focus Glyph: Pious Elixir of Divinity',
 			['Key1'] = 'Gilded Key/40820',
 			['Vault1'] = 'Fanatical Hammer of the Forgotten City',
 			['Key2'] = 'Resilient Key/42461',
