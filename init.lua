@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.5.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.5.2', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -60,6 +60,7 @@ local selectedTeam	= ''
 
 local DZ_NAMES = {
 	Raid = {
+		{name='The Crimson Curse', lockout='The Crimson Curse', zone='Chardok'}, 
 		{name='Crest Event', lockout='Threads_of_Chaos', zone='Qeynos Hills (BB)'},
 		{name='Fippy', lockout='=Broken World', zone='HC Qeynos Hills (pond)'},
 		{name='$$PAID$$ Fippy', lockout='Broken World [Time Keeper]', zone='Plane of Time'},
