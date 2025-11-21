@@ -1018,7 +1018,7 @@ local function bisGUI()
 					currentTab = 'Gear'
 					local origSelectedItemList = selectedItemList
 					ImGui.PushItemWidth(150)
-					ImGui.SetNextWindowSize(150, 350)
+					ImGui.SetNextWindowSize(150, 385)
 					if ImGui.BeginCombo('Item List', selectedItemList.name) then
 						for _, group in ipairs(bisConfig.Groups) do
 							ImGui.TextColored(1, 1, 0, 1, group)

@@ -34,10 +34,12 @@ return {
 		['Other Checklists'] = {
 			[1]={id='llhcitems',name='Lower Level HC Items'},
 			[2]={id='hcitems',name='Higher Level HC Items'},
-			[3]={id='jonas',name='Hand Aug'},
-			[4]={id='questitems',name='Quest Items'},
-			[5]={id='vendoritems',name='Vendor Items'},
-			[6]={id='focusitems',name='Focus Items'},
+			[3]={id='nightveil',name='Nightveil'},
+			[4]={id='jonas',name='Hand Aug'},
+			[5]={id='questitems',name='Quest Items'},
+			[6]={id='vendoritems',name='Vendor Items'},
+			[7]={id='focusitems',name='Focus Items'},
+			[8]={id='bagitems',name='Bag Items'},
 		},
 	},
 	['ZoneMap'] = {
@@ -3138,6 +3140,7 @@ return {
 			['Veeshan Clicky'] = 'Aged Shissar Elementalist\'s Staff',
 		},
 		['Template'] = {
+			['Crown'] = 'Bloodcursed Crown of Vzith',
 			['FabledBrew'] = 'Fabled Blackout Brew',
 			['LazCharm'] = 'Master Lazarus Charm',
 			['Wayfarer'] = 'Wayfarers Brotherhood Emblem',
@@ -3172,6 +3175,7 @@ return {
 				{Name='Power of 3 (HS)', Slots={'Lucky Grass Trinket','Lucky Copper/Silver'}},
 				{Name='Power of 6 (Keepsakes)', Slots={'Symbol','Destruction','Mending','Persistence','Suffering','Cleaving','Deflection','Evasion','Ferocity'}},
 				{Name='Power of 9 (Clue)', Slots={'Eyes', 'Tongue','Idol','Oculus','Horseshoe'}},
+				{Name='Crimson Curse (Chardok)', Slots={'Crown'}},
 				{Name='Kithicor', Slots={'BellikosClaws','BellikosFang','BellikosEye','BellikosTear','BellikosDoll','DollmakersKey'}},
 				{Name='Powersource', Slots={'EOC','Radix','OtherworldlySoul'}},
 				{Name='Augs', Slots={'BIC1','BIC2','BIC3','BIC4','IntricateFigurine','Wayfarer'}},
@@ -3650,6 +3654,129 @@ return {
 			}
 		},
 		['Template'] = {},
+	},
+	['nightveil'] = {
+		['Bard'] = {
+			['Aug1'] = 'Brawler\'s Amorphous ',
+			['Aug2'] = 'Brawler\'s Amorphous ',
+			['Aug3'] = 'Brawler\'s Amorphous ',
+			['Aug4'] = 'Brawler\'s Amorphous ',
+		},
+		['Berserker'] = {
+			['Aug1'] = 'Brawler\'s Amorphous ',
+			['Aug2'] = 'Brawler\'s Amorphous ',
+			['Aug3'] = 'Brawler\'s Amorphous ',
+			['Aug4'] = 'Brawler\'s Amorphous ',
+		},
+		['Beastlord'] = {
+			['Aug1'] = 'Brawler\'s Amorphous ',
+			['Aug2'] = 'Brawler\'s Amorphous ',
+			['Aug3'] = 'Brawler\'s Amorphous ',
+			['Aug4'] = 'Brawler\'s Amorphous ',
+		},
+		['Cleric'] = {
+			['Aug1'] = 'Physician\'s Amorphous ',
+			['Aug2'] = 'Physician\'s Amorphous ',
+			['Aug3'] = 'Physician\'s Amorphous ',
+		},
+		['Druid'] = {
+			['Aug1'] = 'Physician\'s Amorphous ',
+			['Aug2'] = 'Physician\'s Amorphous ',
+			['Aug3'] = 'Physician\'s Amorphous ',
+		},
+		['Enchanter'] = {
+			['Aug1'] = 'Occultist\'s Amorphous ',
+			['Aug2'] = 'Occultist\'s Amorphous ',
+			['Aug3'] = 'Occultist\'s Amorphous ',
+		},
+		['Magician'] = {
+			['Aug1'] = 'Occultist\'s Amorphous ',
+			['Aug2'] = 'Occultist\'s Amorphous ',
+			['Aug3'] = 'Occultist\'s Amorphous ',
+		},
+		['Monk'] = {
+			['Aug1'] = 'Brawler\'s Amorphous ',
+			['Aug2'] = 'Brawler\'s Amorphous ',
+			['Aug3'] = 'Brawler\'s Amorphous ',
+			['Aug4'] = 'Brawler\'s Amorphous ',
+		},
+		['Necromancer'] = {
+			['Aug1'] = 'Occultist\'s Amorphous ',
+			['Aug2'] = 'Occultist\'s Amorphous ',
+			['Aug3'] = 'Occultist\'s Amorphous ',
+		},
+		['Paladin'] = {
+			['Aug1'] = 'Warden\'s Amorphous ',
+			['Aug2'] = 'Warden\'s Amorphous ',
+			['Aug3'] = 'Warden\'s Amorphous ',
+		},
+		['Ranger'] = {
+			['Aug1'] = 'Brawler\'s Amorphous ',
+			['Aug2'] = 'Brawler\'s Amorphous ',
+			['Aug3'] = 'Brawler\'s Amorphous ',
+			['Aug4'] = 'Brawler\'s Amorphous ',
+		},
+		['Rogue'] = {
+			['Aug1'] = 'Brawler\'s Amorphous ',
+			['Aug2'] = 'Brawler\'s Amorphous ',
+			['Aug3'] = 'Brawler\'s Amorphous ',
+			['Aug4'] = 'Brawler\'s Amorphous ',
+		},
+		['Shadow Knight'] = {
+			['Aug1'] = 'Warden\'s Amorphous ',
+			['Aug2'] = 'Warden\'s Amorphous ',
+			['Aug3'] = 'Warden\'s Amorphous ',
+		},
+		['Shaman'] = {
+			['Aug1'] = 'Physician\'s Amorphous ',
+			['Aug2'] = 'Physician\'s Amorphous ',
+			['Aug3'] = 'Physician\'s Amorphous ',
+		},
+		['Warrior'] = {
+			['Aug1'] = 'Warden\'s Amorphous ',
+			['Aug2'] = 'Warden\'s Amorphous ',
+			['Aug3'] = 'Warden\'s Amorphous ',
+		},
+		['Wizard'] = {
+			['Aug1'] = 'Occultist\'s Amorphous ',
+			['Aug2'] = 'Occultist\'s Amorphous ',
+			['Aug3'] = 'Occultist\'s Amorphous ',
+		},
+		['Main'] = {
+			['Slots'] = {
+				{Name='Amorphous Augs', Slots={'Aug1','Aug2','Aug3','Aug4',}}
+			}
+		},
+		['Template'] = {},
+	},
+	-- {Name='Brawler\'s', Slots={'Brawler\'s Amorphous Lightning','Brawler\'s Amorphous Flame','Brawler\'s Amorphous Frost','Brawler\'s Amorphous Venom','Brawler\'s Amorphous Vampirism','Brawler\'s Amorphous Enduring','Brawler\'s Amorphous Exchange','Brawler\'s Amorphous Chaos',}}
+	-- {Name='Occultist\'s', Slots={'Occultist\'s Amorphous Lightning','Occultist\'s Amorphous Flame','Occultist\'s Amorphous Frost','Occultist\'s Amorphous Venom','Occultist\'s Amorphous Rot','Occultist\'s Amorphous Vampirism','Occultist\'s Amorphous Enduring','Occultist\'s Amorphous Exchange',}}
+	-- {Name='Physician\'s', Slots={'Physician\'s Amorphous Lightning','Physician\'s Amorphous Flame','Physician\'s Amorphous Frost','Physician\'s Amorphous Venom','Physician\'s Amorphous Rot','Physician\'s Amorphous Survival','Physician\'s Amorphous Enduring','Physician\'s Amorphous Exchange',}}
+	-- {Name='Warden\'s', Slots={'Warden\'s Amorphous Lightning','Warden\'s Amorphous Flame','Warden\'s Amorphous Frost','Warden\'s Amorphous Venom','Warden\'s Amorphous Rot','Warden\'s Amorphous Survival','Warden\'s Amorphous Enduring','Warden\'s Amorphous Exchange',}}
+	['bagitems'] = {
+		['Template'] = {
+			['Celestial Strongbox'] = 'Celestial Strongbox/50132',
+			['Hallowed Celestial Strongbox'] = 'Hallowed Celestial Strongbox/50143',
+			['Adventurer\'s Tattered Sack'] = 'Adventurer\'s Tattered Sack/151053',
+			['Reinforced Stitching Frame'] = 'Reinforced Stitching Frame/151058',
+			['Treated Expedition Straps'] = 'Treated Expedition Straps/151059',
+			['Arcwoven Binding Thread'] = 'Arcwoven Binding Thread/151060',
+			['Master Taylor\'s Celestial Lining'] = 'Master Taylor\'s Celestial Lining/151061',
+			['Adventurer\'s Tattered Sack (Celestial)'] = 'Adventurer\'s Tattered Sack (Celestial)/151057',		
+			['Euclid\'s Prime Carryall'] = 'Euclid\'s Prime Carryall/50620',
+			['Artisan\'s Adept Attache'] = 'Artisan\'s Adept Attache/50619',
+		},
+		['Main'] = {
+			['Slots'] = {				
+				{Name='CC Bought Bag', Slots={'Celestial Strongbox'}},
+				{Name='CC Upgraded Bag', Slots={'Hallowed Celestial Strongbox'}},
+				{Name='Farmed Bag', Slots={'Adventurer\'s Tattered Sack'}},
+				{Name='Upgrade Drops', Slots={'Reinforced Stitching Frame','Treated Expedition Straps','Arcwoven Binding Thread','Master Taylor\'s Celestial Lining'}},
+				{Name='Upgraded Farmed Bag', Slots={'Adventurer\'s Tattered Sack (Celestial)'}},
+				{Name='Lotto Tickets', Slots={'Euclid\'s Prime Carryall','Artisan\'s Adept Attache',}},
+			},
+		},
+		['ShowBaseItemNames'] = {['ALL']=1},
 	},
 	['Template'] = {
 		['Bard'] = {},
