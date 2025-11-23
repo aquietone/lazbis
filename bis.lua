@@ -3755,24 +3755,43 @@ return {
 	-- {Name='Warden\'s', Slots={'Warden\'s Amorphous Lightning','Warden\'s Amorphous Flame','Warden\'s Amorphous Frost','Warden\'s Amorphous Venom','Warden\'s Amorphous Rot','Warden\'s Amorphous Survival','Warden\'s Amorphous Enduring','Warden\'s Amorphous Exchange',}}
 	['bagitems'] = {
 		['Template'] = {
-			['Celestial Strongbox'] = 'Celestial Strongbox/50132',
-			['Hallowed Celestial Strongbox'] = 'Hallowed Celestial Strongbox/50143',
-			['Adventurer\'s Tattered Sack'] = 'Adventurer\'s Tattered Sack/151053',
-			['Reinforced Stitching Frame'] = 'Reinforced Stitching Frame/151058',
-			['Treated Expedition Straps'] = 'Treated Expedition Straps/151059',
-			['Arcwoven Binding Thread'] = 'Arcwoven Binding Thread/151060',
-			['Master Taylor\'s Celestial Lining'] = 'Master Taylor\'s Celestial Lining/151061',
-			['Adventurer\'s Tattered Sack (Celestial)'] = 'Adventurer\'s Tattered Sack (Celestial)/151057',		
+			['Celestial Strongbox (CC) (Base)'] = 'Celestial Strongbox/50132',
+			['Hallowed Celestial Strongbox (UP^)'] = 'Hallowed Celestial Strongbox/50143',
+
+			['Adventurer\'s Tattered Sack (Base)'] = 'Adventurer\'s Tattered Sack/151053',
+			['Reinforced Stitching Frame (T2 Trash)'] = 'Reinforced Stitching Frame/151058',
+			['Treated Expedition Straps (T3 Trash)'] = 'Treated Expedition Straps/151059',
+			['Arcwoven Binding Thread (T4 Trash)'] = 'Arcwoven Binding Thread/151060',
+			['Master Taylor\'s Celestial Lining (T5 Trash)'] = 'Master Taylor\'s Celestial Lining/151061',
+			['Adventurer\'s Tattered Sack (Celestial)'] = 'Adventurer\'s Tattered Sack (Celestial)/151057/151053',		
+			
+			['Tailored Legendary Pink Pack (Base)'] = 'Tailored Legendary Pink Pack',
+			['Enhanced Legendary Pink Pack (UP^)'] = 'Enhanced Legendary Pink Pack/124602',
+
+			['Santug\'s Stocking (Base)'] = 'Santug\'s Stocking',
+			['Enhanced Santug\'s Stocking (UP^)'] = 'Enhanced Santug\'s Stocking/87573',
+			
+			['Heart Shaped Box (Base)'] = 'Heart Shaped Box',
+			['Enhanced Heart Shaped Box (UP^)'] = 'Enhanced Heart Shaped Box/57853',
+
+			['Enchanted Slimesack (Token DZ) (Base)'] = 'Enchanted Slimesack',
+			['Enhanced Enchanted Slimesack (Token DZ) (UP^)'] = 'Enhanced Enchanted Slimesack/9545',
+
+			['Bank Storage Crate (Shady) (Base)'] = 'Bank Storage Crate/50624',
+			['Alloy Reinforced Bank Vault (UP^)'] = 'Alloy Reinforced Bank Vault/50625',
+
 			['Euclid\'s Prime Carryall'] = 'Euclid\'s Prime Carryall/50620',
 			['Artisan\'s Adept Attache'] = 'Artisan\'s Adept Attache/50619',
 		},
 		['Main'] = {
 			['Slots'] = {				
-				{Name='CC Bought Bag', Slots={'Celestial Strongbox'}},
-				{Name='CC Upgraded Bag', Slots={'Hallowed Celestial Strongbox'}},
-				{Name='Farmed Bag', Slots={'Adventurer\'s Tattered Sack'}},
-				{Name='Upgrade Drops', Slots={'Reinforced Stitching Frame','Treated Expedition Straps','Arcwoven Binding Thread','Master Taylor\'s Celestial Lining'}},
-				{Name='Upgraded Farmed Bag', Slots={'Adventurer\'s Tattered Sack (Celestial)'}},
+				{Name='Farmed Bag (T1 Named)', Slots={'Adventurer\'s Tattered Sack (Base)','Adventurer\'s Tattered Sack (Celestial)'}},
+				{Name='Farmed Bag Upgrade Drops', Slots={'Reinforced Stitching Frame (T2 Trash)','Treated Expedition Straps (T3 Trash)','Arcwoven Binding Thread (T4 Trash)','Master Taylor\'s Celestial Lining (T5 Trash)'}},				
+				{Name='CC Bought Bag', Slots={'Celestial Strongbox (CC) (Base)'}},
+				{Name='Upgradable Bags (Djinn Lamp x10)', Slots={'Celestial Strongbox (CC) (Base)','Hallowed Celestial Strongbox (UP^)'}},
+				{Name='Upgradable Bags (Jolum x1)', Slots={'Tailored Legendary Pink Pack (Base)','Enhanced Legendary Pink Pack (UP^)','Santug\'s Stocking (Base)','Enhanced Santug\'s Stocking (UP^)','Heart Shaped Box (Base)','Enhanced Heart Shaped Box (UP^)','Enchanted Slimesack (Token DZ) (Base)','Enhanced Enchanted Slimesack (Token DZ) (UP^)'}},
+				{Name='Upgradable Bags (Recipe)', Slots={'Bank Storage Crate (Shady) (Base)','Alloy Reinforced Bank Vault (UP^)'}},
+				{Name='NON Upgradable Bags', Slots={''}},
 				{Name='Lotto Tickets', Slots={'Euclid\'s Prime Carryall','Artisan\'s Adept Attache',}},
 			},
 		},
