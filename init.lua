@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.5.2', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.5.3', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -410,6 +410,12 @@ local function searchItemsInList(list)
 			local actualName = nil
 			if string.find(item, '/') then
 				for itemName in split(item, '/') do
+					local realName = itemName
+					if string.find(itemName, '|') then
+						local nameAndID = splitToTable(itemName, '|')
+						realName = nameAndID[1]
+						itemName = nameAndID[2]
+					end
 					if slot == 'Wrists' then
 						local leftwrist = mq.TLO.Me.Inventory('leftwrist')
 						local rightwrist = mq.TLO.Me.Inventory('rightwrist')
@@ -430,6 +436,9 @@ local function searchItemsInList(list)
 						local count = mq.TLO.FindItemCount(searchString)() + mq.TLO.FindItemBankCount(searchString)()
 						if slot == 'PSAugSprings' and itemName == '39071' and currentResult < 3 then
 							currentResult = 0
+						end
+						if count > 0 and tonumber(itemName) and itemName ~= realName then
+							actualName = realName
 						end
 						if count > 0 and not actualName then
 							actualName = findItem() or findItemBank()
@@ -701,6 +710,9 @@ local function slotRow(slot, tmpGear)
 				if (itemName ~= nil) then
 					if string.find(itemName, '/') then
 						itemName = itemName:match("([^/]+)")
+					end
+					if string.find(itemName, '|') then
+						itemName = itemName:match("([^|]+)")
 					end
 					local actualName = tmpGear[char.Name][realSlot].actualname
 					if not actualName or string.find(actualName, '/') then
