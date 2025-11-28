@@ -3744,10 +3744,12 @@ return {
 		},
 		['Main'] = {
 			['Slots'] = {
-				{Name='Amorphous Augs', Slots={'Aug1','Aug2','Aug3','Aug4',}}
+				{Name='Amorphous Augs', Slots={'Codex','Aug1','Aug2','Aug3','Aug4',}}
 			}
 		},
-		['Template'] = {},
+		['Template'] = {
+			['Codex'] = 'Codex of Numbers',
+		},
 	},
 	-- {Name='Brawler\'s', Slots={'Brawler\'s Amorphous Lightning','Brawler\'s Amorphous Flame','Brawler\'s Amorphous Frost','Brawler\'s Amorphous Venom','Brawler\'s Amorphous Vampirism','Brawler\'s Amorphous Enduring','Brawler\'s Amorphous Exchange','Brawler\'s Amorphous Chaos',}}
 	-- {Name='Occultist\'s', Slots={'Occultist\'s Amorphous Lightning','Occultist\'s Amorphous Flame','Occultist\'s Amorphous Frost','Occultist\'s Amorphous Venom','Occultist\'s Amorphous Rot','Occultist\'s Amorphous Vampirism','Occultist\'s Amorphous Enduring','Occultist\'s Amorphous Exchange',}}
