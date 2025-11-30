@@ -4,7 +4,7 @@ aquietone, dlilah, ...
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.5.3', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.5.4', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -60,7 +60,6 @@ local selectedTeam	= ''
 
 local DZ_NAMES = {
 	Raid = {
-		{name='The Crimson Curse', lockout='The Crimson Curse', zone='Chardok'}, 
 		{name='Crest Event', lockout='Threads_of_Chaos', zone='Qeynos Hills (BB)'},
 		{name='Fippy', lockout='=Broken World', zone='HC Qeynos Hills (pond)'},
 		{name='$$PAID$$ Fippy', lockout='Broken World [Time Keeper]', zone='Plane of Time'},
@@ -71,7 +70,15 @@ local DZ_NAMES = {
 		{name='Trak', lockout='Trakanon_Final', zone='HC Sebilis'},
 		{name='FUKU', lockout='The Fabled Undead Knight', zone='Unrest'}
 	},
+	TwoGroupRaid = {
+		{name='The Crimson Curse', lockout='The Crimson Curse', zone='Chardok'},
+		{name='Crucible of the Brawler', lockout='Crucible of the Brawler', zone='Nightveil Sanctum'},
+		{name='Crucible of the Occultist', lockout='Crucible of the Occultist', zone='Nightveil Sanctum'},
+		{name='Crucible of the Physician', lockout='Crucible of the Physician', zone='Nightveil Sanctum'},
+		{name='Crucible of the Warden', lockout='Crucible of the Warden', zone='Nightveil Sanctum'},
+	},
 	Group = {
+		{name='Lucian\'s Nightmare', lockout='Lucian\'s Nightmare', zone='Nightveil Sanctum'},
 		{name='Venril Sathir', lockout='Revenge on Venril Sathir', zone='Karnors Castle'},
 		{name='Fenrir', lockout='Bloodfang', zone='West Karana'},
 		{name='Selana', lockout='Moonshadow', zone='West Karana'},
@@ -94,7 +101,7 @@ local DZ_NAMES = {
 		{name='Plane of Time', lockout='Quarm', zone='Plane of Time', index=3}, -- 'Phase 1 Complete', 'Phase 2 Complete', 'Phase 3 Complete', 'Phase 4 Complete', 'Phase 5 Complete', 'Quarm'
 	}
 }
-local dzInfo = {[mq.TLO.Me.CleanName()] = {Raid={}, Group={}, OldRaids={}}}
+local dzInfo = {[mq.TLO.Me.CleanName()] = {Raid={}, TwoGroupRaid={}, Group={}, OldRaids={}}}
 
 local niceImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/bis.png")
 local iconImg = mq.CreateTexture(mq.luaDir .. "/" .. meta.name .. "/icon_lazbis.png")
@@ -1420,7 +1427,7 @@ local function bisGUI()
 						ImGui.TableHeadersRow()
 
 						-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
-						for _,category in ipairs({'Raid','Group'}) do
+						for _,category in ipairs({'Raid','TwoGroupRaid','Group'}) do
 							ImGui.TableNextRow()
 							ImGui.TableNextColumn()
 							if ImGui.TreeNodeEx(category, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
@@ -1686,7 +1693,7 @@ local function bisCommand(...)
 	elseif args[1] == 'lockouts' then
 		local output = ''
 		-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
-		for _,category in ipairs({'Raid','Group'}) do
+		for _,category in ipairs({'Raid','TwoGroupRaid','Group'}) do
 			if not args[2] or args[2]:lower() == category:lower() then 
 				for _,dz in ipairs(DZ_NAMES[category]) do
 					output = output .. '\ay' .. dz.name .. '\ax \ar' .. category .. '\ax (\ag' .. dz.zone .. '\ax): '
@@ -1709,7 +1716,7 @@ local function populateDZInfo()
 	mq.TLO.Window('DynamicZoneWnd').DoClose()
 	mq.delay(1)
 	-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
-	for _,category in ipairs({'Raid','Group'}) do
+	for _,category in ipairs({'Raid','TwoGroupRaid','Group'}) do
 		for _,dz in ipairs(DZ_NAMES[category]) do
 			local idx = mq.TLO.Window('DynamicZoneWnd/DZ_TimerList').List(dz.lockout,dz.index or 2)()
 			if idx then
