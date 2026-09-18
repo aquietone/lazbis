@@ -1,10 +1,12 @@
 --[[
 Best In Slot - Project Lazarus Edition
-aquietone, dlilah, ...
+aquietone, Kroaking, dlilah, ...
+
+2026+ - Incorporating various additions from WanteD fork by Kroaking
 
 Tracker lua script for all the good stuff to have on Project Lazarus server.
 ]]
-local meta			= {version = '3.6.1', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
+local meta			= {version = '3.7.2(WanteD)', name = string.match(string.gsub(debug.getinfo(1, 'S').short_src, '\\init.lua', ''), "[^\\]+$")}
 local mq			= require('mq')
 local ImGui			= require('ImGui')
 local bisConfig		= require('bis')
@@ -29,6 +31,13 @@ local currentTab	= nil
 local gear				= {}
 local group				= {}
 local sortedGroup		= {}
+-- Gear-tab toon column order state, kept in one table so functions that need it
+-- (including the big bisGUI closure) only capture a single upvalue.
+local gearOrder			= {
+	order = {},		-- user-defined, persisted display order of toon names
+	current = {},	-- current frame's toon order (built from .order), used by the Gear table
+	rowWidth = 0,	-- measured width of the "Characters...Reorder Toons" row, used to center it
+}
 local itemChecks		= {}
 local tradeskills		= {}
 local emptySlots		= {}
@@ -48,6 +57,10 @@ local ingredientsArray	= {}
 local reapplyFilter		= false
 local slots				= {'charm','leftear','head','face','rightear','neck','shoulder','arms','back','leftwrist','rightwrist','ranged','hands','mainhand','offhand','leftfinger','rightfinger','chest','legs','feet','waist','powersource'}
 local hideOwnedSpells	= false
+-- Spells tab layout: each character gets its own fixed-width table, laid out
+-- side by side inside a horizontally scrollable child window.
+local SPELL_TABLE_HEIGHT	= 300
+local spellColumnWidth		= 340
 
 local server		= mq.TLO.EverQuest.Server()
 local dbfmt			= "INSERT INTO Inventory VALUES ('%s','%s','%s','%s','%s','%s',%d,%d,'%s');\n"
@@ -131,6 +144,28 @@ local function splitToTable(str, char)
 	return t
 end
 
+-- Stable numeric id derived from a string, used as ImGui table column user_id so that
+-- Dear ImGui can identify a column (e.g. a specific toon) across frames/sessions
+-- regardless of how many columns exist or what order they were declared in.
+gearOrder.stableId = function(str)
+	local hash = 5381
+	for i = 1, #str do
+		hash = bit32.band(hash * 33 + string.byte(str, i), 0xFFFFFFFF)
+	end
+	return hash
+end
+
+-- Extracts a width from either a plain number or an ImVec2-like {x=..,y=..} value,
+-- since different ImGui size-returning calls may return either.
+gearOrder.vecWidth = function(v)
+	if type(v) == 'number' then return v end
+	if type(v) == 'table' or type(v) == 'userdata' then
+		local ok, x = pcall(function() return v.x end)
+		if ok and type(x) == 'number' then return x end
+	end
+	return 0
+end
+
 local function addCharacter(name, class, offline, show, msg)
 	if not group[name] then
 		if debug then printf('Add character: Name=%s Class=%s Offline=%s Show=%s, Msg=%s', name, class, offline, show, msg) end
@@ -209,6 +244,13 @@ local function settingsRowCallback(udata,cols,values,names)
 		for token in string.gmatch(values[2], "[^,]+") do
 			-- print(token)
 			table.insert(teams[values[1]], token)
+		end
+		return 0
+	end
+	if values[1] == 'GearColumnOrder' then
+		gearOrder.order = {}
+		for token in string.gmatch(values[2], "[^,]+") do
+			table.insert(gearOrder.order, token)
 		end
 		return 0
 	end
@@ -500,7 +542,7 @@ end
 
 local function loadMissingSpells()
 	local missingSpells = {}
-	for _,level in ipairs({70,69,68,67,66}) do
+	for _,level in ipairs({71,70,69,68,67,66}) do
 		local levelSpells = spellConfig[mq.TLO.Me.Class()][level]
 		for _,spellName in ipairs(levelSpells) do
 			local spellDetails = splitToTable(spellName, '|')
@@ -707,7 +749,7 @@ local function slotRow(slot, tmpGear)
 	ImGui.TableNextRow()
 	ImGui.TableNextColumn()
 	ImGui.Text('' .. slot)
-	for _, char in ipairs(group) do
+	for _, char in ipairs(gearOrder.current) do
 		if char.Show then
 			ImGui.TableNextColumn()
 			if (tmpGear[char.Name] ~= nil and tmpGear[char.Name][realSlot] ~= nil) then
@@ -875,6 +917,49 @@ local function updateSetting(name, value)
 	simpleExec(("INSERT INTO Settings VALUES ('%s', '%s') ON CONFLICT(Key) DO UPDATE SET Value = '%s'"):format(name, value, value))
 end
 
+gearOrder.save = function()
+	local nameList = table.concat(gearOrder.order, ',')
+	simpleExec(("INSERT INTO Settings VALUES ('GearColumnOrder', '%s') ON CONFLICT(Key) DO UPDATE SET Value = '%s'"):format(nameList, nameList))
+end
+
+-- Returns the toons currently in `group` arranged per the user's saved order.
+-- Any toon not yet present in the saved order is appended (and the saved
+-- order is updated/persisted) so newly-seen alts get a stable slot too.
+gearOrder.get = function()
+	local ordered = {}
+	local seen = {}
+	local orderChanged = false
+	for _,name in ipairs(gearOrder.order) do
+		local char = group[name]
+		if char then
+			table.insert(ordered, char)
+			seen[name] = true
+		end
+	end
+	for _,char in ipairs(group) do
+		if not seen[char.Name] then
+			table.insert(ordered, char)
+			table.insert(gearOrder.order, char.Name)
+			seen[char.Name] = true
+			orderChanged = true
+		end
+	end
+	if orderChanged then gearOrder.save() end
+	return ordered
+end
+
+gearOrder.move = function(name, direction)
+	local idx
+	for i,n in ipairs(gearOrder.order) do
+		if n == name then idx = i break end
+	end
+	if not idx then return end
+	local swapIdx = idx + direction
+	if swapIdx < 1 or swapIdx > #gearOrder.order then return end
+	gearOrder.order[idx], gearOrder.order[swapIdx] = gearOrder.order[swapIdx], gearOrder.order[idx]
+	gearOrder.save()
+end
+
 local function getAnnounceChannel()
 	if settings.AnnounceChannel == 'Raid' then
 		if mq.TLO.Raid.Members() > 0 then return '/rs ' else return '/g ' end
@@ -935,9 +1020,10 @@ local function drawCharacterMenus()
 	end
 	ImGui.SameLine()
 	if ImGui.Button('Delete Character Set') then
-		if selectedTeam then
+		if selectedTeam ~= '' then
 			simpleExec(("DELETE FROM Settings WHERE Key = '%s'"):format(selectedTeam))
-			teams[teamName] = nil
+			teams[selectedTeam] = nil
+			selectedTeam = ''
 		end
 	end
 	ImGui.SameLine()
@@ -1105,10 +1191,47 @@ local function bisGUI()
 					ImGui.PopItemWidth()
 					ImGui.SameLine()
 					VerticalSeparator()
-					ImGui.SameLine()
 					
+					local availWidth = gearOrder.vecWidth(ImGui.GetContentRegionAvail())
+					local centerOffset = math.max(0, (availWidth - gearOrder.rowWidth) / 2)
+					ImGui.SetCursorPosX(ImGui.GetCursorPosX() + centerOffset)
+
+					ImGui.BeginGroup()
 					drawCharacterMenus()
 
+					gearOrder.current = gearOrder.get()
+					ImGui.SameLine()
+					if ImGui.Button('Reorder Toons') then
+						ImGui.OpenPopup('Reorder Toons##popup')
+					end
+					ImGui.EndGroup()
+					gearOrder.rowWidth = gearOrder.vecWidth(ImGui.GetItemRectSize())
+
+					if ImGui.BeginPopup('Reorder Toons##popup') then
+						ImGui.Text('Set the column order for the Gear tab:')
+						local saveCloseWidth = 190
+						local popupWidth = gearOrder.vecWidth(ImGui.GetContentRegionAvail())
+						ImGui.SetCursorPosX(ImGui.GetCursorPosX() + math.max(0, (popupWidth - saveCloseWidth) / 2))
+						if ImGui.Button('Save Order and Close', saveCloseWidth, 0) then
+							gearOrder.save()
+							ImGui.CloseCurrentPopup()
+						end
+						ImGui.Separator()
+						for i,char in ipairs(gearOrder.current) do
+							ImGui.PushID('reorder##'..char.Name)
+							if ImGui.Button('^') then
+								gearOrder.move(char.Name, -1)
+							end
+							ImGui.SameLine()
+							if ImGui.Button('v') then
+								gearOrder.move(char.Name, 1)
+							end
+							ImGui.SameLine()
+							ImGui.Text(char.Name)
+							ImGui.PopID()
+						end
+						ImGui.EndPopup()
+					end
 					local numColumns = 1
 					for _,char in ipairs(group) do if char.Show then numColumns = numColumns + 1 end end
 					if next(itemChecks) ~= nil then
@@ -1120,7 +1243,7 @@ local function bisGUI()
 						ImGui.Text('Linked items:')
 						if ImGui.BeginTable('linked items', numColumns, bit32.bor(ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY), -1.0, 115) then
 							ImGui.TableSetupScrollFreeze(0, 1)
-							ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), 250, 0)
+							ImGui.TableSetupColumn('ItemName', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), 500, 0)
 							for i,char in ipairs(group) do
 								if char.Show then
 									ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
@@ -1169,12 +1292,12 @@ local function bisGUI()
 						end
 					end
 		
-					if ImGui.BeginTable('gear', numColumns, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.Reorderable, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
+					if ImGui.BeginTable('gear', numColumns, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.ScrollX, ImGuiTableFlags.ScrollY)) then
 						ImGui.TableSetupScrollFreeze(0, 1)
-						ImGui.TableSetupColumn('Item', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
-						for i,char in ipairs(group) do
+						ImGui.TableSetupColumn('Item', bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, gearOrder.stableId('Item'))
+						for i,char in ipairs(gearOrder.current) do
 							if char.Show then
-								ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, 0)
+								ImGui.TableSetupColumn(char.Name, bit32.bor(ImGuiTableColumnFlags.NoSort, ImGuiTableColumnFlags.WidthFixed), -1.0, gearOrder.stableId(char.Name))
 							end
 						end
 						ImGui.TableHeadersRow()
@@ -1207,7 +1330,7 @@ local function bisGUI()
 											ImGui.TableNextRow()
 											ImGui.TableNextColumn()
 											ImGui.Text(name)
-											for _,char in ipairs(group) do
+											for _,char in ipairs(gearOrder.current) do
 												if char.Show then
 													ImGui.TableNextColumn()
 													local skill = tradeskills[char.Name] and tradeskills[char.Name][name] or 0
@@ -1346,17 +1469,25 @@ local function bisGUI()
 					VerticalSeparator()
 					ImGui.SameLine()
 					drawCharacterMenus()
-					local numSpellDataToons = 1
-					for _,_ in pairs(groupSpellData) do numSpellDataToons = numSpellDataToons + 1 end
-					ImGui.Columns(6)
+					ImGui.SameLine()
+					VerticalSeparator()
+					ImGui.SameLine()
+					ImGui.PushItemWidth(120)
+					local tmpSpellColWidth = ImGui.SliderInt('Col Width##spellcolwidth', spellColumnWidth, 200, 800)
+					ImGui.PopItemWidth()
+					if tmpSpellColWidth ~= spellColumnWidth then spellColumnWidth = tmpSpellColWidth end
+
+					-- Horizontally scrollable region holding one table per character
+					ImGui.BeginChild('SpellsScrollRegion', -1, SPELL_TABLE_HEIGHT + 55, false, ImGuiWindowFlags.HorizontalScrollbar)
+					ImGui.BeginGroup()
 					ImGui.Text('%s', mq.TLO.Me.CleanName())
-					if ImGui.BeginTable('Spells', 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), -1, 300) then
+					if ImGui.BeginTable('Spells', 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), spellColumnWidth, SPELL_TABLE_HEIGHT) then
 						ImGui.TableSetupScrollFreeze(0, 1)
-						ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 2)
-						ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 3)
+						ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthStretch), 2, 2)
+						ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthStretch), 1, 3)
 						ImGui.TableHeadersRow()
 
-						for _,level in ipairs({70,69,68,67,66}) do
+						for _,level in ipairs({71,70,69,68,67,66}) do
 							ImGui.TableNextRow()
 							ImGui.TableNextColumn()
 							if ImGui.TreeNodeEx(level..'##'..mq.TLO.Me.CleanName(), bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
@@ -1379,18 +1510,20 @@ local function bisGUI()
 						end
 						ImGui.EndTable()
 					end
+					ImGui.EndGroup()
 					for i,char in ipairs(group) do
 						if char.Show and groupSpellData[char.Name] then
 							local data = groupSpellData[char.Name]
-							ImGui.NextColumn()
+							ImGui.SameLine()
+							ImGui.BeginGroup()
 							ImGui.Text('%s', char.Name)
-							if ImGui.BeginTable('Spells'..char.Name, 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), -1, 300) then
+							if ImGui.BeginTable('Spells'..char.Name, 2, bit32.bor(ImGuiTableFlags.BordersInner, ImGuiTableFlags.RowBg, ImGuiTableFlags.NoSavedSettings, ImGuiTableFlags.ScrollY), spellColumnWidth, SPELL_TABLE_HEIGHT) then
 								ImGui.TableSetupScrollFreeze(0, 1)
-								ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 2)
-								ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthFixed), -1, 3)
+								ImGui.TableSetupColumn('Name', bit32.bor(ImGuiTableColumnFlags.WidthStretch), 2, 2)
+								ImGui.TableSetupColumn('Location', bit32.bor(ImGuiTableColumnFlags.WidthStretch), 1, 3)
 								ImGui.TableHeadersRow()
 
-								for _,level in ipairs({70,69,68,67,66}) do
+								for _,level in ipairs({71,70,69,68,67,66}) do
 									ImGui.TableNextRow()
 									ImGui.TableNextColumn()
 									if ImGui.TreeNodeEx(level..'##'..char.Name, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
@@ -1408,9 +1541,10 @@ local function bisGUI()
 								end
 								ImGui.EndTable()
 							end
+							ImGui.EndGroup()
 						end
 					end
-					ImGui.Columns(1)
+					ImGui.EndChild()
 					ImGui.EndTabItem()
 				end
 				if ImGui.BeginTabItem('Lockouts') then
@@ -1428,8 +1562,8 @@ local function bisGUI()
 						end
 						ImGui.TableHeadersRow()
 
-						-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
-						for _,category in ipairs({'Raid','TwoGroupRaid','Group'}) do
+				     -- for _,category in ipairs({'Raid','TwoGroupRaid','Group'}) do
+						for _,category in ipairs({'Raid','TwoGroupRaid','Group','OldRaids'}) do
 							ImGui.TableNextRow()
 							ImGui.TableNextColumn()
 							if ImGui.TreeNodeEx(category, bit32.bor(ImGuiTreeNodeFlags.SpanFullWidth, ImGuiTreeNodeFlags.DefaultOpen)) then
@@ -1683,7 +1817,7 @@ local function bisCommand(...)
 	if args[1] == 'missing' then
 		local missingSpellsText = {}
 		local classSpells = spellConfig[mq.TLO.Me.Class()]
-		for _,level in ipairs({70,69,68,67,66}) do
+		for _,level in ipairs({71,70,69,68,67,66}) do
 			local levelSpells = classSpells[level]
 			for _,spellName in ipairs(levelSpells) do
 				if spellData[spellName] == 0 then
@@ -1694,8 +1828,7 @@ local function bisCommand(...)
 		printf('Missing Spells:\n%s', table.concat(missingSpellsText, '\n'))
 	elseif args[1] == 'lockouts' then
 		local output = ''
-		-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
-		for _,category in ipairs({'Raid','TwoGroupRaid','Group'}) do
+		for _,category in ipairs({'Raid','TwoGroupRaid','Group','OldRaids'}) do
 			if not args[2] or args[2]:lower() == category:lower() then 
 				for _,dz in ipairs(DZ_NAMES[category]) do
 					output = output .. '\ay' .. dz.name .. '\ax \ar' .. category .. '\ax (\ag' .. dz.zone .. '\ax): '
@@ -1717,8 +1850,7 @@ local function populateDZInfo()
 	mq.delay(1)
 	mq.TLO.Window('DynamicZoneWnd').DoClose()
 	mq.delay(1)
-	-- for _,category in ipairs({'Raid','Group','OldRaids'}) do
-	for _,category in ipairs({'Raid','TwoGroupRaid','Group'}) do
+	for _,category in ipairs({'Raid','TwoGroupRaid','Group','OldRaids'}) do
 		for _,dz in ipairs(DZ_NAMES[category]) do
 			local idx = mq.TLO.Window('DynamicZoneWnd/DZ_TimerList').List(dz.lockout,dz.index or 2)()
 			if idx then

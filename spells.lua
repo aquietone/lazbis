@@ -1,5 +1,18 @@
 return {
     ['Bard'] = {
+        [71] = {
+            'Ancient: Draconic Might|Chieftan Relae Aderi NPC',
+            'Arcane Reprisal|Tatsurjiro NPC',
+            'Bellow of Shadows|Tatsurjiro NPC',
+            'Cantata of Nife|Tatsurjiro NPC',
+            'Chorus of Nife|Tatsurjiro NPC',
+            'Echoes of the Ancient|Tatsurjiro NPC',
+            'Endless Blades|Tatsurjiro NPC',
+            'Niv\'s Symphonic|Tatsurjiro NPC',
+            'One Bard Band|Tatsurjiro NPC',
+            'Squall Blade Flourish|Tatsurjiro NPC',
+            'Symphony of Sound|Tatsurjiro NPC',
+        },		
         [70] = {
             'Ancient: Call of Power|Anguish Rune Turn In',
             'Arcane Aria|Random Drop',
@@ -12,7 +25,7 @@ return {
         [69] = {
             'Chorus of Life|Researched or Greater Rune',
             'Eriki\'s Psalm of Power|Researched or Greater Rune',
-            'Storm Blade|Random Drop',
+            'Storm Blade Flourish|Random Drop',
             'Thousand Blades|Random Drop',
             'Verse of Vesagran|Researched or Greater Rune',
         },
@@ -37,6 +50,19 @@ return {
         },
     },
     ['Beastlord'] = {
+        [71] = {
+            'Ancient: Drake\'s Breath|Chieftan Relae Aderi NPC',
+            'Feral Exigency|Tatsurjiro NPC',
+            'Feral Mettle|Tatsurjiro NPC',
+            'Growl of the Mountain Puma|Tatsurjiro NPC',
+            'Ravenous Ice|Tatsurjiro NPC',
+            'Roaring Sleet|Tatsurjiro NPC',
+            'Roaring Spirit of Tirranun|Tatsurjiro NPC',
+            'Sha\'s Urgent Renewal|Tatsurjiro NPC',
+            'Spiritual Enlightenment|Tatsurjiro NPC',
+            'Spiritual Vibrance|Tatsurjiro NPC',
+            'Swift Salve of the Stillmoon|Tatsurjiro NPC',
+        },		
         [70] = {
             'Ancient: Savage Ice|Anguish Rune Turn In',
             'Ferocity of Irionu|Researched or Glowing Rune',
@@ -73,10 +99,22 @@ return {
         },
     },
     ['Berserker'] = {
+        [71] = {
+            'Ancient: Annihilator\'s Volley|Chieftan Relae Aderi NPC',
+            'Arcane Reprisal|Tatsurjiro NPC',
+            'Bloodcurdling Scream|Tatsurjiro NPC',
+            'Cleaving Madness Discipline|Tatsurjiro NPC',
+            'Combat Focus Discipline|Tatsurjiro NPC',
+            'Cry of Catastrophe|Tatsurjiro NPC',
+            'Fourth Wind Discipline|Tatsurjiro NPC',
+            'Rancorous Flurry Discipline|Tatsurjiro NPC',
+            'Vigorous Axe Throw|Tatsurjiro NPC',
+            'Wounding Rage|Tatsurjiro NPC',
+        },		
         [70] = {
             'Bewildering Scream|Random Drop',
-            'Bloodthirst|???',
-            'Third Wind|Random Drop',
+            'Bloodthirst|Tatsurjiro NPC',
+            'Third Wind Discipline|Random Drop',
             'Vengeful Flurry Discipline|Researched or Glowing Rune',
         },
         [69] = {
@@ -96,6 +134,20 @@ return {
         },
     },
     ['Cleric'] = {
+        [71] = {
+            'Aegis of Vie|Tatsurjiro NPC',
+            'Allegiance|Tatsurjiro NPC',
+            'Ancient: Sacred Remedy|Chieftan Relae Aderi NPC',
+            'Armor of the Sacred|Tatsurjiro NPC',
+            'Chromablast|Tatsurjiro NPC',
+            'Divine Redemption|Tatsurjiro NPC',
+            'Elixir of Redemption|Tatsurjiro NPC',
+            'Hand of Allegiance|Tatsurjiro NPC',
+            'Sound of Zeal|Tatsurjiro NPC',
+            'Symbol of Elushar|Tatsurjiro NPC',
+            'Urgent Renewal|Tatsurjiro NPC',
+            'Vigilant Censure|Tatsurjiro NPC',
+        },	
         [70] = {
             'Ancient: Hallowed Light|Anguish Rune Turn In',
             'Ancient: Pious Conscience|Anguish Rune Turn In',
@@ -146,6 +198,20 @@ return {
         },
     },
     ['Druid'] = {
+        [71] = {
+            'Ancient: Chlorobalm|Chieftan Relae Aderi NPC',
+            'Ascent Frost|Tatsurjiro NPC',
+            'Blessing of Moss|Tatsurjiro NPC',
+            'Blessing of Spiritoak|Tatsurjiro NPC',
+            'Breath of The Ascent|Tatsurjiro NPC',
+            'Dawnflame|Tatsurjiro NPC',
+            'Lunar Shadow|Tatsurjiro NPC',
+            'Mossy Vigor|Tatsurjiro NPC',
+            'Nature Seeker\'s Behest|Tatsurjiro NPC',
+            'Spiritoak Skin|Tatsurjiro NPC',
+            'Sun\'s Blistering Corona|Tatsurjiro NPC',
+            'Sunburst Devotion|Tatsurjiro NPC',
+        },		
         [70] = {
             'Ancient: Chlorobon|Anguish Rune Turn In',
             'Ancient: Glacier Frost|Anguish Rune Turn In',
@@ -156,7 +222,7 @@ return {
             'Hungry Vines|Researched or Glowing Rune',
             'Legacy of Nettles|Researched or Glowing Rune',
             'Mask of the Wild|Researched or Glowing Rune',
-            'Moonshadow|Random Drop',
+            'Moon Shadow|Random Drop',
             'Nature Walker\'s Behest|Random Drop',
             'Nature\'s Beckon|Researched or Glowing Rune',
             'Sunburst Blessing|Random Drop',
@@ -198,6 +264,20 @@ return {
         },
     },
     ['Enchanter'] = {
+        [71] = {
+            'Ancient: Mind Implosion|Chieftan Relae Aderi NPC',
+            'Boon of the Sentinel|Tatsurjiro NPC',
+            'Chromatic Chaos|Tatsurjiro NPC',
+            'Edict of Tashan|Tatsurjiro NPC',
+            'Hastening of Ellowind|Tatsurjiro NPC',
+            'Hysteria|Tatsurjiro NPC',
+            'Presidio of the Seer|Tatsurjiro NPC',
+            'Seer\'s Intuition|Tatsurjiro NPC',
+            'Speed of Ellowind|Tatsurjiro NPC',
+            'Urgent Rune of Destiny|Tatsurjiro NPC',
+            'Voice of Intuition|Tatsurjiro NPC',
+            'Whispers of Emoush|Tatsurjiro NPC',
+        },		
         [70] = {
             'Abashi\'s Disempowerment|Random Drop',
             'Ancient: Neurosis|Anguish Rune Turn In',
@@ -249,6 +329,18 @@ return {
         },
     },
     ['Magician'] = {
+        [71] = {
+            'Ancient: Spear of Molten Slag|Chieftan Relae Aderi NPC',
+            'Blade Rend|Tatsurjiro NPC',
+            'Burning Bladestorm|Tatsurjiro NPC',
+            'Circle of Magmaskin|Tatsurjiro NPC',
+            'Fickle Inferno|Tatsurjiro NPC',
+            'Frantic Blaze|Tatsurjiro NPC',
+            'Goner\'s Urgent Renewal|Tatsurjiro NPC',
+            'Grant Battle Materiel|Tatsurjiro NPC',
+            'Monolithic Strength|Tatsurjiro NPC',
+            'Ward of the Conjurer|Tatsurjiro NPC',
+        },		
         [70] = {
             'Ancient: Nova Strike|Anguish Rune Turn In',
             'Ancient: Veil of Pyrilonus|Anguish Rune Turn In',
@@ -308,11 +400,23 @@ return {
         },
     },
     ['Monk'] = {
+        [71] = {
+            'Ancient: Arachnid Fang|Chieftan Relae Aderi NPC',
+            'Arcane Reprisal|Tatsurjiro NPC',
+            'Dragondance Discipline|Tatsurjiro NPC',
+            'Fists of Thundercrest|Tatsurjiro NPC',
+            'Fourth Wind Discipline|Tatsurjiro NPC',
+            'Grandmaster\'s Aura|Tatsurjiro NPC',
+            'Phantom Whispers|Tatsurjiro NPC',
+            'Stormfist Discipline|Tatsurjiro NPC',
+            'Velocity Focus Discipline|Tatsurjiro NPC',
+            'Wheel of Fists|Tatsurjiro NPC',
+        },		
         [70] = {
             'Crystalpalm Discipline|Random Drop',
             'Heel of Kai|Random Drop',
             'Rapid Kick Discipline|Researched or Glowing Rune',
-            'Third Wind|Random Drop',
+            'Third Wind Discipline|Random Drop',
         },
         [69] = {
             'Dragon Fang|Random Drop',
@@ -325,10 +429,22 @@ return {
 
         },
         [66] = {
-            'Dreamwalk Discipline|???',
+            'Dreamwalk Discipline|Researched Only',
         },
     },
     ['Necromancer'] = {
+        [71] = {
+            'Ancient: Despair of Vishimtar|Chieftan Relae Aderi NPC',
+            'Dull Agony|Tatsurjiro NPC',
+            'Goner\'s Urgent Renewal|Tatsurjiro NPC',
+            'Malignant Plague|Tatsurjiro NPC',
+            'Molten Pyre|Tatsurjiro NPC',
+            'Pestilent Pustules|Tatsurjiro NPC',
+            'Ritual of Blood|Tatsurjiro NPC',
+            'Sacrilege of the Wraith|Tatsurjiro NPC',
+            'Venom of the Accursed Nest|Tatsurjiro NPC',
+            'Yearning of Death|Tatsurjiro NPC',
+        },		
         [70] = {
             'Ancient: Allure of Extinction|Anguish Rune Turn In',
             'Ancient: Curse of Mori|Anguish Rune Turn In',
@@ -376,6 +492,18 @@ return {
         },
     },
     ['Paladin'] = {
+        [71] = {
+            'Aegis of Righteousness|Tatsurjiro NPC',
+            'Ancient: Justice of Firiona|Chieftan Relae Aderi NPC',
+            'Armor of the Savior|Tatsurjiro NPC',
+            'Benevolent Aura|Tatsurjiro NPC',
+            'Brell\'s Unshakable Barricade|Tatsurjiro NPC',
+            'Force of the Sacred|Tatsurjiro NPC',
+            'Force of the Sentinel|Tatsurjiro NPC',
+            'The Silent Decree|Tatsurjiro NPC',
+            'Virtuous Fervor|Tatsurjiro NPC',
+            'Wave of the Stillmoon|Tatsurjiro NPC',
+        },		
         [70] = {
             'Affirmation|Researched or Glowing Rune',
             'Ancient: Force of Jeron|Anguish Rune Turn In',
@@ -416,6 +544,19 @@ return {
         },
     },
     ['Ranger'] = {
+        [71] = {
+            'Ancient: Focused Barrage of Arrows|Chieftan Relae Aderi NPC',
+            'Call of Storms|Tatsurjiro NPC',
+            'Embers of the Delve|Tatsurjiro NPC',
+            'Eyes of the Drake|Tatsurjiro NPC',
+            'Frost of the Ascent|Tatsurjiro NPC',
+            'Guard of Thundercrest|Tatsurjiro NPC',
+            'Heartshatter|Tatsurjiro NPC',
+            'Jolting Thunderkicks|Tatsurjiro NPC',
+            'Snarl of the Predator|Tatsurjiro NPC',
+            'Swift Salve of the Stillmoon|Tatsurjiro NPC',
+            'Ward of the Stalker|Tatsurjiro NPC',		
+        },		
         [70] = {
             'Ancient: North Wind|Anguish Rune Turn In',
             'Call of Lightning|Researched or Glowing Rune',
@@ -454,16 +595,28 @@ return {
         },
     },
     ['Rogue'] = {
+        [71] = {
+            'Ancient: Incursion|Chieftan Relae Aderi NPC',
+            'Arcane Reprisal|Tatsurjiro NPC',
+            'Assailant Discipline|Tatsurjiro NPC',
+            'Fourth Wind Discipline|Tatsurjiro NPC',
+            'Frenetic Stabbing Discipline|Tatsurjiro NPC',
+            'Lithe Discipline|Tatsurjiro NPC',
+            'Outlaw\'s Glare|Tatsurjiro NPC',
+            'Pinpoint Weakness|Tatsurjiro NPC',
+            'Twisted Fortune Discipline|Tatsurjiro NPC',
+            'Vigorous Dagger Throw|Tatsurjiro NPC',
+        },		
         [70] = {
             'Assault|Random Drop',
             'Brigand\'s Gaze|Random Drop',
             'Frenzied Stabbing Discipline|Researched or Glowing Rune',
             'Poison Spikes Trap|Random Drop',
             'Razorarc|Random Drop',
-            'Third Wind|Random Drop',
+            'Third Wind Discipline|Random Drop',
         },
         [69] = {
-            'Assassin\'s Deceit|???',
+            'Assassin\'s Deceit|Tatsurjiro NPC',
             'Assassin\'s Feint|Random Drop',
             'Daggerfall|Researched or Greater Rune',
             'Pinpoint Vulnerability|Random Drop',
@@ -479,6 +632,18 @@ return {
         },
     },
     ['Shadow Knight'] = {
+        [71] = {
+            'Ancient: Spear of Lanys|Chieftan Relae Aderi NPC',
+            'Blood of the Harbinger|Tatsurjiro NPC',
+            'Cloak of the Corrupter|Tatsurjiro NPC',
+            'Grasp of Ju\'rek|Tatsurjiro NPC',
+            'Shroud of the Accursed|Tatsurjiro NPC',
+            'Soul Carapace|Tatsurjiro NPC',
+            'Terror of Lavaspinner\'s Lair|Tatsurjiro NPC',
+            'Theft of Misery|Tatsurjiro NPC',
+            'Touch of the Shadows|Tatsurjiro NPC',
+            'Voice of Emoush|Tatsurjiro NPC',
+        },		
         [70] = {
             'Ancient: Bite of Muram|Anguish Rune Turn In',
             'Cloak of Discord|Researched or Glowing Rune',
@@ -520,6 +685,24 @@ return {
         },
     },
     ['Shaman'] = {
+        [71] = {
+            'Ancient: Emoush\'s Mending|Chieftan Relae Aderi NPC',
+            'Black Scorpion Companion|Tatsurjiro NPC',
+            'Blood Raptor Companion|Tatsurjiro NPC',
+            'Blood of Volkara|Tatsurjiro NPC',
+            'Breath of Shadows|Tatsurjiro NPC',
+            'Cunning Lioness Companion|Tatsurjiro NPC',
+            'Curse of Emoush|Tatsurjiro NPC',
+            'Gray Elephant Companion|Tatsurjiro NPC',
+            'Sea Cow Companion|Tatsurjiro NPC',
+            'Shadowy Sloth|Tatsurjiro NPC',
+            'Stillmoon Focusing|Tatsurjiro NPC',
+            'Talisman of Coalescence|Tatsurjiro NPC',
+            'Talisman of the Cougar|Tatsurjiro NPC',
+            'Talisman of the Stillmoon|Tatsurjiro NPC',
+            'Transcendental Torpor|Tatsurjiro NPC',
+            'Wooly Rhino Companion|Tatsurjiro NPC',
+        },		
         [70] = {
             'Abashi\'s Disempowerment|Random Drop',
             'Ancient: Ancestral Calling|Anguish Rune Turn In',
@@ -576,11 +759,24 @@ return {
         },
     },
     ['Warrior'] = {
+        [71] = {
+            'Ancient: Impervious Discipline|Chieftan Relae Aderi NPC',
+            'Ancient: Malicious Onslaught|Chieftan Relae Aderi NPC',
+            'Field Conqueror|Tatsurjiro NPC',
+            'Final Stand Discipline|Tatsurjiro NPC',
+            'Fourth Wind Discipline|Tatsurjiro NPC',
+            'Jeer|Tatsurjiro NPC',
+            'Maelstrom Blade|Tatsurjiro NPC',
+            'Maximum Effort Discipline|Tatsurjiro NPC',
+            'Roaring Hatred|Tatsurjiro NPC',
+            'Scowl|Tatsurjiro NPC',
+            'Vanquisher\'s Aura|Tatsurjiro NPC',
+        },		
         [70] = {
             'Champion\'s Aura|Random Drop',
             'Flaunt|Random Drop',
             'Shocking Defense Discipline|Researched or Minor Rune',
-            'Third Wind|Random Drop',
+            'Third Wind Discipline|Random Drop',
             'Unyielding Attention|Random Drop',
         },
         [69] = {
@@ -598,6 +794,18 @@ return {
         },
     },
     ['Wizard'] = {
+        [71] = {
+            'Ancient: Chaos Elements|Chieftan Relae Aderi NPC',
+            'Arcane Sanctuary|Tatsurjiro NPC',
+            'Bolster of the Sorcerer|Tatsurjiro NPC',
+            'Eruption of Telakemara|Tatsurjiro NPC',
+            'Ether Blaze|Tatsurjiro NPC',
+            'Ethereal Weave|Tatsurjiro NPC',
+            'Evoker\'s Pyromantic Blade|Tatsurjiro NPC',
+            'Serenity Harvest|Tatsurjiro NPC',
+            'Supernal Skin|Tatsurjiro NPC',
+            'Wildmagic Salvo|Tatsurjiro NPC',
+        },		
         [70] = {
             'Ancient: Core Fire|Anguish Rune Turn In',
             'Ancient: Spear of Gelaqua|Anguish Rune Turn In',
